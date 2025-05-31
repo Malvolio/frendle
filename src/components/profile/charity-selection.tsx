@@ -1,16 +1,30 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/providers/auth-provider';
-import { supabase, updateUserProfile } from '@/lib/supabase';
-import { Charity } from '@/types';
-import { toast } from '@/hooks/use-toast';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
+import { updateUserProfile } from "@/lib/supabase";
+import { useAuth } from "@/providers/auth-provider";
+import { Charity } from "@/types";
+import { useEffect, useState } from "react";
 
 export function CharitySelection() {
   const { user } = useAuth();
   const [charities, setCharities] = useState<Charity[]>([]);
-  const [selectedCharity, setSelectedCharity] = useState<string>(user?.selectedCharity || '');
+  const [selectedCharity, setSelectedCharity] = useState<string>(
+    user?.selectedCharity || ""
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -21,42 +35,43 @@ export function CharitySelection() {
         // Here we're using mock data
         const mockCharities: Charity[] = [
           {
-            id: '1',
-            name: 'Global Education Fund',
-            description: 'Providing education opportunities worldwide',
-            website: 'https://example.com/gef',
-            category: 'Education',
+            id: "1",
+            name: "Global Education Fund",
+            description: "Providing education opportunities worldwide",
+            website: "https://example.com/gef",
+            category: "Education",
           },
           {
-            id: '2',
-            name: 'Ocean Conservation Initiative',
-            description: 'Protecting marine ecosystems globally',
-            website: 'https://example.com/oci',
-            category: 'Environment',
+            id: "2",
+            name: "Ocean Conservation Initiative",
+            description: "Protecting marine ecosystems globally",
+            website: "https://example.com/oci",
+            category: "Environment",
           },
           {
-            id: '3',
-            name: 'Digital Inclusion Alliance',
-            description: 'Bridging the digital divide in underserved communities',
-            website: 'https://example.com/dia',
-            category: 'Technology',
+            id: "3",
+            name: "Digital Inclusion Alliance",
+            description:
+              "Bridging the digital divide in underserved communities",
+            website: "https://example.com/dia",
+            category: "Technology",
           },
           {
-            id: '4',
-            name: 'Mental Health Awareness Foundation',
-            description: 'Supporting mental health research and awareness',
-            website: 'https://example.com/mhaf',
-            category: 'Health',
+            id: "4",
+            name: "Mental Health Awareness Foundation",
+            description: "Supporting mental health research and awareness",
+            website: "https://example.com/mhaf",
+            category: "Health",
           },
         ];
-        
+
         setCharities(mockCharities);
-        
+
         if (user?.selectedCharity) {
           setSelectedCharity(user.selectedCharity);
         }
       } catch (error) {
-        console.error('Error fetching charities:', error);
+        console.error("Error fetching charities:", error);
       } finally {
         setIsLoading(false);
       }
@@ -67,9 +82,9 @@ export function CharitySelection() {
 
   const handleSaveCharity = async () => {
     if (!user) return;
-    
+
     setIsSaving(true);
-    
+
     try {
       const { error } = await updateUserProfile(user.id, {
         selected_charity: selectedCharity,
@@ -78,15 +93,15 @@ export function CharitySelection() {
       if (error) throw error;
 
       toast({
-        title: 'Charity updated',
-        description: 'Your selected charity has been updated successfully.',
+        title: "Charity updated",
+        description: "Your selected charity has been updated successfully.",
       });
     } catch (error) {
-      console.error('Error updating charity:', error);
+      console.error("Error updating charity:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to update charity. Please try again.',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to update charity. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsSaving(false);
@@ -98,7 +113,8 @@ export function CharitySelection() {
       <CardHeader>
         <CardTitle>Support a Cause</CardTitle>
         <CardDescription>
-          Choose a charity to support. 100% of your donation will go directly to your selected charity.
+          Choose a charity to support. 100% of your donation will go directly to
+          your selected charity.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -124,17 +140,17 @@ export function CharitySelection() {
               </SelectContent>
             </Select>
           </div>
-          
+
           {selectedCharity && (
             <div className="rounded-md bg-muted p-4">
               <h4 className="font-medium mb-1">
-                {charities.find(c => c.id === selectedCharity)?.name}
+                {charities.find((c) => c.id === selectedCharity)?.name}
               </h4>
               <p className="text-sm text-muted-foreground mb-2">
-                {charities.find(c => c.id === selectedCharity)?.description}
+                {charities.find((c) => c.id === selectedCharity)?.description}
               </p>
               <a
-                href={charities.find(c => c.id === selectedCharity)?.website}
+                href={charities.find((c) => c.id === selectedCharity)?.website}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-primary hover:underline"
@@ -143,12 +159,12 @@ export function CharitySelection() {
               </a>
             </div>
           )}
-          
-          <Button 
-            onClick={handleSaveCharity} 
+
+          <Button
+            onClick={handleSaveCharity}
             disabled={!selectedCharity || isSaving}
           >
-            {isSaving ? 'Saving...' : 'Save Selection'}
+            {isSaving ? "Saving..." : "Save Selection"}
           </Button>
         </div>
       </CardContent>
