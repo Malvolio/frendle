@@ -23,4 +23,9 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/match',
     requiresAuth: true,
   },
+  {
+    title: 'UI Kit',
+    href: '/uikit',
+    requiresAuth: true,
+  },
 ];

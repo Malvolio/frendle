@@ -17,11 +17,11 @@ export function AboutPage() {
               increasingly digital world.
             </p>
             <div className="relative">
-              <img
+              {/* <img
                 src="https://images.pexels.com/photos/7648526/pexels-photo-7648526.jpeg"
                 alt="People connecting — with a picture of a duck"
                 className="rounded-lg w-full h-64 md:h-96 object-cover"
-              />
+              /> */}
               <div className="absolute inset-0 bg-primary/10 rounded-lg"></div>
             </div>
           </div>
