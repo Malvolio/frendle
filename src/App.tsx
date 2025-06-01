@@ -1,18 +1,17 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from '@/components/ui/toaster';
-import { ThemeProvider } from '@/providers/theme-provider';
-import { AuthProvider } from '@/providers/auth-provider';
-import { HomePage } from '@/pages/home';
-import { AboutPage } from '@/pages/about';
-import { ResourcesPage } from '@/pages/resources';
-import { UIKit } from '@/pages/uikit';
-import { PrivacyPage } from '@/pages/privacy';
-import { ProfilePage } from '@/pages/profile';
-import { MatchPage } from '@/pages/match';
-import { LoginPage } from '@/pages/login';
+import { Toaster } from "@/components/ui/toaster";
+import { AboutPage } from "@/pages/about";
+import { HomePage } from "@/pages/home";
+import { LoginPage } from "@/pages/login";
+import { MatchPage } from "@/pages/match";
+import { PrivacyPage } from "@/pages/privacy";
+import { ProfilePage } from "@/pages/profile";
+import { ResourcesPage } from "@/pages/resources";
+import { UIKit } from "@/pages/uikit";
+import { AuthProvider } from "@/providers/auth-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-
-import '@/App.css';
+import "@/App.css";
 
 function App() {
   return (
@@ -33,7 +32,7 @@ function App() {
             <Route path="/match" element={<MatchPage />} />
 
             {/* Fallback route */}
-            <Route path="*" element={<Navigate to="/\" replace />} />
+            <Route path="*" element={<HomePage />} />
           </Routes>
         </Router>
         <Toaster />
