@@ -6,6 +6,7 @@ import { MatchPage } from "@/pages/match";
 import { PrivacyPage } from "@/pages/privacy";
 import { ProfilePage } from "@/pages/profile";
 import { ResourcesPage } from "@/pages/resources";
+import { SessionPage } from "@/pages/session";
 import { UIKit } from "@/pages/uikit";
 import { AuthProvider } from "@/providers/auth-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -30,6 +31,7 @@ function App() {
             {/* Protected routes */}
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/match" element={<MatchPage />} />
+            <Route path="/session" element={<SessionPage />} />
 
             {/* Fallback route */}
             <Route path="*" element={<HomePage />} />
@@ -40,5 +42,3 @@ function App() {
     </ThemeProvider>
   );
 }
-
-export default App;
