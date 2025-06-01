@@ -1,11 +1,9 @@
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
+import { signInWithGoogle } from "@/lib/supabase";
 import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { LoginPrompt } from '@/components/auth/login-prompt';
-import { useState } from 'react';
-import { signInWithGoogle } from '@/lib/supabase';
 
 export function HomePage() {
   useEffect(() => {
@@ -24,7 +22,7 @@ export function HomePage() {
       setIsLoading(true);
       await signInWithGoogle();
     } catch (error) {
-      console.error('Error signing in with Google:', error);
+      console.error("Error signing in with Google:", error);
     } finally {
       setIsLoading(false);
     }
@@ -54,16 +52,27 @@ export function HomePage() {
               </h1>
 
               <p className="text-xl md:text-2xl mb-8 animate-fade-in font-medium">
-                Get paired for brief 1:1 video chats and guided activities in a fun, casual environment designed to creating closer connections.
+                Get paired for brief 1:1 video chats and guided activities in a
+                fun, casual environment designed to creating closer connections.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-
                 {/* TODO: Login here */}
                 <div className="flex flex-col gap-8">
-                  <wired-button elevation="3">
+                  <wired-button
+                    elevation="3"
+                    onAuthStateChange={handleGoogleSignIn}
+                    disabled={isLoading}
+                  >
                     <span className="flex items-center gap-2">
-                      <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
-                        <path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
+                      <svg
+                        className="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 488 512"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+                        />
                       </svg>
                       Sign in with Google to start chatting
                     </span>
@@ -106,7 +115,9 @@ export function HomePage() {
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <Users className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Match with Others</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Match with Others
+                </h3>
                 <p className="text-muted-foreground">
                   Get matched with people who share your interests and
                   conversation goals.
@@ -128,9 +139,12 @@ export function HomePage() {
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <Smile className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Guided Activities</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Guided Activities
+                </h3>
                 <p className="text-muted-foreground">
-                  Follow fun prompts designed to create meaningful conversations.
+                  Follow fun prompts designed to create meaningful
+                  conversations.
                 </p>
               </div>
 
@@ -138,9 +152,12 @@ export function HomePage() {
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                   <Heart className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Support Charities</h3>
+                <h3 className="text-xl font-semibold mb-2">
+                  Support Charities
+                </h3>
                 <p className="text-muted-foreground">
-                  20% of premium subscriptions go to your selected 501(c) charity.
+                  20% of premium subscriptions go to your selected 501(c)
+                  charity.
                 </p>
               </div>
             </div>
@@ -166,5 +183,5 @@ export function HomePage() {
         </div>
       </section>
     </PublicLayout>
-  )
-};
+  );
+}
