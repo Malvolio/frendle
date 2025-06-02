@@ -1,9 +1,9 @@
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { signInWithGoogle } from "@/lib/supabase";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 export function HomePage() {
   useEffect(() => {
@@ -30,24 +30,13 @@ export function HomePage() {
   return (
     <PublicLayout>
       <section className="relative">
-        {/* Hero section */}
-        {/* <div className="relative h-[90vh] flex items-center overflow-hidden bg-gradient-to-b from-background to-muted/30"> */}
         <div className="relative h-[90vh] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-40">
-            {/* <div className="absolute inset-0 bg-gradient-to-b from-background via-background/20 to-background"></div> */}
-            {/* <img
-            src="https://images.pexels.com/photos/7149165/pexels-photo-7149165.jpeg"
-            alt="People connecting"
-            className="w-full h-full object-cover"
-          /> */}
           </div>
 
           <div className="container relative z-10 pt-20 md:pt-0">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
-                {/* Meaningful Connections Through Guided Activities */}
-                {/* Grow your friendship group */}
-                {/* TODO: Header image */}
                 Kindle new friendships
               </h1>
 
@@ -56,7 +45,6 @@ export function HomePage() {
                 fun, casual environment designed to creating closer connections.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-                {/* TODO: Login here */}
                 <div className="flex flex-col gap-8">
                   <wired-button
                     elevation="3"
@@ -78,19 +66,8 @@ export function HomePage() {
                     </span>
                   </wired-button>
                   <Link to="/about">
-                    {/* <Button size="lg" className="w-full sm:w-auto"> */}
                     Learn More
-                    {/* </Button> */}
                   </Link>
-                  {/* <Link to="/match">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="w-full sm:w-auto"
-                >
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link> */}
                 </div>
               </div>
             </div>
@@ -99,7 +76,6 @@ export function HomePage() {
           <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
         </div>
 
-        {/* Features section */}
         <div className="bg-background py-20">
           <div className="container">
             <div className="text-center mb-16">
@@ -164,7 +140,6 @@ export function HomePage() {
           </div>
         </div>
 
-        {/* CTA section */}
         <div className="bg-muted/30 py-20">
           <div className="container">
             <div className="max-w-4xl mx-auto text-center">
