@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useRouterState } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Moon, Sun, Menu, Video } from 'lucide-react';
@@ -8,7 +8,7 @@ import { useAuth } from '@/providers/auth-provider';
 import { NAV_ITEMS } from '@/config/navigation';
 
 export function Header() {
-  const { pathname } = useLocation();
+  const pathname = useRouterState().location.pathname;
   const { theme, setTheme } = useTheme();
   const { user } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);

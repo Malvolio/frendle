@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/providers/auth-provider';
 import { LoginPrompt } from '@/components/auth/login-prompt';

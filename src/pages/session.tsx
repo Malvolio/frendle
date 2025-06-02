@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearch } from '@tanstack/react-router';
 import { WebRTCConnection } from '@/lib/webrtc';
 import { AuthLayout } from '@/components/layout/auth-layout';
 import { Button } from '@/components/ui/button';
@@ -8,9 +8,7 @@ import { Mic, MicOff, Video as VideoIcon, VideoOff, PhoneOff } from 'lucide-reac
 import { toast } from '@/hooks/use-toast';
 
 export function SessionPage() {
-  const [searchParams] = useSearchParams();
-  const sessionId = searchParams.get('id');
-  const isHost = searchParams.get('host') === 'true';
+  const { id: sessionId, host: isHost } = useSearch({ from: '/session' });
   
   const [isConnecting, setIsConnecting] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);

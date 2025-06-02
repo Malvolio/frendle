@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@tanstack/react-router';
 import { NAV_ITEMS } from '@/config/navigation';
 import { Heart, Video } from 'lucide-react';
 
