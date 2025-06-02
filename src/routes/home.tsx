@@ -1,66 +1,154 @@
+import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { signInWithGoogle } from "@/lib/supabase";
+import { Link } from "@tanstack/react-router";
 import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
 
 export function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       await signInWithGoogle();
     } catch (error) {
-      console.error(error);
+      console.error("Error signing in with Google:", error);
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <div className="max-w-2xl text-center">
-        <h1 className="text-4xl font-bold mb-4">
-          Welcome to Our Chat App
-        </h1>
-        <div className="space-y-8">
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">
-              Get Started
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Join our community and start chatting with people from around the world.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
-              <div className="flex flex-col gap-8">
-                <Button
-                  onClick={handleGoogleSignIn}
-                  disabled={isLoading}
-                  size="lg"
-                >
-                  <span className="flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                      <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                      <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-                      <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-                    </svg>
-                    Sign in with Google to start chatting
-                  </span>
-                </Button>
-                <Link to="/about">
-                  Learn More
-                </Link>
+    <PublicLayout>
+      <section className="relative">
+        {/* Hero section */}
+        <div className="relative h-[90vh] flex items-center overflow-hidden">
+          <div className="absolute inset-0 z-0 opacity-40"></div>
+
+          <div className="container relative z-10 pt-20 md:pt-0">
+            <div className="max-w-3xl mx-auto text-center">
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
+                Kindle new friendships
+              </h1>
+
+              <p className="text-xl md:text-2xl mb-8 animate-fade-in font-medium">
+                Get paired for brief 1:1 video chats and guided activities in a
+                fun, casual environment designed to creating closer connections.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
+                {/* TODO: Login here */}
+                <div className="flex flex-col gap-8">
+                  <wired-button
+                    elevation="3"
+                    onAuthStateChange={handleGoogleSignIn}
+                    disabled={isLoading}
+                  >
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 488 512"
+                      >
+                        <path
+                          fill="currentColor"
+                          d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+                        />
+                      </svg>
+                      Sign in with Google to start chatting
+                    </span>
+                  </wired-button>
+                  <Link to="/about">Learn More</Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
+        </div>
+
+        {/* Features section */}
+        <div className="bg-background py-20">
+          <div className="container">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold mb-4">How Frendle Works</h2>
+              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                Our platform is designed to foster genuine connections in a
+                structured, time-boxed environment.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <Users className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">
+                  Match with Others
+                </h3>
+                <p className="text-muted-foreground">
+                  Get matched with people who share your interests and
+                  conversation goals.
+                </p>
+              </div>
+
+              <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <Shield className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Safe Environment</h3>
+                <p className="text-muted-foreground">
+                  Enjoy conversations in a moderated, safe space with clear
+                  community guidelines.
+                </p>
+              </div>
+
+              <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <Smile className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">
+                  Guided Activities
+                </h3>
+                <p className="text-muted-foreground">
+                  Follow fun prompts designed to create meaningful
+                  conversations.
+                </p>
+              </div>
+
+              <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <Heart className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">
+                  Support Charities
+                </h3>
+                <p className="text-muted-foreground">
+                  20% of premium subscriptions go to your selected 501(c)
+                  charity.
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
+        {/* CTA section */}
+        <div className="bg-muted/30 py-20">
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-4">Ready to Connect?</h2>
+              <p className="text-xl text-muted-foreground mb-8">
+                Join thousands of people using Frendle to create meaningful
+                connections and reduce social isolation.
+              </p>
+              <Link to="/match">
+                <Button size="lg">
+                  Start Matching Now <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </PublicLayout>
   );
 }
