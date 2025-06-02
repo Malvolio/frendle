@@ -1,28 +1,17 @@
-import { Toaster } from "@/components/ui/toaster";
-import { AboutPage } from "@/pages/about";
-import { HomePage } from "@/pages/home";
-import { LoginPage } from "@/pages/login";
-import { MatchPage } from "@/pages/match";
-import { PrivacyPage } from "@/pages/privacy";
-import { ProfilePage } from "@/pages/profile";
-import { ResourcesPage } from "@/pages/resources";
-import { SessionPage } from "@/pages/session";
-import { UIKit } from "@/pages/uikit";
-import { AuthProvider } from "@/providers/auth-provider";
-import { ThemeProvider } from "@/providers/theme-provider";
+import { AboutPage } from "@/routes/about";
+import { HomePage } from "@/routes/home";
+import { LoginPage } from "@/routes/login";
+import { MatchPage } from "@/routes/match";
+import { PrivacyPage } from "@/routes/privacy";
+import { ProfilePage } from "@/routes/profile";
+import { ResourcesPage } from "@/routes/resources";
+import { SessionPage } from "@/routes/session";
+import { UIKit } from "@/routes/uikit";
+import { Root } from "@/routes/_root";
 import { Outlet, RouterProvider, createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
 
-import "@/App.css";
-
 const rootRoute = createRootRoute({
-  component: () => (
-    <ThemeProvider defaultTheme="light">
-      <AuthProvider>
-        <Outlet />
-        <Toaster />
-      </AuthProvider>
-    </ThemeProvider>
-  ),
+  component: Root
 });
 
 const indexRoute = createRoute({
