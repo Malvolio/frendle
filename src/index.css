@@ -8,6 +8,8 @@
     src: url('https://use.typekit.net/pug2gxb.css');
   }
 
+
+
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -71,5 +73,11 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  font-marigny {
+    font-family: 'marigny', sans-serif;
   }
 }

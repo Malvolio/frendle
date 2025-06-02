@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as UikitImport } from './routes/uikit'
+import { Route as TermsImport } from './routes/terms'
 import { Route as SessionImport } from './routes/session'
 import { Route as ResourcesImport } from './routes/resources'
 import { Route as ProfileImport } from './routes/profile'
@@ -26,6 +27,12 @@ import { Route as AboutImport } from './routes/about'
 const UikitRoute = UikitImport.update({
   id: '/uikit',
   path: '/uikit',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TermsRoute = TermsImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -137,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SessionImport
       parentRoute: typeof rootRoute
     }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsImport
+      parentRoute: typeof rootRoute
+    }
     '/uikit': {
       id: '/uikit'
       path: '/uikit'
@@ -158,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/session': typeof SessionRoute
+  '/terms': typeof TermsRoute
   '/uikit': typeof UikitRoute
 }
 
@@ -170,6 +185,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/session': typeof SessionRoute
+  '/terms': typeof TermsRoute
   '/uikit': typeof UikitRoute
 }
 
@@ -183,6 +199,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/session': typeof SessionRoute
+  '/terms': typeof TermsRoute
   '/uikit': typeof UikitRoute
 }
 
@@ -197,6 +214,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/resources'
     | '/session'
+    | '/terms'
     | '/uikit'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -208,6 +226,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/resources'
     | '/session'
+    | '/terms'
     | '/uikit'
   id:
     | '__root__'
@@ -219,6 +238,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/resources'
     | '/session'
+    | '/terms'
     | '/uikit'
   fileRoutesById: FileRoutesById
 }
@@ -232,6 +252,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   ResourcesRoute: typeof ResourcesRoute
   SessionRoute: typeof SessionRoute
+  TermsRoute: typeof TermsRoute
   UikitRoute: typeof UikitRoute
 }
 
@@ -244,6 +265,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   ResourcesRoute: ResourcesRoute,
   SessionRoute: SessionRoute,
+  TermsRoute: TermsRoute,
   UikitRoute: UikitRoute,
 }
 
@@ -265,6 +287,7 @@ export const routeTree = rootRoute
         "/profile",
         "/resources",
         "/session",
+        "/terms",
         "/uikit"
       ]
     },
@@ -291,6 +314,9 @@ export const routeTree = rootRoute
     },
     "/session": {
       "filePath": "session.tsx"
+    },
+    "/terms": {
+      "filePath": "terms.tsx"
     },
     "/uikit": {
       "filePath": "uikit.tsx"
