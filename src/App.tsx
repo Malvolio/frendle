@@ -7,7 +7,7 @@ import { ProfilePage } from "@/routes/profile";
 import { ResourcesPage } from "@/routes/resources";
 import { SessionPage } from "@/routes/session";
 import { UIKit } from "@/routes/uikit";
-import { Root } from "@/routes/_root";
+import { Root } from "@/routes/__root";
 import { Outlet, RouterProvider, createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
 
 const rootRoute = createRootRoute({
