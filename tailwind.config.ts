@@ -80,6 +80,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    fontFamily: {
+      marigny: ["Marigny", "sans-serif"],
+    },
   },
   plugins: [TailwindAnimate],
 };

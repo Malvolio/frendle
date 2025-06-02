@@ -1,14 +1,13 @@
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
 import { Globe, Handshake, Heart, Users } from "lucide-react";
-import { Link } from "react-router-dom";
 
 export function AboutPage() {
   return (
     <PublicLayout>
       <div className="py-16 md:py-24">
         <div className="container">
-          {/* Mission section */}
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h1 className="text-4xl font-bold mb-6">Our Mission</h1>
             <p className="text-xl text-muted-foreground leading-relaxed mb-8">
@@ -17,16 +16,10 @@ export function AboutPage() {
               increasingly digital world.
             </p>
             <div className="relative">
-              {/* <img
-                src="https://images.pexels.com/photos/7648526/pexels-photo-7648526.jpeg"
-                alt="People connecting — with a picture of a duck"
-                className="rounded-lg w-full h-64 md:h-96 object-cover"
-              /> */}
               <div className="absolute inset-0 bg-primary/10 rounded-lg"></div>
             </div>
           </div>
 
-          {/* Values section */}
           <div className="max-w-5xl mx-auto mb-20">
             <h2 className="text-3xl font-bold text-center mb-12">
               Our Core Values
@@ -105,7 +98,6 @@ export function AboutPage() {
             </div>
           </div>
 
-          {/* Donation model section */}
           <div className="bg-muted/40 rounded-lg p-8 md:p-12 max-w-5xl mx-auto mb-20">
             <div className="text-center mb-10">
               <h2 className="text-3xl font-bold mb-4">
@@ -143,7 +135,6 @@ export function AboutPage() {
             </div>
           </div>
 
-          {/* Team section */}
           <div className="max-w-5xl mx-auto mb-20">
             <h2 className="text-3xl font-bold text-center mb-12">
               Meet Our Team
@@ -175,7 +166,6 @@ export function AboutPage() {
             </div>
           </div>
 
-          {/* CTA section */}
           <div className="bg-primary/5 rounded-lg p-10 text-center max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold mb-4">Join Our Community</h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">

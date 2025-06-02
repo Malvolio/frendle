@@ -1,86 +1,85 @@
-import { Toaster } from "@/components/ui/toaster";
-import { AboutPage } from "@/pages/about";
-import { HomePage } from "@/pages/home";
-import { LoginPage } from "@/pages/login";
-import { MatchPage } from "@/pages/match";
-import { PrivacyPage } from "@/pages/privacy";
-import { ProfilePage } from "@/pages/profile";
-import { ResourcesPage } from "@/pages/resources";
-import { SessionPage } from "@/pages/session";
-import { UIKit } from "@/pages/uikit";
-import { AuthProvider } from "@/providers/auth-provider";
-import { ThemeProvider } from "@/providers/theme-provider";
-import { Outlet, RouterProvider, createRootRoute, createRoute, createRouter } from '@tanstack/react-router';
-
-import "@/App.css";
+import { Root } from "@/routes/__root";
+import { AboutPage } from "@/routes/about";
+import { HomePage } from "@/routes/home";
+import { LoginPage } from "@/routes/login";
+import { MatchPage } from "@/routes/match";
+import { PrivacyPage } from "@/routes/privacy";
+import { ProfilePage } from "@/routes/profile";
+import { ResourcesPage } from "@/routes/resources";
+import { SessionPage } from "@/routes/session";
+import { UIKit } from "@/routes/uikit";
+import {
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import { TermsPage } from "./routes/terms";
 
 const rootRoute = createRootRoute({
-  component: () => (
-    <ThemeProvider defaultTheme="light">
-      <AuthProvider>
-        <Outlet />
-        <Toaster />
-      </AuthProvider>
-    </ThemeProvider>
-  ),
+  component: Root,
 });
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: "/",
   component: HomePage,
 });
 
 const aboutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/about',
+  path: "/about",
   component: AboutPage,
 });
 
 const resourcesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/resources',
+  path: "/resources",
   component: ResourcesPage,
 });
 
 const uikitRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/uikit',
+  path: "/uikit",
   component: UIKit,
 });
 
 const privacyRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/privacy',
+  path: "/privacy",
   component: PrivacyPage,
 });
 
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/login',
+  path: "/login",
   component: LoginPage,
 });
 
 const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/profile',
+  path: "/profile",
   component: ProfilePage,
 });
 
 const matchRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/match',
+  path: "/match",
   component: MatchPage,
 });
-
+const termsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/terms",
+  component: TermsPage,
+});
 const sessionRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/session',
+  path: "/session",
   component: SessionPage,
   validateSearch: (search: Record<string, unknown>) => {
     return {
       id: search.id as string,
-      host: search.host === 'true',
+      host: search.host === "true",
     };
   },
 });
@@ -95,20 +94,19 @@ const routeTree = rootRoute.addChildren([
   profileRoute,
   matchRoute,
   sessionRoute,
+  termsRoute,
 ]);
 
 const router = createRouter({ routeTree });
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
 }
 
 function App() {
-  return (
-    <RouterProvider router={router} />
-  );
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
