@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { WebRTCConnection } from "@/lib/webrtc";
+import { useAuth } from "@/providers/auth-provider";
 import { supabase } from "@/lib/supabase";
 import { useSearch } from "@tanstack/react-router";
 import {
@@ -16,6 +17,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export function SessionPage() {
   const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
+  const { user } = useAuth();
   const [isConnecting, setIsConnecting] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -32,6 +34,16 @@ export function SessionPage() {
       toast({
         title: "Error",
         description: "Session ID is required",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!user) {
+      console.log('[Session] No user found');
+      toast({
+        title: "Error",
+        description: "You must be logged in to join a session",
         variant: "destructive",
       });
       return;
@@ -109,7 +121,7 @@ export function SessionPage() {
     return () => {
       connectionRef.current?.cleanup();
     };
-  }, [sessionId, isHost]);
+  }, [sessionId, isHost, user]);
 
   const handleToggleAudio = () => {
     if (connectionRef.current) {
