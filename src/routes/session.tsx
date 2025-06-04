@@ -29,6 +29,11 @@ export function SessionPage() {
   const connectionRef = useRef<WebRTCConnection | null>(null);
 
   useEffect(() => {
+    console.log("[Session] Component mounted", {
+      uid: user?.id,
+      sessionId,
+      isHost,
+    });
     if (!sessionId) {
       console.log("[Session] No session ID provided");
       toast({
@@ -39,7 +44,7 @@ export function SessionPage() {
       return;
     }
 
-    if (!user) {
+    if (!user?.id) {
       console.log("[Session] No user found");
       toast({
         title: "Error",
