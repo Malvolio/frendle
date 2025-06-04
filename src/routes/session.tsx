@@ -2,9 +2,9 @@ import { AuthLayout } from "@/components/layout/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 import { WebRTCConnection } from "@/lib/webrtc";
 import { useAuth } from "@/providers/auth-provider";
-import { supabase } from "@/lib/supabase";
 import { useSearch } from "@tanstack/react-router";
 import {
   Mic,
@@ -30,7 +30,7 @@ export function SessionPage() {
 
   useEffect(() => {
     if (!sessionId) {
-      console.log('[Session] No session ID provided');
+      console.log("[Session] No session ID provided");
       toast({
         title: "Error",
         description: "Session ID is required",
@@ -40,7 +40,7 @@ export function SessionPage() {
     }
 
     if (!user) {
-      console.log('[Session] No user found');
+      console.log("[Session] No user found");
       toast({
         title: "Error",
         description: "You must be logged in to join a session",
@@ -51,25 +51,25 @@ export function SessionPage() {
 
     const initializeConnection = async () => {
       try {
-        console.log('[Session] Initializing connection', { isHost });
+        console.log("[Session] Initializing connection", { isHost });
         const connection = new WebRTCConnection(
           sessionId,
           user.id,
           isHost,
           (stream) => {
-            console.log('[Session] Remote stream updated');
+            console.log("[Session] Remote stream updated");
             if (remoteVideoRef.current) {
               remoteVideoRef.current.srcObject = stream;
             }
           },
           (state) => {
-            console.log('[Session] Connection state changed', { state });
+            console.log("[Session] Connection state changed", { state });
             setConnectionState(state);
           }
         );
 
         const localStream = await connection.initializeLocalStream();
-        console.log('[Session] Local stream initialized');
+        console.log("[Session] Local stream initialized");
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = localStream;
         }
@@ -93,21 +93,19 @@ export function SessionPage() {
             if (session.ice_candidates) {
               await connection.addRemoteIceCandidates(session.ice_candidates);
             }
-            
+
             // If offer exists, use it immediately
             await connection.createAnswer(JSON.parse(session.offer));
             setIsConnecting(false);
           }
 
           // Subscribe to future updates
-          connection.subscribeToSessionChanges(
-            async (offer) => {
-              if (!connection.peerConnection.currentRemoteDescription) {
-                await connection.createAnswer(offer);
-                setIsConnecting(false);
-              }
+          connection.subscribeToSessionChanges(async (offer) => {
+            if (!connection.peerConnection.currentRemoteDescription) {
+              await connection.createAnswer(offer);
+              setIsConnecting(false);
             }
-          );
+          });
         }
 
         connectionRef.current = connection;
@@ -127,12 +125,12 @@ export function SessionPage() {
     return () => {
       connectionRef.current?.cleanup();
     };
-  }, [sessionId, isHost, user]);
+  }, [sessionId, isHost, user?.id]);
 
   const handleToggleAudio = () => {
     if (connectionRef.current) {
       connectionRef.current.toggleAudio(!isAudioEnabled);
-      console.log('[Session] Audio toggled', { enabled: !isAudioEnabled });
+      console.log("[Session] Audio toggled", { enabled: !isAudioEnabled });
       setIsAudioEnabled(!isAudioEnabled);
     }
   };
@@ -140,7 +138,7 @@ export function SessionPage() {
   const handleToggleVideo = () => {
     if (connectionRef.current) {
       connectionRef.current.toggleVideo(!isVideoEnabled);
-      console.log('[Session] Video toggled', { enabled: !isVideoEnabled });
+      console.log("[Session] Video toggled", { enabled: !isVideoEnabled });
       setIsVideoEnabled(!isVideoEnabled);
     }
   };
