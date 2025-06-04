@@ -42,6 +42,7 @@ export function SessionPage() {
         console.log('[Session] Initializing connection', { isHost });
         const connection = new WebRTCConnection(
           sessionId,
+          user.id,
           (stream) => {
             console.log('[Session] Remote stream updated');
             if (remoteVideoRef.current) {

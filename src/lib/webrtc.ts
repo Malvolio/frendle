@@ -13,13 +13,16 @@ export class WebRTCConnection {
   private localStream: MediaStream | null = null;
   private remoteStream: MediaStream | null = null;
   private channel: RealtimeChannel;
+  private isHost: boolean;
 
   constructor(
     private sessionId: string,
+    private userId: string,
     private onRemoteStream: (stream: MediaStream) => void,
     private onConnectionStateChange: (state: RTCPeerConnectionState) => void
   ) {
     this.peerConnection = new RTCPeerConnection(configuration);
+    this.isHost = false;
     this.setupPeerConnectionListeners();
     this.channel = supabase.channel(`session:${sessionId}`);
     console.log("[WebRTC] Connection initialized", { sessionId });
@@ -41,6 +44,35 @@ export class WebRTCConnection {
         state: this.peerConnection.connectionState,
       });
       this.onConnectionStateChange(this.peerConnection.connectionState);
+    };
+
+    this.peerConnection.onicecandidate = async (event) => {
+      if (!event.candidate) return;
+      
+      console.log("[WebRTC] New ICE candidate", event.candidate);
+      
+      try {
+        const { data: session } = await supabase
+          .from("sessions")
+          .select("ice_candidates")
+          .eq("id", this.sessionId)
+          .single();
+
+        const candidates = session?.ice_candidates || [];
+        const newCandidate = {
+          from: this.userId,
+          candidate: event.candidate.toJSON(),
+        };
+
+        await supabase
+          .from("sessions")
+          .update({ ice_candidates: [...candidates, newCandidate] })
+          .eq("id", this.sessionId);
+
+        console.log("[WebRTC] ICE candidate sent to database");
+      } catch (error) {
+        console.error("[WebRTC] Error sending ICE candidate:", error);
+      }
     };
   }
 
@@ -68,6 +100,7 @@ export class WebRTCConnection {
 
   async createOffer() {
     try {
+      this.isHost = true;
       const offer = await this.peerConnection.createOffer();
       console.log("[WebRTC] Offer created");
       await this.peerConnection.setLocalDescription(offer);
@@ -134,7 +167,7 @@ export class WebRTCConnection {
           filter: `id=eq.${this.sessionId}`,
         },
         async (payload) => {
-          const { offer, answer } = payload.new;
+          const { offer, answer, ice_candidates } = payload.new;
 
           if (offer && onOffer) {
             onOffer(offer);
@@ -142,6 +175,23 @@ export class WebRTCConnection {
 
           if (answer && onAnswer) {
             onAnswer(answer);
+          }
+
+          if (ice_candidates) {
+            const newCandidates = ice_candidates.filter(
+              (c: any) => c.from !== this.userId
+            );
+            
+            for (const { candidate } of newCandidates) {
+              try {
+                await this.peerConnection.addIceCandidate(
+                  new RTCIceCandidate(candidate)
+                );
+                console.log("[WebRTC] Added remote ICE candidate");
+              } catch (error) {
+                console.error("[WebRTC] Error adding ICE candidate:", error);
+              }
+            }
           }
         }
       )
