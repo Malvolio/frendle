@@ -11,6 +11,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
 export const signInWithGoogle = async () => {
+  // Store current path for redirect after auth
+  const currentPath = window.location.pathname;
+  localStorage.setItem('auth_redirect', currentPath);
+
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {

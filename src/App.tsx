@@ -8,6 +8,7 @@ import { ProfilePage } from "@/routes/profile";
 import { ResourcesPage } from "@/routes/resources";
 import { SessionPage } from "@/routes/session";
 import { UIKit } from "@/routes/uikit";
+import { CallbackPage } from "@/routes/auth/callback";
 import {
   RouterProvider,
   createRootRoute,
@@ -72,6 +73,12 @@ const termsRoute = createRoute({
   path: "/terms",
   component: TermsPage,
 });
+
+const callbackRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/auth/callback",
+  component: CallbackPage,
+});
 const sessionRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/session",
@@ -93,6 +100,7 @@ const routeTree = rootRoute.addChildren([
   matchRoute,
   sessionRoute,
   termsRoute,
+  callbackRoute,
 ]);
 
 const router = createRouter({ routeTree });
