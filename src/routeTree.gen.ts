@@ -21,6 +21,7 @@ import { Route as MatchImport } from './routes/match'
 import { Route as LoginImport } from './routes/login'
 import { Route as HomeImport } from './routes/home'
 import { Route as AboutImport } from './routes/about'
+import { Route as AuthCallbackImport } from './routes/auth/callback'
 
 // Create/Update Routes
 
@@ -81,6 +82,12 @@ const HomeRoute = HomeImport.update({
 const AboutRoute = AboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthCallbackRoute = AuthCallbackImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -158,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UikitImport
       parentRoute: typeof rootRoute
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -174,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/session': typeof SessionRoute
   '/terms': typeof TermsRoute
   '/uikit': typeof UikitRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 
 export interface FileRoutesByTo {
@@ -187,6 +202,7 @@ export interface FileRoutesByTo {
   '/session': typeof SessionRoute
   '/terms': typeof TermsRoute
   '/uikit': typeof UikitRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 
 export interface FileRoutesById {
@@ -201,6 +217,7 @@ export interface FileRoutesById {
   '/session': typeof SessionRoute
   '/terms': typeof TermsRoute
   '/uikit': typeof UikitRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 
 export interface FileRouteTypes {
@@ -216,6 +233,7 @@ export interface FileRouteTypes {
     | '/session'
     | '/terms'
     | '/uikit'
+    | '/auth/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
@@ -228,6 +246,7 @@ export interface FileRouteTypes {
     | '/session'
     | '/terms'
     | '/uikit'
+    | '/auth/callback'
   id:
     | '__root__'
     | '/about'
@@ -240,6 +259,7 @@ export interface FileRouteTypes {
     | '/session'
     | '/terms'
     | '/uikit'
+    | '/auth/callback'
   fileRoutesById: FileRoutesById
 }
 
@@ -254,6 +274,7 @@ export interface RootRouteChildren {
   SessionRoute: typeof SessionRoute
   TermsRoute: typeof TermsRoute
   UikitRoute: typeof UikitRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -267,6 +288,7 @@ const rootRouteChildren: RootRouteChildren = {
   SessionRoute: SessionRoute,
   TermsRoute: TermsRoute,
   UikitRoute: UikitRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 
 export const routeTree = rootRoute
@@ -288,7 +310,8 @@ export const routeTree = rootRoute
         "/resources",
         "/session",
         "/terms",
-        "/uikit"
+        "/uikit",
+        "/auth/callback"
       ]
     },
     "/about": {
@@ -320,6 +343,9 @@ export const routeTree = rootRoute
     },
     "/uikit": {
       "filePath": "uikit.tsx"
+    },
+    "/auth/callback": {
+      "filePath": "auth/callback.tsx"
     }
   }
 }
