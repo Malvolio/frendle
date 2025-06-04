@@ -1,23 +1,13 @@
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
-import { signInWithGoogle } from "@/lib/supabase";
+import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
-import { useState } from "react";
 
 export function HomePage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
 
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsLoading(true);
-      await signInWithGoogle();
-    } catch (error) {
-      console.error("Error signing in with Google:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   return (
     <PublicLayout>
       <section className="relative">
@@ -37,28 +27,30 @@ export function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
                 {/* TODO: Login here */}
-                <div className="flex flex-col gap-8">
-                  <wired-button
-                    elevation="3"
-                    onAuthStateChange={handleGoogleSignIn}
-                    disabled={isLoading}
-                  >
-                    <span className="flex items-center gap-2">
-                      <svg
-                        className="h-5 w-5"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 488 512"
-                      >
-                        <path
-                          fill="currentColor"
-                          d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-                        />
-                      </svg>
-                      Sign in with Google to start chatting
-                    </span>
-                  </wired-button>
-                  <Link to="/about">Learn More</Link>
-                </div>
+                {!user && (
+                  <div className="flex flex-col gap-8 cursor-pointer">
+                    <wired-button
+                      elevation="3"
+                      onClick={handleGoogleSignIn}
+                      disabled={isLoading}
+                    >
+                      <span className="flex items-center gap-2">
+                        <svg
+                          className="h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 488 512"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+                          />
+                        </svg>
+                        Sign in with Google to start chatting
+                      </span>
+                    </wired-button>
+                    <Link to="/about">Learn More</Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
