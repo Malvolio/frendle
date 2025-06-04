@@ -9,7 +9,7 @@ const configuration = {
 };
 
 export class WebRTCConnection {
-  private peerConnection: RTCPeerConnection;
+  public peerConnection: RTCPeerConnection;
   private localStream: MediaStream | null = null;
   private remoteStream: MediaStream | null = null;
   private channel: RealtimeChannel;

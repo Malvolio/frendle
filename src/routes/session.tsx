@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { WebRTCConnection } from "@/lib/webrtc";
+import { supabase } from "@/lib/supabase";
 import { useSearch } from "@tanstack/react-router";
 import {
   Mic,
@@ -59,10 +60,28 @@ export function SessionPage() {
           });
           await connection.createOffer();
         } else {
-          connection.subscribeToSessionChanges(async (offer) => {
-            await connection.createAnswer(offer);
+          // Check if offer already exists
+          const { data: session } = await supabase
+            .from("sessions")
+            .select("offer")
+            .eq("id", sessionId)
+            .single();
+
+          if (session?.offer) {
+            // If offer exists, use it immediately
+            await connection.createAnswer(JSON.parse(session.offer));
             setIsConnecting(false);
-          });
+          }
+
+          // Subscribe to future updates
+          connection.subscribeToSessionChanges(
+            async (offer) => {
+              if (!connection.peerConnection.currentRemoteDescription) {
+                await connection.createAnswer(offer);
+                setIsConnecting(false);
+              }
+            }
+          );
         }
 
         connectionRef.current = connection;
