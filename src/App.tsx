@@ -76,12 +76,10 @@ const sessionRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/session",
   component: SessionPage,
-  validateSearch: (search: Record<string, unknown>) => {
-    return {
-      id: search.id as string,
-      host: search.host === "true",
-    };
-  },
+  validateSearch: (search: Record<string, unknown>) => ({
+    id: search.id as string,
+    host: Boolean(search.host),
+  }),
 });
 
 const routeTree = rootRoute.addChildren([
