@@ -83,11 +83,28 @@ export function SessionPage() {
           // Check if offer already exists
           const { data: session } = await supabase
             .from("sessions")
-            .select("offer")
+            .select("offer, ice_candidates")
             .eq("id", sessionId)
             .single();
 
           if (session?.offer) {
+            // Process any existing ICE candidates first
+            if (session.ice_candidates) {
+              const candidates = session.ice_candidates.filter(
+                (c: any) => c.from !== user.id
+              );
+              for (const { candidate } of candidates) {
+                try {
+                  await connection.peerConnection.addIceCandidate(
+                    new RTCIceCandidate(candidate)
+                  );
+                  console.log("[WebRTC] Added initial ICE candidate");
+                } catch (error) {
+                  console.error("[WebRTC] Error adding initial ICE candidate:", error);
+                }
+              }
+            }
+            
             // If offer exists, use it immediately
             await connection.createAnswer(JSON.parse(session.offer));
             setIsConnecting(false);

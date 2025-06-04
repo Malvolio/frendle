@@ -105,9 +105,14 @@ export class WebRTCConnection {
       console.log("[WebRTC] Offer created");
       await this.peerConnection.setLocalDescription(offer);
 
+      // Reset session state when creating new offer
       const { error } = await supabase
         .from("sessions")
-        .update({ offer: JSON.stringify(offer) })
+        .update({
+          offer: JSON.stringify(offer),
+          answer: null,
+          ice_candidates: []
+        })
         .eq("id", this.sessionId);
 
       if (error) throw error;
