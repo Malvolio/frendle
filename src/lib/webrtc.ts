@@ -8,12 +8,14 @@ const configuration = {
   ],
 };
 
+type CandidateEntry = { from: string; candidate: RTCIceCandidateInit };
+
 export class WebRTCConnection {
   public peerConnection: RTCPeerConnection;
   private localStream: MediaStream | null = null;
   private remoteStream: MediaStream | null = null;
   private channel: RealtimeChannel;
-  private role: 'host' | 'guest';
+  private role: "host" | "guest";
   private userId: string;
 
   constructor(
@@ -24,8 +26,8 @@ export class WebRTCConnection {
     private onConnectionStateChange: (state: RTCPeerConnectionState) => void
   ) {
     this.peerConnection = new RTCPeerConnection(configuration);
-    this.role = isHost ? 'host' : 'guest';
-    this.userId = `${this.role}-${this.uid}`
+    this.role = isHost ? "host" : "guest";
+    this.userId = `${this.role}-${this.uid}`;
     this.setupPeerConnectionListeners();
     this.channel = supabase.channel(`session:${sessionId}`);
     console.log("[WebRTC] Connection initialized", { sessionId });
@@ -51,9 +53,9 @@ export class WebRTCConnection {
 
     this.peerConnection.onicecandidate = async (event) => {
       if (!event.candidate) return;
-      
+
       console.log("[WebRTC] New ICE candidate", event.candidate);
-      
+
       try {
         const { data: session } = await supabase
           .from("sessions")
@@ -103,8 +105,8 @@ export class WebRTCConnection {
 
   async createOffer() {
     try {
-      if (this.role !== 'host') {
-        throw new Error('Only host can create offer');
+      if (this.role !== "host") {
+        throw new Error("Only host can create offer");
       }
 
       const offer = await this.peerConnection.createOffer();
@@ -117,7 +119,7 @@ export class WebRTCConnection {
         .update({
           offer: JSON.stringify(offer),
           answer: null,
-          ice_candidates: []
+          ice_candidates: [],
         })
         .eq("id", this.sessionId);
 
@@ -142,15 +144,21 @@ export class WebRTCConnection {
     }
   }
 
-  async createAnswer(offer: RTCSessionDescriptionInit) {
+  async createAnswer(
+    offer: RTCSessionDescriptionInit,
+    candidates?: CandidateEntry[]
+  ) {
     try {
-      if (this.role !== 'guest') {
-        throw new Error('Only guest can create answer');
+      if (this.role !== "guest") {
+        throw new Error("Only guest can create answer");
       }
 
       await this.peerConnection.setRemoteDescription(
         new RTCSessionDescription(offer)
       );
+      if (candidates) {
+        this.addRemoteIceCandidates(candidates);
+      }
       const answer = await this.peerConnection.createAnswer();
       await this.peerConnection.setLocalDescription(answer);
 
@@ -168,12 +176,16 @@ export class WebRTCConnection {
     }
   }
 
-  async addRemoteIceCandidates(candidates: Array<{ from: string; candidate: RTCIceCandidateInit }>) {
-    const remoteCandidates = candidates.filter(c => c.from !== this.userId);
-    
+  private async addRemoteIceCandidates(
+    candidates: Array<{ from: string; candidate: RTCIceCandidateInit }>
+  ) {
+    const remoteCandidates = candidates.filter((c) => c.from !== this.userId);
+
     for (const { candidate } of remoteCandidates) {
       try {
-        await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        await this.peerConnection.addIceCandidate(
+          new RTCIceCandidate(candidate)
+        );
         console.log("[WebRTC] Added remote ICE candidate");
       } catch (error) {
         console.error("[WebRTC] Error adding ICE candidate:", error);
@@ -182,8 +194,8 @@ export class WebRTCConnection {
   }
 
   subscribeToSessionChanges(
-    onOffer?: (offer: RTCSessionDescriptionInit) => void,
-    onAnswer?: (answer: RTCSessionDescriptionInit) => void
+    onOffer?: (offer: RTCSessionDescriptionInit) => Promise<void>,
+    onAnswer?: (answer: RTCSessionDescriptionInit) => Promise<void>
   ) {
     this.channel
       .on(
@@ -198,11 +210,11 @@ export class WebRTCConnection {
           const { offer, answer, ice_candidates } = payload.new;
 
           if (offer && onOffer) {
-            onOffer(offer);
+            await onOffer(offer);
           }
 
           if (answer && onAnswer) {
-            onAnswer(answer);
+            await onAnswer(answer);
           }
 
           if (ice_candidates) {

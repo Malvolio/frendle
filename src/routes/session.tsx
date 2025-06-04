@@ -94,13 +94,11 @@ export function SessionPage() {
             .single();
 
           if (session?.offer) {
-            // Process any existing ICE candidates first
-            if (session.ice_candidates) {
-              await connection.addRemoteIceCandidates(session.ice_candidates);
-            }
-
             // If offer exists, use it immediately
-            await connection.createAnswer(JSON.parse(session.offer));
+            await connection.createAnswer(
+              JSON.parse(session.offer),
+              session.ice_candidates
+            );
             setIsConnecting(false);
           }
 
