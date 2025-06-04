@@ -13,13 +13,19 @@ export class WebRTCConnection {
   private localStream: MediaStream | null = null;
   private remoteStream: MediaStream | null = null;
   private channel: RealtimeChannel;
+  private role: 'host' | 'guest';
+  private userId: string;
 
   constructor(
     private sessionId: string,
+    private uid: string,
+    isHost: boolean,
     private onRemoteStream: (stream: MediaStream) => void,
     private onConnectionStateChange: (state: RTCPeerConnectionState) => void
   ) {
     this.peerConnection = new RTCPeerConnection(configuration);
+    this.role = isHost ? 'host' : 'guest';
+    this.userId = `${this.role}-${this.uid}`
     this.setupPeerConnectionListeners();
     this.channel = supabase.channel(`session:${sessionId}`);
     console.log("[WebRTC] Connection initialized", { sessionId });
@@ -41,6 +47,35 @@ export class WebRTCConnection {
         state: this.peerConnection.connectionState,
       });
       this.onConnectionStateChange(this.peerConnection.connectionState);
+    };
+
+    this.peerConnection.onicecandidate = async (event) => {
+      if (!event.candidate) return;
+      
+      console.log("[WebRTC] New ICE candidate", event.candidate);
+      
+      try {
+        const { data: session } = await supabase
+          .from("sessions")
+          .select("ice_candidates")
+          .eq("id", this.sessionId)
+          .single();
+
+        const candidates = session?.ice_candidates || [];
+        const newCandidate = {
+          from: this.userId,
+          candidate: event.candidate.toJSON(),
+        };
+
+        await supabase
+          .from("sessions")
+          .update({ ice_candidates: [...candidates, newCandidate] })
+          .eq("id", this.sessionId);
+
+        console.log("[WebRTC] ICE candidate sent to database");
+      } catch (error) {
+        console.error("[WebRTC] Error sending ICE candidate:", error);
+      }
     };
   }
 
@@ -68,13 +103,22 @@ export class WebRTCConnection {
 
   async createOffer() {
     try {
+      if (this.role !== 'host') {
+        throw new Error('Only host can create offer');
+      }
+
       const offer = await this.peerConnection.createOffer();
       console.log("[WebRTC] Offer created");
       await this.peerConnection.setLocalDescription(offer);
 
+      // Reset session state when creating new offer
       const { error } = await supabase
         .from("sessions")
-        .update({ offer: JSON.stringify(offer) })
+        .update({
+          offer: JSON.stringify(offer),
+          answer: null,
+          ice_candidates: []
+        })
         .eq("id", this.sessionId);
 
       if (error) throw error;
@@ -100,6 +144,10 @@ export class WebRTCConnection {
 
   async createAnswer(offer: RTCSessionDescriptionInit) {
     try {
+      if (this.role !== 'guest') {
+        throw new Error('Only guest can create answer');
+      }
+
       await this.peerConnection.setRemoteDescription(
         new RTCSessionDescription(offer)
       );
@@ -120,6 +168,19 @@ export class WebRTCConnection {
     }
   }
 
+  async addRemoteIceCandidates(candidates: Array<{ from: string; candidate: RTCIceCandidateInit }>) {
+    const remoteCandidates = candidates.filter(c => c.from !== this.userId);
+    
+    for (const { candidate } of remoteCandidates) {
+      try {
+        await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        console.log("[WebRTC] Added remote ICE candidate");
+      } catch (error) {
+        console.error("[WebRTC] Error adding ICE candidate:", error);
+      }
+    }
+  }
+
   subscribeToSessionChanges(
     onOffer?: (offer: RTCSessionDescriptionInit) => void,
     onAnswer?: (answer: RTCSessionDescriptionInit) => void
@@ -134,7 +195,7 @@ export class WebRTCConnection {
           filter: `id=eq.${this.sessionId}`,
         },
         async (payload) => {
-          const { offer, answer } = payload.new;
+          const { offer, answer, ice_candidates } = payload.new;
 
           if (offer && onOffer) {
             onOffer(offer);
@@ -142,6 +203,10 @@ export class WebRTCConnection {
 
           if (answer && onAnswer) {
             onAnswer(answer);
+          }
+
+          if (ice_candidates) {
+            await this.addRemoteIceCandidates(ice_candidates);
           }
         }
       )

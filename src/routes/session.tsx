@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import { WebRTCConnection } from "@/lib/webrtc";
+import { useAuth } from "@/providers/auth-provider";
 import { supabase } from "@/lib/supabase";
 import { useSearch } from "@tanstack/react-router";
 import {
@@ -16,6 +17,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export function SessionPage() {
   const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
+  const { user } = useAuth();
   const [isConnecting, setIsConnecting] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -37,11 +39,23 @@ export function SessionPage() {
       return;
     }
 
+    if (!user) {
+      console.log('[Session] No user found');
+      toast({
+        title: "Error",
+        description: "You must be logged in to join a session",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const initializeConnection = async () => {
       try {
         console.log('[Session] Initializing connection', { isHost });
         const connection = new WebRTCConnection(
           sessionId,
+          user.id,
+          isHost,
           (stream) => {
             console.log('[Session] Remote stream updated');
             if (remoteVideoRef.current) {
@@ -70,11 +84,16 @@ export function SessionPage() {
           // Check if offer already exists
           const { data: session } = await supabase
             .from("sessions")
-            .select("offer")
+            .select("offer, ice_candidates")
             .eq("id", sessionId)
             .single();
 
           if (session?.offer) {
+            // Process any existing ICE candidates first
+            if (session.ice_candidates) {
+              await connection.addRemoteIceCandidates(session.ice_candidates);
+            }
+            
             // If offer exists, use it immediately
             await connection.createAnswer(JSON.parse(session.offer));
             setIsConnecting(false);
@@ -108,7 +127,7 @@ export function SessionPage() {
     return () => {
       connectionRef.current?.cleanup();
     };
-  }, [sessionId, isHost]);
+  }, [sessionId, isHost, user]);
 
   const handleToggleAudio = () => {
     if (connectionRef.current) {
