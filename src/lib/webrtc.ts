@@ -14,16 +14,18 @@ export class WebRTCConnection {
   private remoteStream: MediaStream | null = null;
   private channel: RealtimeChannel;
   private role: 'host' | 'guest';
+  private userId: string;
 
   constructor(
     private sessionId: string,
-    private userId: string,
+    private uid: string,
     isHost: boolean,
     private onRemoteStream: (stream: MediaStream) => void,
     private onConnectionStateChange: (state: RTCPeerConnectionState) => void
   ) {
     this.peerConnection = new RTCPeerConnection(configuration);
     this.role = isHost ? 'host' : 'guest';
+    this.userId = `${this.role}-${this.uid}`
     this.setupPeerConnectionListeners();
     this.channel = supabase.channel(`session:${sessionId}`);
     console.log("[WebRTC] Connection initialized", { sessionId });
