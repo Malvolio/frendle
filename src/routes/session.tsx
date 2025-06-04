@@ -55,6 +55,7 @@ export function SessionPage() {
         const connection = new WebRTCConnection(
           sessionId,
           user.id,
+          isHost,
           (stream) => {
             console.log('[Session] Remote stream updated');
             if (remoteVideoRef.current) {
@@ -90,19 +91,7 @@ export function SessionPage() {
           if (session?.offer) {
             // Process any existing ICE candidates first
             if (session.ice_candidates) {
-              const candidates = session.ice_candidates.filter(
-                (c: any) => c.from !== user.id
-              );
-              for (const { candidate } of candidates) {
-                try {
-                  await connection.peerConnection.addIceCandidate(
-                    new RTCIceCandidate(candidate)
-                  );
-                  console.log("[WebRTC] Added initial ICE candidate");
-                } catch (error) {
-                  console.error("[WebRTC] Error adding initial ICE candidate:", error);
-                }
-              }
+              await connection.addRemoteIceCandidates(session.ice_candidates);
             }
             
             // If offer exists, use it immediately
