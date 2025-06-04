@@ -13,16 +13,17 @@ export class WebRTCConnection {
   private localStream: MediaStream | null = null;
   private remoteStream: MediaStream | null = null;
   private channel: RealtimeChannel;
-  private isHost: boolean;
+  private role: 'host' | 'guest';
 
   constructor(
     private sessionId: string,
     private userId: string,
+    isHost: boolean,
     private onRemoteStream: (stream: MediaStream) => void,
     private onConnectionStateChange: (state: RTCPeerConnectionState) => void
   ) {
     this.peerConnection = new RTCPeerConnection(configuration);
-    this.isHost = false;
+    this.role = isHost ? 'host' : 'guest';
     this.setupPeerConnectionListeners();
     this.channel = supabase.channel(`session:${sessionId}`);
     console.log("[WebRTC] Connection initialized", { sessionId });
@@ -100,7 +101,10 @@ export class WebRTCConnection {
 
   async createOffer() {
     try {
-      this.isHost = true;
+      if (this.role !== 'host') {
+        throw new Error('Only host can create offer');
+      }
+
       const offer = await this.peerConnection.createOffer();
       console.log("[WebRTC] Offer created");
       await this.peerConnection.setLocalDescription(offer);
@@ -138,6 +142,10 @@ export class WebRTCConnection {
 
   async createAnswer(offer: RTCSessionDescriptionInit) {
     try {
+      if (this.role !== 'guest') {
+        throw new Error('Only guest can create answer');
+      }
+
       await this.peerConnection.setRemoteDescription(
         new RTCSessionDescription(offer)
       );
@@ -155,6 +163,19 @@ export class WebRTCConnection {
     } catch (error) {
       console.error("Error creating answer:", error);
       throw error;
+    }
+  }
+
+  async addRemoteIceCandidates(candidates: Array<{ from: string; candidate: RTCIceCandidateInit }>) {
+    const remoteCandidates = candidates.filter(c => c.from !== this.userId);
+    
+    for (const { candidate } of remoteCandidates) {
+      try {
+        await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        console.log("[WebRTC] Added remote ICE candidate");
+      } catch (error) {
+        console.error("[WebRTC] Error adding ICE candidate:", error);
+      }
     }
   }
 
@@ -183,20 +204,7 @@ export class WebRTCConnection {
           }
 
           if (ice_candidates) {
-            const newCandidates = ice_candidates.filter(
-              (c: any) => c.from !== this.userId
-            );
-            
-            for (const { candidate } of newCandidates) {
-              try {
-                await this.peerConnection.addIceCandidate(
-                  new RTCIceCandidate(candidate)
-                );
-                console.log("[WebRTC] Added remote ICE candidate");
-              } catch (error) {
-                console.error("[WebRTC] Error adding ICE candidate:", error);
-              }
-            }
+            await this.addRemoteIceCandidates(ice_candidates);
           }
         }
       )
