@@ -1,13 +1,13 @@
 -- 1. Create the table
 create table
     sessions (
-        id uuid primary key,
+        id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
         created_at timestamptz default now (),
         host_id uuid references auth.users,
         guest_id uuid references auth.users,
         offer jsonb,
-        answer jsonb,
-        ice_candidates jsonb default '[]'::jsonb
+        answer jsonb
+        --        ice_candidates jsonb default '[]'::jsonb
     );
 
 -- 2. Enable RLS

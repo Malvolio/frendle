@@ -1,20 +1,26 @@
-import { useEffect, useRef, useState } from 'react';
-import { useSearch } from '@tanstack/react-router';
-import { WebRTCConnection } from '@/lib/webrtc';
-import { AuthLayout } from '@/components/layout/auth-layout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Mic, MicOff, Video as VideoIcon, VideoOff, PhoneOff } from 'lucide-react';
-import { toast } from '@/hooks/use-toast';
+import { AuthLayout } from "@/components/layout/auth-layout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { toast } from "@/hooks/use-toast";
+import { WebRTCConnection } from "@/lib/webrtc";
+import { useSearch } from "@tanstack/react-router";
+import {
+  Mic,
+  MicOff,
+  PhoneOff,
+  Video as VideoIcon,
+  VideoOff,
+} from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function SessionPage() {
-  const { id: sessionId, host: isHost } = useSearch({ from: '/session' });
-  
+  const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
   const [isConnecting, setIsConnecting] = useState(true);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
-  const [connectionState, setConnectionState] = useState<RTCPeerConnectionState>('new');
-  
+  const [connectionState, setConnectionState] =
+    useState<RTCPeerConnectionState>("new");
+
   const localVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const connectionRef = useRef<WebRTCConnection | null>(null);
@@ -22,9 +28,9 @@ export function SessionPage() {
   useEffect(() => {
     if (!sessionId) {
       toast({
-        title: 'Error',
-        description: 'Session ID is required',
-        variant: 'destructive',
+        title: "Error",
+        description: "Session ID is required",
+        variant: "destructive",
       });
       return;
     }
@@ -61,11 +67,12 @@ export function SessionPage() {
 
         connectionRef.current = connection;
       } catch (error) {
-        console.error('Error initializing connection:', error);
+        console.error("Error initializing connection:", error);
         toast({
-          title: 'Error',
-          description: 'Failed to initialize video chat. Please check your camera and microphone permissions.',
-          variant: 'destructive',
+          title: "Error",
+          description:
+            "Failed to initialize video chat. Please check your camera and microphone permissions.",
+          variant: "destructive",
         });
       }
     };
@@ -91,10 +98,21 @@ export function SessionPage() {
     }
   };
 
-  const handleHangup = () => {
+  const handleHangup = useCallback(() => {
     connectionRef.current?.cleanup();
-    window.close();
-  };
+  }, [connectionRef]);
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      handleHangup;
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [handleHangup]);
 
   return (
     <AuthLayout title="Video Chat">
@@ -105,7 +123,9 @@ export function SessionPage() {
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                 <span className="ml-3">
-                  {isHost ? 'Waiting for participant to join...' : 'Joining session...'}
+                  {isHost
+                    ? "Waiting for participant to join..."
+                    : "Joining session..."}
                 </span>
               </div>
             </CardContent>
@@ -151,7 +171,7 @@ export function SessionPage() {
           <CardContent className="p-6">
             <div className="flex justify-center gap-4">
               <Button
-                variant={isAudioEnabled ? 'outline' : 'destructive'}
+                variant={isAudioEnabled ? "outline" : "destructive"}
                 size="icon"
                 onClick={handleToggleAudio}
               >
@@ -161,9 +181,9 @@ export function SessionPage() {
                   <MicOff className="h-5 w-5" />
                 )}
               </Button>
-              
+
               <Button
-                variant={isVideoEnabled ? 'outline' : 'destructive'}
+                variant={isVideoEnabled ? "outline" : "destructive"}
                 size="icon"
                 onClick={handleToggleVideo}
               >
@@ -173,19 +193,15 @@ export function SessionPage() {
                   <VideoOff className="h-5 w-5" />
                 )}
               </Button>
-              
-              <Button
-                variant="destructive"
-                size="icon"
-                onClick={handleHangup}
-              >
+
+              <Button variant="destructive" size="icon" onClick={handleHangup}>
                 <PhoneOff className="h-5 w-5" />
               </Button>
             </div>
           </CardContent>
         </Card>
 
-        {connectionState !== 'connected' && !isConnecting && (
+        {connectionState !== "connected" && !isConnecting && (
           <Card>
             <CardContent className="p-6">
               <div className="text-center text-muted-foreground">
