@@ -17,26 +17,28 @@ export class WebRTCConnection {
   constructor(
     private sessionId: string,
     private onRemoteStream: (stream: MediaStream) => void,
-    private onConnectionStateChange: (state: RTCPeerConnectionState) => void,
+    private onConnectionStateChange: (state: RTCPeerConnectionState) => void
   ) {
     this.peerConnection = new RTCPeerConnection(configuration);
     this.setupPeerConnectionListeners();
     this.channel = supabase.channel(`session:${sessionId}`);
-    console.log('[WebRTC] Connection initialized', { sessionId });
+    console.log("[WebRTC] Connection initialized", { sessionId });
   }
 
   private setupPeerConnectionListeners() {
     this.peerConnection.ontrack = ({ streams: [stream] }) => {
       this.remoteStream = stream;
-      console.log('[WebRTC] Remote stream received', { 
-        tracks: stream.getTracks().map(t => ({ kind: t.kind, enabled: t.enabled }))
+      console.log("[WebRTC] Remote stream received", {
+        tracks: stream
+          .getTracks()
+          .map((t) => ({ kind: t.kind, enabled: t.enabled })),
       });
       this.onRemoteStream(this.remoteStream);
     };
 
     this.peerConnection.onconnectionstatechange = () => {
-      console.log('[WebRTC] Connection state changed', { 
-        state: this.peerConnection.connectionState 
+      console.log("[WebRTC] Connection state changed", {
+        state: this.peerConnection.connectionState,
       });
       this.onConnectionStateChange(this.peerConnection.connectionState);
     };
@@ -48,9 +50,9 @@ export class WebRTCConnection {
         audio,
         video,
       });
-      console.log('[WebRTC] Local stream initialized', {
+      console.log("[WebRTC] Local stream initialized", {
         audio: this.localStream.getAudioTracks().length > 0,
-        video: this.localStream.getVideoTracks().length > 0
+        video: this.localStream.getVideoTracks().length > 0,
       });
       this.localStream.getTracks().forEach((track) => {
         if (this.localStream) {
@@ -67,7 +69,7 @@ export class WebRTCConnection {
   async createOffer() {
     try {
       const offer = await this.peerConnection.createOffer();
-      console.log('[WebRTC] Offer created');
+      console.log("[WebRTC] Offer created");
       await this.peerConnection.setLocalDescription(offer);
 
       const { error } = await supabase
@@ -89,7 +91,7 @@ export class WebRTCConnection {
       await this.peerConnection.setRemoteDescription(
         new RTCSessionDescription(answer)
       );
-      console.log('[WebRTC] Answer handled');
+      console.log("[WebRTC] Answer handled");
     } catch (error) {
       console.error("Error handling answer:", error);
       throw error;
@@ -135,11 +137,11 @@ export class WebRTCConnection {
           const { offer, answer } = payload.new;
 
           if (offer && onOffer) {
-            onOffer(JSON.parse(offer));
+            onOffer(offer);
           }
 
           if (answer && onAnswer) {
-            onAnswer(JSON.parse(answer));
+            onAnswer(answer);
           }
         }
       )
