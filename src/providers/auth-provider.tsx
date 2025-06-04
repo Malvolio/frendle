@@ -1,4 +1,4 @@
-import { getCurrentUser, supabase } from "@/lib/supabase";
+import { getCurrentUser, signInWithGoogle, supabase } from "@/lib/supabase";
 import { User } from "@/types";
 import {
   createContext,
@@ -120,6 +120,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export const useSignInWithGoogle = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      await signInWithGoogle();
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  return { handleGoogleSignIn, isLoading };
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
