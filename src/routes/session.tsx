@@ -28,6 +28,7 @@ export function SessionPage() {
 
   useEffect(() => {
     if (!sessionId) {
+      console.log('[Session] No session ID provided');
       toast({
         title: "Error",
         description: "Session ID is required",
@@ -38,17 +39,23 @@ export function SessionPage() {
 
     const initializeConnection = async () => {
       try {
+        console.log('[Session] Initializing connection', { isHost });
         const connection = new WebRTCConnection(
           sessionId,
           (stream) => {
+            console.log('[Session] Remote stream updated');
             if (remoteVideoRef.current) {
               remoteVideoRef.current.srcObject = stream;
             }
           },
-          setConnectionState
+          (state) => {
+            console.log('[Session] Connection state changed', { state });
+            setConnectionState(state);
+          }
         );
 
         const localStream = await connection.initializeLocalStream();
+        console.log('[Session] Local stream initialized');
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = localStream;
         }
@@ -106,6 +113,7 @@ export function SessionPage() {
   const handleToggleAudio = () => {
     if (connectionRef.current) {
       connectionRef.current.toggleAudio(!isAudioEnabled);
+      console.log('[Session] Audio toggled', { enabled: !isAudioEnabled });
       setIsAudioEnabled(!isAudioEnabled);
     }
   };
@@ -113,6 +121,7 @@ export function SessionPage() {
   const handleToggleVideo = () => {
     if (connectionRef.current) {
       connectionRef.current.toggleVideo(!isVideoEnabled);
+      console.log('[Session] Video toggled', { enabled: !isVideoEnabled });
       setIsVideoEnabled(!isVideoEnabled);
     }
   };

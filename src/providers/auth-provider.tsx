@@ -25,9 +25,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        console.log('[Auth] Fetching current user');
         const currentUser = await getCurrentUser();
         
         if (currentUser) {
+          console.log('[Auth] User found, fetching profile');
           // Fetch user profile from profiles table
           const { data: profile } = await supabase
             .from('profiles')
@@ -36,6 +38,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
             .single();
           
           if (profile) {
+            console.log('[Auth] Profile loaded', { 
+              id: profile.id,
+              membershipStatus: profile.membership_status 
+            });
             setUser({
               id: profile.id,
               email: profile.email,
@@ -47,6 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             });
           } else {
             // Profile doesn't exist yet, create one
+            console.log('[Auth] Creating new profile');
             const { data: newProfile } = await supabase
               .from('profiles')
               .insert({
@@ -58,6 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
               .single();
             
             if (newProfile) {
+              console.log('[Auth] New profile created');
               setUser({
                 id: newProfile.id,
                 email: newProfile.email,
@@ -78,9 +86,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Set up auth subscription
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('[Auth] Auth state changed', { event });
         if (event === 'SIGNED_IN' && session?.user) {
           fetchUser();
         } else if (event === 'SIGNED_OUT') {
+          console.log('[Auth] User signed out');
           setUser(null);
         }
       }
