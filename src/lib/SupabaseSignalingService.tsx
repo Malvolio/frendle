@@ -76,6 +76,7 @@ export class SupabaseSignalingService implements Signaling {
   /**
    * Create a new session (for hosts)
    */
+  // @ts-ignore: Unused variable
   private async createSession(): Promise<void> {
     const { error } = await supabase.from("sessions").insert({
       id: this.sessionId,
