@@ -1,262 +1,158 @@
 import { AuthLayout } from "@/components/layout/auth-layout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { toast } from "@/hooks/use-toast";
-import { WebRTCConnection } from "@/lib/webrtc";
+import { Input } from "@/components/ui/input";
+import { useSupabaseSignaling } from "@/lib/useSupabaseSignaling";
+import { useWebRTC } from "@/lib/useWebRTC";
 import { useAuth } from "@/providers/auth-provider";
-import { supabase } from "@/lib/supabase";
 import { useSearch } from "@tanstack/react-router";
-import {
-  Mic,
-  MicOff,
-  PhoneOff,
-  Video as VideoIcon,
-  VideoOff,
-} from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useRef, useState } from "react";
 
+type Message = {
+  local: boolean;
+  text: string;
+};
+
+const useTextChat = () => {
+  const [conversation, setConversation] = useState<Message[]>([]);
+  const addToConversation = useCallback((c: Message) => {
+    setConversation((ca) => [...ca, c]);
+  }, []);
+  return { conversation, addToConversation };
+};
+
+const TextChat: FC<{
+  conversation: Message[];
+  sendMessage: (text: string) => void;
+  disabled?: boolean;
+}> = ({ conversation, sendMessage, disabled }) => {
+  const [text, setText] = useState("");
+  const send = () => {
+    sendMessage(text);
+    setText("");
+  };
+  return (
+    <div>
+      <div className="scroll-overflow w-40 h-40 border border-gray-200">
+        {conversation.map((message, index) => (
+          <div key={index}>
+            {message.local ? "you" : "him"}: {message.text}
+          </div>
+        ))}
+      </div>
+      <Input
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            send();
+          }
+        }}
+        value={text}
+        onChange={(e) => setText(e.currentTarget.value)}
+        disabled={disabled}
+      />
+      <Button onClick={send} disabled={disabled}>
+        Send
+      </Button>
+    </div>
+  );
+};
+
+const VideoChat: FC<{
+  sessionId: string;
+  isHost: boolean;
+  userId: string;
+}> = ({ sessionId, isHost, userId }) => {
+  const [isAudioEnabled, setAudioEnabled] = useState(true);
+  const [isVideoEnabled, setVideoEnabled] = useState(true);
+  const { conversation, addToConversation } = useTextChat();
+
+  const createSignaling = useSupabaseSignaling(sessionId, isHost, userId);
+  const localRef = useRef<HTMLVideoElement>(null);
+  const remoteRef = useRef<HTMLVideoElement>(null);
+  const webrtc = useWebRTC({
+    isHost,
+    createSignaling,
+    localRef,
+    remoteRef,
+    onDataReceived: (text) => {
+      addToConversation({ local: false, text });
+    },
+  });
+  return (
+    <div className="video-chat flex flex-col gap-5 w-full items-center">
+      <div className="video-container flex flex-row items-center space-x-6">
+        <video
+          ref={localRef}
+          autoPlay
+          muted
+          playsInline
+          className="local-video border rounded-lg shadow-lg border-gray-300 h-32 w-32"
+        />
+        <video
+          ref={remoteRef}
+          autoPlay
+          playsInline
+          className="remote-video border rounded-lg shadow-lg border-gray-300 h-32 w-32"
+        />
+        <TextChat
+          conversation={conversation}
+          sendMessage={(text: string) => {
+            addToConversation({ local: true, text });
+            webrtc.sendData(text);
+          }}
+          disabled={webrtc.connectionState !== "connected"}
+        />
+      </div>
+
+      <div className="controls flex gap-x-4">
+        {webrtc.connectionState === "disconnected" && (
+          <Button className="w-32" onClick={webrtc.startCall}>
+            Start Call
+          </Button>
+        )}
+        {webrtc.connectionState !== "disconnected" && (
+          <Button className="w-32" onClick={webrtc.endCall}>
+            End Call
+          </Button>
+        )}
+        <Button
+          className="w-32"
+          onClick={() => {
+            setVideoEnabled(!isVideoEnabled);
+            webrtc.setVideoEnabled(!isVideoEnabled);
+          }}
+        >
+          {isVideoEnabled ? "Stop Video" : "Start Video"}
+        </Button>
+
+        <Button
+          className="w-32"
+          onClick={() => {
+            setAudioEnabled(!isAudioEnabled);
+            webrtc.setAudioEnabled(!isAudioEnabled);
+          }}
+        >
+          {isAudioEnabled ? "Mute" : "Unmute"}
+        </Button>
+      </div>
+
+      <div className="status">
+        <div>Status: {webrtc.connectionState}</div>
+      </div>
+    </div>
+  );
+};
 export function SessionPage() {
   const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
   const { user } = useAuth();
-  const [isConnecting, setIsConnecting] = useState(true);
-  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
-  const [connectionState, setConnectionState] =
-    useState<RTCPeerConnectionState>("new");
-
-  const localVideoRef = useRef<HTMLVideoElement>(null);
-  const remoteVideoRef = useRef<HTMLVideoElement>(null);
-  const connectionRef = useRef<WebRTCConnection | null>(null);
-
-  useEffect(() => {
-    if (!sessionId) {
-      console.log('[Session] No session ID provided');
-      toast({
-        title: "Error",
-        description: "Session ID is required",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!user) {
-      console.log('[Session] No user found');
-      toast({
-        title: "Error",
-        description: "You must be logged in to join a session",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const initializeConnection = async () => {
-      try {
-        console.log('[Session] Initializing connection', { isHost });
-        const connection = new WebRTCConnection(
-          sessionId,
-          user.id,
-          isHost,
-          (stream) => {
-            console.log('[Session] Remote stream updated');
-            if (remoteVideoRef.current) {
-              remoteVideoRef.current.srcObject = stream;
-            }
-          },
-          (state) => {
-            console.log('[Session] Connection state changed', { state });
-            setConnectionState(state);
-          }
-        );
-
-        const localStream = await connection.initializeLocalStream();
-        console.log('[Session] Local stream initialized');
-        if (localVideoRef.current) {
-          localVideoRef.current.srcObject = localStream;
-        }
-
-        if (isHost) {
-          connection.subscribeToSessionChanges(undefined, async (answer) => {
-            await connection.handleAnswer(answer);
-            setIsConnecting(false);
-          });
-          await connection.createOffer();
-        } else {
-          // Check if offer already exists
-          const { data: session } = await supabase
-            .from("sessions")
-            .select("offer, ice_candidates")
-            .eq("id", sessionId)
-            .single();
-
-          if (session?.offer) {
-            // Process any existing ICE candidates first
-            if (session.ice_candidates) {
-              await connection.addRemoteIceCandidates(session.ice_candidates);
-            }
-            
-            // If offer exists, use it immediately
-            await connection.createAnswer(JSON.parse(session.offer));
-            setIsConnecting(false);
-          }
-
-          // Subscribe to future updates
-          connection.subscribeToSessionChanges(
-            async (offer) => {
-              if (!connection.peerConnection.currentRemoteDescription) {
-                await connection.createAnswer(offer);
-                setIsConnecting(false);
-              }
-            }
-          );
-        }
-
-        connectionRef.current = connection;
-      } catch (error) {
-        console.error("Error initializing connection:", error);
-        toast({
-          title: "Error",
-          description:
-            "Failed to initialize video chat. Please check your camera and microphone permissions.",
-          variant: "destructive",
-        });
-      }
-    };
-
-    initializeConnection();
-
-    return () => {
-      connectionRef.current?.cleanup();
-    };
-  }, [sessionId, isHost, user]);
-
-  const handleToggleAudio = () => {
-    if (connectionRef.current) {
-      connectionRef.current.toggleAudio(!isAudioEnabled);
-      console.log('[Session] Audio toggled', { enabled: !isAudioEnabled });
-      setIsAudioEnabled(!isAudioEnabled);
-    }
-  };
-
-  const handleToggleVideo = () => {
-    if (connectionRef.current) {
-      connectionRef.current.toggleVideo(!isVideoEnabled);
-      console.log('[Session] Video toggled', { enabled: !isVideoEnabled });
-      setIsVideoEnabled(!isVideoEnabled);
-    }
-  };
-
-  const handleHangup = useCallback(() => {
-    connectionRef.current?.cleanup();
-  }, [connectionRef]);
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      handleHangup;
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    // Cleanup
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, [handleHangup]);
 
   return (
-    <AuthLayout title="Video Chat">
+    <AuthLayout title={`Video Chat — ${isHost ? "Host" : "Guest"}`}>
       <div className="max-w-4xl mx-auto space-y-6">
-        {isConnecting && (
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                <span className="ml-3">
-                  {isHost
-                    ? "Waiting for participant to join..."
-                    : "Joining session..."}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="overflow-hidden">
-            <CardContent className="p-0 aspect-video relative">
-              <video
-                ref={localVideoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-4 left-4">
-                <span className="bg-black/50 text-white px-2 py-1 rounded text-sm">
-                  You
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden">
-            <CardContent className="p-0 aspect-video relative">
-              <video
-                ref={remoteVideoRef}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute bottom-4 left-4">
-                <span className="bg-black/50 text-white px-2 py-1 rounded text-sm">
-                  Participant
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex justify-center gap-4">
-              <Button
-                variant={isAudioEnabled ? "outline" : "destructive"}
-                size="icon"
-                onClick={handleToggleAudio}
-              >
-                {isAudioEnabled ? (
-                  <Mic className="h-5 w-5" />
-                ) : (
-                  <MicOff className="h-5 w-5" />
-                )}
-              </Button>
-
-              <Button
-                variant={isVideoEnabled ? "outline" : "destructive"}
-                size="icon"
-                onClick={handleToggleVideo}
-              >
-                {isVideoEnabled ? (
-                  <VideoIcon className="h-5 w-5" />
-                ) : (
-                  <VideoOff className="h-5 w-5" />
-                )}
-              </Button>
-
-              <Button variant="destructive" size="icon" onClick={handleHangup}>
-                <PhoneOff className="h-5 w-5" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {connectionState !== "connected" && !isConnecting && (
-          <Card>
-            <CardContent className="p-6">
-              <div className="text-center text-muted-foreground">
-                Connection status: {connectionState}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <VideoChat
+          sessionId={sessionId}
+          isHost={isHost}
+          userId={user?.id ?? ""}
+        />
       </div>
     </AuthLayout>
   );

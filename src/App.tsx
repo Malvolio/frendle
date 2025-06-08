@@ -1,14 +1,15 @@
 import { Root } from "@/routes/__root";
 import { AboutPage } from "@/routes/about";
+import { CallbackPage } from "@/routes/auth/callback";
 import { HomePage } from "@/routes/home";
 import { LoginPage } from "@/routes/login";
 import { MatchPage } from "@/routes/match";
+import OnboardingPage from "@/routes/onboarding";
 import { PrivacyPage } from "@/routes/privacy";
 import { ProfilePage } from "@/routes/profile";
 import { ResourcesPage } from "@/routes/resources";
 import { SessionPage } from "@/routes/session";
 import { UIKit } from "@/routes/uikit";
-import OnboardingPage from "@/routes/onboarding";
 import {
   RouterProvider,
   createRootRoute,
@@ -16,7 +17,6 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import { TermsPage } from "./routes/terms";
-
 
 const rootRoute = createRootRoute({
   component: Root,
@@ -80,6 +80,12 @@ const termsRoute = createRoute({
   path: "/terms",
   component: TermsPage,
 });
+
+const callbackRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/auth/callback",
+  component: CallbackPage,
+});
 const sessionRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/session",
@@ -102,6 +108,7 @@ const routeTree = rootRoute.addChildren([
   matchRoute,
   sessionRoute,
   termsRoute,
+  callbackRoute,
 ]);
 
 const router = createRouter({ routeTree });

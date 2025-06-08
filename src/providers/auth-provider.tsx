@@ -1,6 +1,12 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { supabase, getCurrentUser } from '@/lib/supabase';
-import { User } from '@/types';
+import { getCurrentUser, signInWithGoogle, supabase } from "@/lib/supabase";
+import { User } from "@/types";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -25,22 +31,22 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log('[Auth] Fetching current user');
+        console.log("[Auth] Fetching current user");
         const currentUser = await getCurrentUser();
-        
+
         if (currentUser) {
-          console.log('[Auth] User found, fetching profile');
+          console.log("[Auth] User found, fetching profile");
           // Fetch user profile from profiles table
           const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', currentUser.id)
+            .from("profiles")
+            .select("*")
+            .eq("id", currentUser.id)
             .single();
-          
+
           if (profile) {
-            console.log('[Auth] Profile loaded', { 
+            console.log("[Auth] Profile loaded", {
               id: profile.id,
-              membershipStatus: profile.membership_status 
+              membershipStatus: profile.membership_status,
             });
             setUser({
               id: profile.id,
@@ -49,33 +55,33 @@ export function AuthProvider({ children }: AuthProviderProps) {
               bio: profile.bio || undefined,
               avatarUrl: profile.avatar_url || undefined,
               selectedCharity: profile.selected_charity || undefined,
-              membershipStatus: profile.membership_status || 'free',
+              membershipStatus: profile.membership_status || "free",
             });
           } else {
             // Profile doesn't exist yet, create one
-            console.log('[Auth] Creating new profile');
+            console.log("[Auth] Creating new profile");
             const { data: newProfile } = await supabase
-              .from('profiles')
+              .from("profiles")
               .insert({
                 id: currentUser.id,
-                email: currentUser.email || '',
-                membership_status: 'free',
+                email: currentUser.email || "",
+                membership_status: "free",
               })
               .select()
               .single();
-            
+
             if (newProfile) {
-              console.log('[Auth] New profile created');
+              console.log("[Auth] New profile created");
               setUser({
                 id: newProfile.id,
                 email: newProfile.email,
-                membershipStatus: 'free',
+                membershipStatus: "free",
               });
             }
           }
         }
       } catch (error) {
-        console.error('Error fetching user:', error);
+        console.error("Error fetching user:", error);
       } finally {
         setLoading(false);
       }
@@ -86,11 +92,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // Set up auth subscription
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('[Auth] Auth state changed', { event });
-        if (event === 'SIGNED_IN' && session?.user) {
+        console.log("[Auth] Auth state changed", { event });
+        if (event === "SIGNED_IN" && session?.user) {
           fetchUser();
-        } else if (event === 'SIGNED_OUT') {
-          console.log('[Auth] User signed out');
+        } else if (event === "SIGNED_OUT") {
+          console.log("[Auth] User signed out");
           setUser(null);
         }
       }
@@ -115,12 +121,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+export const useSignInWithGoogle = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      await signInWithGoogle();
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  return { handleGoogleSignIn, isLoading };
+};
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  
+
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  
+
   return context;
 };

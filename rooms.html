@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Session Launcher</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2em;
+        }
+
+        button {
+            margin: 0.5em;
+            padding: 0.75em 1.25em;
+            font-size: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Open Session Windows</h2>
+
+    <button onclick="openWin('http://localhost:2000/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=true')">Local
+        Host</button>
+    <button onclick="openWin('http://localhost:2000/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=false')">Local
+        Guest</button>
+    <button
+        onclick="openWin('https://demo.frendle.space/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=true')">Live
+        Host</button>
+    <button
+        onclick="openWin('https://demo.frendle.space/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=false')">Live
+        Guest</button>
+    <button
+        onclick="openWin('https://demo.frendle.space/session?id=ffcc25ea-b2d5-4193-9648-4033659da678&host=true')">Live
+        Host (V)</button>
+    <br />
+    <div>Live Guest:</div>
+    <img src="public/frendle_guest.png" />
+    <script>
+        const openWin = (url) => {
+            window.open(url, '__blank', 'width=800,height=600,resizable=yes');
+        };
+    </script>
+</body>
+
+</html>
