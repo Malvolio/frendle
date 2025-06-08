@@ -8,6 +8,7 @@ import { ProfilePage } from "@/routes/profile";
 import { ResourcesPage } from "@/routes/resources";
 import { SessionPage } from "@/routes/session";
 import { UIKit } from "@/routes/uikit";
+import OnboardingPage from "@/routes/onboarding";
 import {
   RouterProvider,
   createRootRoute,
@@ -15,6 +16,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import { TermsPage } from "./routes/terms";
+
 
 const rootRoute = createRootRoute({
   component: Root,
@@ -42,6 +44,12 @@ const uikitRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/uikit",
   component: UIKit,
+});
+
+const onboardingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/onboarding",
+  component: OnboardingPage,
 });
 
 const privacyRoute = createRoute({
@@ -87,6 +95,7 @@ const routeTree = rootRoute.addChildren([
   aboutRoute,
   resourcesRoute,
   uikitRoute,
+  onboardingRoute,
   privacyRoute,
   loginRoute,
   profileRoute,

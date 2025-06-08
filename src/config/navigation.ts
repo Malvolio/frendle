@@ -14,6 +14,11 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/resources',
   },
   {
+    title: 'Onboarding',
+    href: '/onboarding',
+
+  },
+  {
     title: 'Profile',
     href: '/profile',
     requiresAuth: true,
@@ -28,4 +33,5 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/uikit',
     requiresAuth: true,
   },
+
 ];
