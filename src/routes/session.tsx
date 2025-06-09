@@ -143,16 +143,20 @@ const VideoChat: FC<{
 };
 
 export const Route = createFileRoute("/session")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    id: search.id as string,
+    host: Boolean(search.host),
+  }),
   component: () => {
-    const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
+    const { id: sessionId, host } = useSearch({ from: "/session" });
     const { user } = useAuth();
 
     return (
-      <AuthLayout title={`Video Chat — ${isHost ? "Host" : "Guest"}`}>
+      <AuthLayout title={`Video Chat — ${host ? "Host" : "Guest"}`}>
         <div className="max-w-4xl mx-auto space-y-6">
           <VideoChat
             sessionId={sessionId}
-            isHost={isHost}
+            isHost={host}
             userId={user?.id ?? ""}
           />
         </div>
