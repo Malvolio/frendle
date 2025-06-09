@@ -55,6 +55,14 @@ export function Footer() {
                   Terms of Service
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/donation"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Donation Policy
+                </Link>
+              </li>
             </ul>
           </div>
 

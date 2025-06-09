@@ -1,4 +1,5 @@
 import { AboutMission, AboutStory, AboutTeam } from "@/components/about";
+import PageTitle from "@/components/layout/PageTitle";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -28,12 +29,9 @@ export const Route = createFileRoute("/about")({
 
     return (
       <PublicLayout>
-        <div className="mb-8 w-7/12 mx-auto">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">About Us</h1>
-          <p className="text-gray-600">
-            Learn more about our story, team, and mission
-          </p>
-        </div>
+        <PageTitle title="About Us">
+          Learn more about our story, team, and mission
+        </PageTitle>
 
         <Tabs
           value={currentTab}
