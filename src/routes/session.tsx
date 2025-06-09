@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useSupabaseSignaling } from "@/lib/useSupabaseSignaling";
 import { useWebRTC } from "@/lib/useWebRTC";
 import { useAuth } from "@/providers/auth-provider";
-import { useSearch } from "@tanstack/react-router";
+import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { FC, useCallback, useRef, useState } from "react";
 
 type Message = {
@@ -141,19 +141,22 @@ const VideoChat: FC<{
     </div>
   );
 };
-export function SessionPage() {
-  const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
-  const { user } = useAuth();
 
-  return (
-    <AuthLayout title={`Video Chat — ${isHost ? "Host" : "Guest"}`}>
-      <div className="max-w-4xl mx-auto space-y-6">
-        <VideoChat
-          sessionId={sessionId}
-          isHost={isHost}
-          userId={user?.id ?? ""}
-        />
-      </div>
-    </AuthLayout>
-  );
-}
+export const Route = createFileRoute("/session")({
+  component: () => {
+    const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
+    const { user } = useAuth();
+
+    return (
+      <AuthLayout title={`Video Chat — ${isHost ? "Host" : "Guest"}`}>
+        <div className="max-w-4xl mx-auto space-y-6">
+          <VideoChat
+            sessionId={sessionId}
+            isHost={isHost}
+            userId={user?.id ?? ""}
+          />
+        </div>
+      </AuthLayout>
+    );
+  },
+});

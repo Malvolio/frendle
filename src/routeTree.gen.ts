@@ -20,8 +20,8 @@ import { Route as PrivacyImport } from './routes/privacy'
 import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as MatchImport } from './routes/match'
 import { Route as LoginImport } from './routes/login'
-import { Route as HomeImport } from './routes/home'
 import { Route as AboutImport } from './routes/about'
+import { Route as IndexImport } from './routes/index'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
 
 // Create/Update Routes
@@ -80,15 +80,15 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const HomeRoute = HomeImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AboutRoute = AboutImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const IndexRoute = IndexImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,18 +102,18 @@ const AuthCallbackRoute = AuthCallbackImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutImport
-      parentRoute: typeof rootRoute
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -192,8 +192,8 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
@@ -207,8 +207,8 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
@@ -223,8 +223,8 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/home': typeof HomeRoute
   '/login': typeof LoginRoute
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
@@ -240,8 +240,8 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/about'
-    | '/home'
     | '/login'
     | '/match'
     | '/onboarding'
@@ -254,8 +254,8 @@ export interface FileRouteTypes {
     | '/auth/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/about'
-    | '/home'
     | '/login'
     | '/match'
     | '/onboarding'
@@ -268,8 +268,8 @@ export interface FileRouteTypes {
     | '/auth/callback'
   id:
     | '__root__'
+    | '/'
     | '/about'
-    | '/home'
     | '/login'
     | '/match'
     | '/onboarding'
@@ -284,8 +284,8 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  HomeRoute: typeof HomeRoute
   LoginRoute: typeof LoginRoute
   MatchRoute: typeof MatchRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -299,8 +299,8 @@ export interface RootRouteChildren {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  HomeRoute: HomeRoute,
   LoginRoute: LoginRoute,
   MatchRoute: MatchRoute,
   OnboardingRoute: OnboardingRoute,
@@ -323,8 +323,8 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/about",
-        "/home",
         "/login",
         "/match",
         "/onboarding",
@@ -337,11 +337,11 @@ export const routeTree = rootRoute
         "/auth/callback"
       ]
     },
+    "/": {
+      "filePath": "index.tsx"
+    },
     "/about": {
       "filePath": "about.tsx"
-    },
-    "/home": {
-      "filePath": "home.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

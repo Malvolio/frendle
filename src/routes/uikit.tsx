@@ -1,17 +1,19 @@
+import { Availability } from "@/components/ui/availability";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Availability } from "@/components/ui/availability";
-
-export function UIKit() {
-  return (
+import { createFileRoute } from "@tanstack/react-router";
+export const Route = createFileRoute("/uikit")({
+  component: () => (
     <div className="container py-10 bg-[url(background.jpg)]">
       <h1>UI Kit</h1>
       <p className="text-lg mb-6">
         This page showcases the UI components used in the Frendle.{" "}
       </p>
       <h2>Availability component</h2>
-      <p className="text-red-700 strong">NOTE: The animation is a bit wonky, feel free to tweak!</p>
+      <p className="text-red-700 strong">
+        NOTE: The animation is a bit wonky, feel free to tweak!
+      </p>
       <Availability />
       <hr></hr>
       <div className="grid grid-cols-2 gap-4">
@@ -31,10 +33,16 @@ export function UIKit() {
         <div className="border p-8 border-black flex flex-col justify-center">
           <h2>Links</h2>
           <Button variant="link" asChild>
-            <a href="https://ui.shadcn.com" target="_blank" rel="noopener noreferrer">Text link</a>
+            <a
+              href="https://ui.shadcn.com"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Text link
+            </a>
           </Button>
         </div>
       </div>
     </div>
-  );
-}
+  ),
+});

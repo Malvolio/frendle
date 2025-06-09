@@ -1,10 +1,10 @@
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Globe, Handshake, Heart, Users } from "lucide-react";
 
-export function AboutPage() {
-  return (
+export const Route = createFileRoute("/about")({
+  component: () => (
     <PublicLayout>
       <div className="py-16 md:py-24">
         <div className="container">
@@ -192,5 +192,5 @@ export function AboutPage() {
         </div>
       </div>
     </PublicLayout>
-  );
-}
+  ),
+});

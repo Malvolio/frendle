@@ -1,5 +1,7 @@
-import { LoginPrompt } from '@/components/auth/login-prompt';
+import { LoginPrompt } from "@/components/auth/login-prompt";
 
-export function LoginPage() {
-  return <LoginPrompt />;
-}
+import { createFileRoute } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/login")({
+  component: () => <LoginPrompt />,
+});
