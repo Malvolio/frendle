@@ -14,7 +14,7 @@ const AboutStory = () => (
         <Users className="w-5 h-5 text-green-600" />
         Our Story
       </CardTitle>
-      <CardDescription>Meet the people behind the product</CardDescription>
+      <CardDescription>So far...</CardDescription>
     </CardHeader>
     <CardContent>
       <p>

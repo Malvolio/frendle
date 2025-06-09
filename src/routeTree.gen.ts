@@ -20,6 +20,7 @@ import { Route as PrivacyImport } from './routes/privacy'
 import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as MatchImport } from './routes/match'
 import { Route as LoginImport } from './routes/login'
+import { Route as ExpectationsImport } from './routes/expectations'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
@@ -80,6 +81,12 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ExpectationsRoute = ExpectationsImport.update({
+  id: '/expectations',
+  path: '/expectations',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AboutRoute = AboutImport.update({
   id: '/about',
   path: '/about',
@@ -114,6 +121,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/expectations': {
+      id: '/expectations'
+      path: '/expectations'
+      fullPath: '/expectations'
+      preLoaderRoute: typeof ExpectationsImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -194,6 +208,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/expectations': typeof ExpectationsRoute
   '/login': typeof LoginRoute
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
@@ -209,6 +224,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/expectations': typeof ExpectationsRoute
   '/login': typeof LoginRoute
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
@@ -225,6 +241,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/expectations': typeof ExpectationsRoute
   '/login': typeof LoginRoute
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
@@ -242,6 +259,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/expectations'
     | '/login'
     | '/match'
     | '/onboarding'
@@ -256,6 +274,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/expectations'
     | '/login'
     | '/match'
     | '/onboarding'
@@ -270,6 +289,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/expectations'
     | '/login'
     | '/match'
     | '/onboarding'
@@ -286,6 +306,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ExpectationsRoute: typeof ExpectationsRoute
   LoginRoute: typeof LoginRoute
   MatchRoute: typeof MatchRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -301,6 +322,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ExpectationsRoute: ExpectationsRoute,
   LoginRoute: LoginRoute,
   MatchRoute: MatchRoute,
   OnboardingRoute: OnboardingRoute,
@@ -325,6 +347,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/expectations",
         "/login",
         "/match",
         "/onboarding",
@@ -342,6 +365,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/expectations": {
+      "filePath": "expectations.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

@@ -1,37 +1,39 @@
-import { NavItem } from '@/types';
+import { NavItem } from "@/types";
 
 export const NAV_ITEMS: NavItem[] = [
   {
-    title: 'Home',
-    href: '/',
+    title: "Home",
+    href: "/",
   },
   {
-    title: 'About',
-    href: '/about',
+    title: "About",
+    href: "/about",
   },
   {
-    title: 'Resources',
-    href: '/resources',
+    title: "Resources",
+    href: "/resources",
   },
   {
-    title: 'Onboarding',
-    href: '/onboarding',
-
+    title: "Community Expectations",
+    href: "/expectations",
   },
   {
-    title: 'Profile',
-    href: '/profile',
+    title: "Onboarding",
+    href: "/onboarding",
+  },
+  {
+    title: "Profile",
+    href: "/profile",
     requiresAuth: true,
   },
   {
-    title: 'Match',
-    href: '/match',
+    title: "Match",
+    href: "/match",
     requiresAuth: true,
   },
   {
-    title: 'UI Kit',
-    href: '/uikit',
+    title: "UI Kit",
+    href: "/uikit",
     requiresAuth: true,
   },
-
 ];
