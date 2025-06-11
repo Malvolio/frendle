@@ -99,7 +99,7 @@ const Questionnaire = () => {
           onClick={() => {
             setQuestionIndex((n) => n + 1);
           }}
-          disabled={questionIndex >= Questions.length}
+          disabled={questionIndex >= Questions.length - 1}
         >
           Next
         </Button>
