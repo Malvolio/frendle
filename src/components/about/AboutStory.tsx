@@ -18,14 +18,15 @@ const AboutStory = () => (
     </CardHeader>
     <CardContent>
       <p>
-        Frendle began when its founder, Bartholomew “Barty” Plim, accidentally
-        dialed a wrong number and ended up having a 45-minute conversation with
-        a retired beekeeper in Latvia. They talked about loneliness, honey, and
-        the universal longing to be known. Inspired, the founder spent the next
-        72 hours building the first version of Frendle — a platform designed to
-        recreate the magic of accidental human connection, but with slightly
-        better audio quality. The name “Frendle” came from a typo during a
-        drug-addled late-night search for available domains, and ...
+        Frendle began when its founder, Bartholomew “Barty” Frendle,
+        accidentally dialed a wrong number and ended up having a 45-minute
+        conversation with a retired beekeeper in Latvia. They talked about
+        loneliness, honey, and the universal longing to be known. Inspired, the
+        founder spent the next 72 hours building the first version of Frendle —
+        a platform designed to recreate the magic of accidental human
+        connection, but with slightly better audio quality. The name “Frendle”
+        came from a typo during a drug-addled late-night search for available
+        domains, and ...
       </p>
       <p className="my-3">
         OK, none of that is true. The boring truth is, the two founders (see

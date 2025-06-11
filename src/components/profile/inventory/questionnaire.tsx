@@ -72,24 +72,39 @@ const DisplayQuestion: FC<{
 
 const Questionnaire = () => {
   const [questionIndex, setQuestionIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
   const [answers, setAnswers] = useState<string[]>([]);
+  const updateQuestionIndex = (f: (n: number) => number) => {
+    const n = f(questionIndex);
+    setVisible(false);
+    setTimeout(() => {
+      setQuestionIndex(n);
+      setVisible(true);
+    }, 800);
+  };
   return (
     <div>
-      <DisplayQuestion
-        selectedId={answers[questionIndex] ?? ""}
-        setSelectedId={(id) => {
-          setAnswers((v) => {
-            const p = [...v];
-            p[questionIndex] = id;
-            return p;
-          });
-        }}
-        question={Questions[questionIndex]}
-      />
+      <div className="h-72 w-full flex flex-col justify-center items-center">
+        {visible ? (
+          <DisplayQuestion
+            selectedId={answers[questionIndex] ?? ""}
+            setSelectedId={(id) => {
+              setAnswers((v) => {
+                const p = [...v];
+                p[questionIndex] = id;
+                return p;
+              });
+            }}
+            question={Questions[questionIndex]}
+          />
+        ) : (
+          <img src="/spiral.png" className="animate-spin-slow w-24" />
+        )}
+      </div>
       <div className="flex justify-center gap-6 my-6">
         <Button
           onClick={() => {
-            setQuestionIndex((n) => n - 1);
+            updateQuestionIndex((n) => n - 1);
           }}
           disabled={questionIndex <= 0}
         >
@@ -97,7 +112,7 @@ const Questionnaire = () => {
         </Button>
         <Button
           onClick={() => {
-            setQuestionIndex((n) => n + 1);
+            updateQuestionIndex((n) => n + 1);
           }}
           disabled={questionIndex >= Questions.length - 1}
         >

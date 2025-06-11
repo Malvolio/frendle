@@ -7,7 +7,7 @@ export function Footer() {
 
   return (
     <footer className="bg-muted/40 border-t">
-      <div className="container py-8 md:py-12">
+      <div className="container py-8 md:py-12 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-3">
             <Link to="/" className="flex items-center gap-2">
