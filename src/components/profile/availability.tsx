@@ -27,6 +27,8 @@ const TIME_BLOCKS = [
   { label: "night", hours: ["12am", "1am", "2am", "3am", "4am", "5am"] },
 ];
 
+const MAX_SLOTS = 20;
+
 const Availability = () => {
   const [openColumn, setOpenColumn] = useState("Mon");
 
@@ -53,7 +55,7 @@ const Availability = () => {
       }
 
       // Prevent more than 5 total selections
-      if (totalSelections >= 5) return prev;
+      if (totalSelections >= MAX_SLOTS) return prev;
 
       // Add new selection
       return {
@@ -65,14 +67,14 @@ const Availability = () => {
   const [show, setShow] = useState(false); // or false, depending on when you want to show
   // Show highlight when 5 slots are selected
   useEffect(() => {
-    setShow(totalSelections >= 5);
+    setShow(totalSelections >= MAX_SLOTS);
   }, [totalSelections]);
   return (
     <div className="w-full flex-col justify-between items-start md:items-center mb-4">
       <div>
         <RoughNotation type="highlight" show={show} color="#F0D8A0">
-          <span className="text-2xl font-bold">{totalSelections}</span> of 5
-          selected
+          <span className="text-2xl font-bold">{totalSelections}</span> of{" "}
+          {MAX_SLOTS} selected
         </RoughNotation>
       </div>
       <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-6xl mx-auto">
@@ -83,7 +85,8 @@ const Availability = () => {
             return (
               <motion.div
                 key={day.short}
-                className="border-r border-gray-200 last:border-r-0 overflow-hidden"
+                className="border-r border-gray-200 last:border-r-0 overflow-hidden cursor-pointer"
+                onClick={() => setOpenColumn(day.short)}
                 initial={false}
                 animate={{
                   width: openColumn === day.short ? "400px" : "200px",
@@ -96,12 +99,11 @@ const Availability = () => {
                 {/* Column Header */}
                 <motion.div
                   className={`px-3 py-2 rounded font-semibold w-full text-center ${openColumn === day.short ? "" : "hover:border-b-2"}`}
-                  onClick={() => setOpenColumn(day.short)}
                   whileHover={{ backgroundColor: "#F0D8A0" }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center justify-center">
-                    <h3 className="font-semibold text-center text-lg">
+                    <h3 className="font-semibold text-center text-lg whitespace-nowrap">
                       {openColumn === day.short ? day.full : day.short}{" "}
                       {dayLabel}
                     </h3>
@@ -128,7 +130,7 @@ const Availability = () => {
                             const isSelected =
                               selectedTimes[day.short]?.includes(hour);
                             const isDisabled =
-                              !isSelected && totalSelections >= 5;
+                              !isSelected && totalSelections >= MAX_SLOTS;
                             return (
                               <button
                                 key={hour}
@@ -170,7 +172,7 @@ const AvailabilityPage = () => {
         </CardTitle>
 
         <CardDescription>
-          Pick up to 5 one-hour slots you’re available every week.
+          Pick up to {MAX_SLOTS} one-hour slots you’re available every week.
         </CardDescription>
       </CardHeader>
       <CardContent>
