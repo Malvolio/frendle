@@ -17,6 +17,7 @@ import { toast } from "@/hooks/use-toast";
 import { updateUserProfile } from "@/lib/supabase";
 import { useAuth } from "@/providers/auth-provider";
 import { Charity } from "@/types";
+import { HeartHandshake } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function CharitySelection() {
@@ -111,16 +112,20 @@ export function CharitySelection() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Support a Cause</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <HeartHandshake className="w-5 h-5 text-green-600" />
+          Support a Cause
+        </CardTitle>
+
         <CardDescription>
           Choose a charity to support. 100% of your donation will go directly to
           your selected charity.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-4 h-96">
           <div className="space-y-2">
-            <label htmlFor="charity" className="text-sm font-medium">
+            <label htmlFor="charitySelect" className="text-sm font-medium">
               Select Charity
             </label>
             <Select
@@ -128,7 +133,7 @@ export function CharitySelection() {
               value={selectedCharity}
               onValueChange={setSelectedCharity}
             >
-              <SelectTrigger id="charity">
+              <SelectTrigger id="charitySelect">
                 <SelectValue placeholder="Select a charity" />
               </SelectTrigger>
               <SelectContent>

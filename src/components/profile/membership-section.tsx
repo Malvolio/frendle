@@ -17,7 +17,7 @@ import {
 } from "@/lib/stripe";
 import { useAuth } from "@/providers/auth-provider";
 import { Subscription } from "@/types";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, BadgeCheck, CheckCircle2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function MembershipSection() {
@@ -124,7 +124,10 @@ export function MembershipSection() {
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle>Membership</CardTitle>
+            <CardTitle className="flex items-center gap-2 mb-1">
+              <BadgeCheck className="w-5 h-5 text-green-600" />
+              Membership
+            </CardTitle>
             <CardDescription>
               Upgrade to Premium for unlimited matches and exclusive features
             </CardDescription>

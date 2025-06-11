@@ -31,7 +31,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        console.log("[Auth] Fetching current user");
         const currentUser = await getCurrentUser();
 
         if (currentUser) {

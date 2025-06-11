@@ -18,17 +18,8 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/expectations",
   },
   {
-    title: "Onboarding",
-    href: "/onboarding",
-  },
-  {
     title: "Profile",
     href: "/profile",
-    requiresAuth: true,
-  },
-  {
-    title: "Match",
-    href: "/match",
     requiresAuth: true,
   },
   {

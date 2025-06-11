@@ -1,22 +1,31 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/providers/auth-provider';
-import { toast } from '@/hooks/use-toast';
-import { updateUserProfile } from '@/lib/supabase';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/hooks/use-toast";
+import { updateUserProfile } from "@/lib/supabase";
+import { useAuth } from "@/providers/auth-provider";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const profileSchema = z.object({
   fullName: z.string().min(2, {
-    message: 'Full name must be at least 2 characters.',
+    message: "Full name must be at least 2 characters.",
   }),
   bio: z.string().max(160, {
-    message: 'Bio must not be longer than 160 characters.',
+    message: "Bio must not be longer than 160 characters.",
   }),
 });
 
@@ -29,8 +38,8 @@ export function ProfileForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      fullName: user?.fullName || '',
-      bio: user?.bio || '',
+      fullName: user?.fullName || "",
+      bio: user?.bio || "",
     },
   });
 
@@ -38,7 +47,7 @@ export function ProfileForm() {
     if (!user) return;
 
     setIsSubmitting(true);
-    
+
     try {
       const { error } = await updateUserProfile(user.id, {
         full_name: data.fullName,
@@ -49,15 +58,15 @@ export function ProfileForm() {
       if (error) throw error;
 
       toast({
-        title: 'Profile updated',
-        description: 'Your profile has been updated successfully.',
+        title: "Profile updated",
+        description: "Your profile has been updated successfully.",
       });
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to update profile. Please try again.',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to update profile. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -67,7 +76,10 @@ export function ProfileForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Profile</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <User className="w-5 h-5 text-green-600" />
+          About you
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -88,7 +100,7 @@ export function ProfileForm() {
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="bio"
@@ -109,9 +121,9 @@ export function ProfileForm() {
                 </FormItem>
               )}
             />
-            
+
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Saving...' : 'Save Changes'}
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
           </form>
         </Form>

@@ -1,15 +1,15 @@
 import { LoginPrompt } from "@/components/auth/login-prompt";
 import { useAuth } from "@/providers/auth-provider";
-import { Link } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
 import { ReactNode } from "react";
+import { Footer } from "./footer";
+import { Header } from "./header";
 
 interface AuthLayoutProps {
   children: ReactNode;
-  title: string;
+  title?: string;
 }
 
-export function AuthLayout({ children, title }: AuthLayoutProps) {
+export function AuthLayout({ children }: AuthLayoutProps) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -26,24 +26,10 @@ export function AuthLayout({ children, title }: AuthLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-muted/30">
-      <div className="container py-4 md:py-8">
-        <div className="mb-6">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Home
-          </Link>
-        </div>
-
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">{title}</h1>
-        </div>
-
-        <div>{children}</div>
-      </div>
+    <div className="flex flex-col min-h-screen bg-[url('/bg-paper.png')] bg-repeat bg-auto">
+      <Header />
+      <main className="flex-1 pt-16">{children}</main>
+      <Footer />
     </div>
   );
 }

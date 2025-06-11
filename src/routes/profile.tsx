@@ -1,32 +1,51 @@
 import { AuthLayout } from "@/components/layout/auth-layout";
+import AvailabilityPage from "@/components/profile/availability";
 import { CharitySelection } from "@/components/profile/charity-selection";
+import Inventory from "@/components/profile/inventory";
 import { MembershipSection } from "@/components/profile/membership-section";
 import { ProfileForm } from "@/components/profile/profile-form";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TabSet from "@/components/TabSet";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  BadgeCheck,
+  Calendar1,
+  HeartHandshake,
+  ListChecks,
+  User,
+} from "lucide-react";
+const ProfileTabs = [
+  { id: "profile", name: "About you", icon: User, body: ProfileForm },
+
+  {
+    id: "membership",
+    name: "Membership",
+    icon: BadgeCheck,
+    body: MembershipSection,
+  },
+  {
+    id: "inventory",
+    name: "Personality",
+    icon: ListChecks,
+    body: Inventory,
+  },
+  {
+    id: "availability",
+    name: "Availability",
+    icon: Calendar1,
+    body: AvailabilityPage,
+  },
+  {
+    id: "charity",
+    name: "Charity",
+    icon: HeartHandshake,
+    body: CharitySelection,
+  },
+];
 
 export const Route = createFileRoute("/profile")({
   component: () => (
     <AuthLayout title="My Profile">
-      <Tabs defaultValue="profile" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-3">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="charity">Charity</TabsTrigger>
-          <TabsTrigger value="membership">Membership</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="profile" className="space-y-6">
-          <ProfileForm />
-        </TabsContent>
-
-        <TabsContent value="charity" className="space-y-6">
-          <CharitySelection />
-        </TabsContent>
-
-        <TabsContent value="membership" className="space-y-6">
-          <MembershipSection />
-        </TabsContent>
-      </Tabs>
+      <TabSet tabs={ProfileTabs} />
     </AuthLayout>
   ),
 });

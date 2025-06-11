@@ -1,4 +1,3 @@
-import { Availability } from "@/components/ui/availability";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,11 +9,6 @@ export const Route = createFileRoute("/uikit")({
       <p className="text-lg mb-6">
         This page showcases the UI components used in the Frendle.{" "}
       </p>
-      <h2>Availability component</h2>
-      <p className="text-red-700 strong">
-        NOTE: The animation is a bit wonky, feel free to tweak!
-      </p>
-      <Availability />
       <hr></hr>
       <div className="grid grid-cols-2 gap-4">
         <div className="border p-8 border-black">
