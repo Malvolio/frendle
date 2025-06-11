@@ -11,13 +11,13 @@ import { useEffect, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 
 const DAYS = [
+  { short: "Sun", full: "Sunday" },
   { short: "Mon", full: "Monday" },
   { short: "Tue", full: "Tuesday" },
   { short: "Wed", full: "Wednesday" },
   { short: "Thu", full: "Thursday" },
   { short: "Fri", full: "Friday" },
   { short: "Sat", full: "Saturday" },
-  { short: "Sun", full: "Sunday" },
 ];
 
 const TIME_BLOCKS = [
@@ -28,7 +28,8 @@ const TIME_BLOCKS = [
 ];
 
 const Availability = () => {
-  const [openDay, setOpenDay] = useState<string | null>(null);
+  const [openColumn, setOpenColumn] = useState("Mon");
+
   const [selectedTimes, setSelectedTimes] = useState<Record<string, string[]>>(
     {}
   );
@@ -38,17 +39,6 @@ const Availability = () => {
     (sum, arr) => sum + arr.length,
     0
   );
-
-  const [show, setShow] = useState(false); // or false, depending on when you want to show
-  // Show highlight when 5 slots are selected
-  useEffect(() => {
-    setShow(totalSelections >= 5);
-  }, [totalSelections]);
-
-  const handleDayClick = (day: string) => {
-    setOpenDay(openDay === day ? null : day);
-  };
-
   const handleTimeClick = (day: string, time: string) => {
     setSelectedTimes((prev) => {
       const dayTimes = prev[day] || [];
@@ -72,92 +62,104 @@ const Availability = () => {
       };
     });
   };
-
+  const [show, setShow] = useState(false); // or false, depending on when you want to show
+  // Show highlight when 5 slots are selected
+  useEffect(() => {
+    setShow(totalSelections >= 5);
+  }, [totalSelections]);
   return (
-    <div className="w-full md:w-[600px] max-w-2xl mx-auto m-h-80 transition-all ">
-      <div className="w-full flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-        <div>
-          <RoughNotation type="highlight" show={show} color="#F0D8A0">
-            <span className="text-2xl font-bold">{totalSelections}</span> of 5
-            selected
-          </RoughNotation>
-        </div>
+    <div className="w-full flex-col justify-between items-start md:items-center mb-4">
+      <div>
+        <RoughNotation type="highlight" show={show} color="#F0D8A0">
+          <span className="text-2xl font-bold">{totalSelections}</span> of 5
+          selected
+        </RoughNotation>
       </div>
-      <div className="flex flex-col md:flex-row justify-between mb-4 transition-transform ">
-        {DAYS.map((day) => (
-          <motion.div
-            key={day.short}
-            className={`flex flex-col items-center w-full border border-transparent `}
-          >
-            <motion.button
-              layout
-              className={`px-3 py-2 rounded font-semibold w-full text-center ${
-                openDay === day.short
-                  ? ""
-                  : "hover:bg-[#F0D8A0] hover:border-b-2"
-              }`}
-              onClick={() => {
-                if (openDay !== day.short) {
-                  handleDayClick(day.short);
-                }
-              }}
-            >
-              <div>{openDay === day.short ? day.full : day.short}</div>
-            </motion.button>
-            {selectedTimes[day.short] &&
-              selectedTimes[day.short].length > 0 &&
-              openDay != day.short && (
-                <span className="mt-1 text-sm text-primary">
-                  {selectedTimes[day.short].join(",  ")}
-                </span>
-              )}
-            {openDay === day.short && (
-              <div className="flex gap-2 px-2 ">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-6xl mx-auto">
+        <div className="flex">
+          {DAYS.map((day) => {
+            const count = selectedTimes[day.short]?.length;
+            const dayLabel = count ? `(${count})` : "";
+            return (
+              <motion.div
+                key={day.short}
+                className="border-r border-gray-200 last:border-r-0 overflow-hidden"
+                initial={false}
+                animate={{
+                  width: openColumn === day.short ? "400px" : "200px",
+                }}
+                transition={{
+                  duration: 0.4,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
+              >
+                {/* Column Header */}
+                <motion.div
+                  className={`px-3 py-2 rounded font-semibold w-full text-center ${openColumn === day.short ? "" : "hover:border-b-2"}`}
+                  onClick={() => setOpenColumn(day.short)}
+                  whileHover={{ backgroundColor: "#F0D8A0" }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <div className="flex items-center justify-center">
+                    <h3 className="font-semibold text-center text-lg">
+                      {openColumn === day.short ? day.full : day.short}{" "}
+                      {dayLabel}
+                    </h3>
+                  </div>
+                </motion.div>
+
+                {/* Column Content */}
                 <AnimatePresence>
-                  {TIME_BLOCKS.map((block) => (
-                    <motion.div
-                      layout
-                      key={block.label}
-                      exit={{ opacity: 0 }}
-                      className="flex flex-col items-center"
-                    >
-                      <img
-                        src={block.label + ".svg"}
-                        alt={block.label}
-                        className="mb-2"
-                      />
-                      {block.hours.map((hour) => {
-                        const isSelected =
-                          selectedTimes[day.short]?.includes(hour);
-                        const isDisabled = !isSelected && totalSelections >= 5;
-                        return (
-                          <button
-                            key={hour}
-                            className={`mb-1 px-2 py-1 rounded text-sm ${
-                              isSelected
-                                ? "bg-primary text-white"
-                                : isDisabled
-                                  ? " text-gray-500 cursor-not-allowed border text-italic"
-                                  : "hover:bg-[#F0D8A0]/60"
-                            }`}
-                            onClick={() => handleTimeClick(day.short, hour)}
-                            disabled={isDisabled}
-                          >
-                            {hour}
-                          </button>
-                        );
-                      })}
-                    </motion.div>
-                  ))}
+                  {openColumn === day.short && (
+                    <div className="flex gap-2 px-2 ">
+                      {TIME_BLOCKS.map((block) => (
+                        <motion.div
+                          layout
+                          key={block.label}
+                          exit={{ opacity: 0 }}
+                          className="flex flex-col items-center"
+                        >
+                          <img
+                            src={block.label + ".svg"}
+                            alt={block.label}
+                            className="mb-2"
+                          />
+                          {block.hours.map((hour) => {
+                            const isSelected =
+                              selectedTimes[day.short]?.includes(hour);
+                            const isDisabled =
+                              !isSelected && totalSelections >= 5;
+                            return (
+                              <button
+                                key={hour}
+                                className={`mb-1 px-2 py-1 rounded text-sm border ${
+                                  isSelected
+                                    ? "bg-primary text-white"
+                                    : isDisabled
+                                      ? "text-gray-500 cursor-not-allowed  text-italic"
+                                      : "hover:bg-[#F0D8A0]/60 border-transparent"
+                                }`}
+                                onClick={() => handleTimeClick(day.short, hour)}
+                                disabled={isDisabled}
+                              >
+                                {hour}
+                              </button>
+                            );
+                          })}
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
                 </AnimatePresence>
-              </div>
-            )}
-          </motion.div>
-        ))}
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 };
+
 const AvailabilityPage = () => {
   return (
     <Card>
@@ -168,7 +170,7 @@ const AvailabilityPage = () => {
         </CardTitle>
 
         <CardDescription>
-          Pick up to 5 one-hour slots you're available every week.
+          Pick up to 5 one-hour slots you’re available every week.
         </CardDescription>
       </CardHeader>
       <CardContent>
