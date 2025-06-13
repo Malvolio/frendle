@@ -1,8 +1,8 @@
 import { AuthLayout } from "@/components/layout/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSupabaseSignaling } from "@/lib/useSupabaseSignaling";
 import { useWebRTC } from "@/lib/useWebRTC";
+import { useWebSocketSignaling } from "@/lib/useWebSocketSignaling";
 import { useAuth } from "@/providers/auth-provider";
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 import { FC, useCallback, useRef, useState } from "react";
@@ -64,8 +64,8 @@ const VideoChat: FC<{
   const [isAudioEnabled, setAudioEnabled] = useState(true);
   const [isVideoEnabled, setVideoEnabled] = useState(true);
   const { conversation, addToConversation } = useTextChat();
-
-  const createSignaling = useSupabaseSignaling(sessionId, isHost, userId);
+  const url = "ws://localhost:3001/signaling";
+  const createSignaling = useWebSocketSignaling(url, sessionId, isHost, userId);
   const localRef = useRef<HTMLVideoElement>(null);
   const remoteRef = useRef<HTMLVideoElement>(null);
   const webrtc = useWebRTC({

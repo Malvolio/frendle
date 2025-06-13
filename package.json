@@ -7,6 +7,7 @@
     "dev": "vite --port 2000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "start:signal": "bun run src/server/socketServer.ts",
     "preview": "vite preview"
   },
   "dependencies": {
