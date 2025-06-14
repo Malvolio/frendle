@@ -89,7 +89,7 @@ const VideoChat: FC<{
   const [isAudioEnabled, setAudioEnabled] = useState(true);
   const [isVideoEnabled, setVideoEnabled] = useState(true);
   const { conversation, addToConversation } = useTextChat();
-  const url = "ws://localhost:3001/signaling";
+  const url = "ws://frendle-signaling.fly.dev/signaling";
   const createSignaling = useWebSocketSignaling(url, sessionId, isHost, userId);
   const localRef = useRef<HTMLVideoElement>(null);
   const remoteRef = useRef<HTMLVideoElement>(null);

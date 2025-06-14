@@ -243,7 +243,7 @@ const signalingServer = new SignalingServer();
 
 // Create Bun WebSocket server
 const server = Bun.serve({
-  port: process.env.PORT || 3001,
+  port: process.env.PORT || 3000,
 
   fetch(req, server) {
     const url = new URL(req.url);
