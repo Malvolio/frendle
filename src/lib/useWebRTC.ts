@@ -62,9 +62,6 @@ const initializePeerConnection = (
         break;
       case "connected":
         onStateChange("connected");
-        if (connection.localData) {
-          connection.localData("");
-        }
         break;
       case "disconnected":
         onStateChange("disconnected");
@@ -111,7 +108,9 @@ const initializePeerConnection = (
     });
   }
   const connectDataChannel = (dataChannel: RTCDataChannel) => {
-    dataChannel.onopen = () => console.log("[DataChannel] Data channel open");
+    dataChannel.onopen = () => {
+      console.log("[DataChannel] Data channel open");
+    };
     dataChannel.onmessage = (event) => {
       if (connection.remoteData && event.data) {
         console.log(`[WebRTC onmessage] ${event.data}`);
@@ -391,7 +390,9 @@ export const useWebRTC = ({
     endCall,
     setAudioEnabled,
     setVideoEnabled,
-    sendData: connectionRef.current.localData || (() => {}),
+    sendData: (s) => {
+      connectionRef.current.localData && connectionRef.current.localData(s);
+    },
     isVideoRunning:
       isVideoInitialized &&
       !!connectionRef.current.localStream?.getVideoTracks()[0].enabled,

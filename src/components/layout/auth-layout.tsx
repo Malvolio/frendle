@@ -1,15 +1,15 @@
 import { LoginPrompt } from "@/components/auth/login-prompt";
 import { useAuth } from "@/providers/auth-provider";
 import { ReactNode } from "react";
-import { Footer } from "./footer";
-import { Header } from "./header";
+import { PublicLayout } from "./public-layout";
 
 interface AuthLayoutProps {
   children: ReactNode;
   title?: string;
+  clean?: boolean;
 }
 
-export function AuthLayout({ children }: AuthLayoutProps) {
+export function AuthLayout({ children, clean }: AuthLayoutProps) {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -25,11 +25,5 @@ export function AuthLayout({ children }: AuthLayoutProps) {
     return <LoginPrompt />;
   }
 
-  return (
-    <div className="flex flex-col min-h-screen bg-[url('/bg-paper.png')] bg-repeat bg-auto">
-      <Header />
-      <main className="flex-1 pt-16">{children}</main>
-      <Footer />
-    </div>
-  );
+  return clean ? children : <PublicLayout>{children}</PublicLayout>;
 }

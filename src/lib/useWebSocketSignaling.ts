@@ -44,8 +44,6 @@ export const useWebSocketSignaling = (
       const queuedMessages: SignalingMessage[] = [];
 
       const sendMessage = async (message: SignalingMessage): Promise<void> => {
-        console.log(`sending ${JSON.stringify(message, null, 2)}`);
-
         if (ws.readyState !== WebSocket.OPEN) {
           throw new Error("WebSocket is not connected");
         }
@@ -166,7 +164,6 @@ export const useWebSocketSignaling = (
       ws.onmessage = (event) => {
         try {
           const message: SignalingMessage = JSON.parse(event.data);
-          console.log(`received ${JSON.stringify(message, null, 2)}`);
           switch (message.type) {
             case "user-joined":
               // Another user joined the session - we now have the other party
