@@ -1,7 +1,13 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Maximize2 } from "lucide-react";
-import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
+import React, {
+  Dispatch,
+  PropsWithChildren,
+  SetStateAction,
+  useRef,
+  useState,
+} from "react";
 
 export interface PaneStyle {
   x: number;
@@ -12,31 +18,19 @@ export interface PaneStyle {
 }
 
 const MovablePaneStyles = ({
-  paneStyles: extPaneStyles,
-  setPaneStyles: setExtPaneStyles,
+  paneStyles,
+  setPaneStyles,
   panes: components,
   children,
 }: PropsWithChildren<{
-  paneStyles?: Record<string, PaneStyle>;
-  setPaneStyles?: (_: Record<string, PaneStyle>) => void;
+  paneStyles: Record<string, PaneStyle>;
+  setPaneStyles: Dispatch<SetStateAction<Record<string, PaneStyle>>>;
   panes: Record<string, JSX.Element>;
 }>) => {
-  const [paneStyles, setPaneStyles] = useState(extPaneStyles ?? {});
   const [resizing, setResizing] = useState(false);
   const updateBlock = (id: string, updates: Partial<PaneStyle>) => {
     setPaneStyles((prev) => ({ ...prev, [id]: { ...prev[id], ...updates } }));
   };
-  useEffect(() => {
-    if (!setExtPaneStyles) {
-      return;
-    }
-    const p = setTimeout(() => {
-      setExtPaneStyles(paneStyles);
-    }, 300);
-    return () => {
-      clearTimeout(p);
-    };
-  }, [paneStyles]);
 
   const handleDrag = (id: string, info: any) => {
     updateBlock(id, { x: info.point.x, y: info.point.y });

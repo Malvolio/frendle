@@ -19,7 +19,7 @@ export type WebRTCHookReturn = {
   endCall: () => void;
   setAudioEnabled: (_: boolean) => void;
   setVideoEnabled: (_: boolean) => void;
-  sendData: (_: string) => void;
+  sendData: (_: object) => void;
   isVideoRunning: boolean;
 };
 
@@ -34,9 +34,9 @@ const DEFAULT_CONFIG: WebRTCConfig = {
 type Connection = {
   signaling: Signaling | undefined;
   localStream: MediaStream | undefined;
-  localData: ((s: string) => void) | undefined;
+  localData: ((s: object) => void) | undefined;
   remoteStream: MediaStream | undefined;
-  remoteData: ((s: string) => void) | undefined;
+  remoteData: ((s: object) => void) | undefined;
 };
 
 const initializePeerConnection = (
@@ -108,18 +108,33 @@ const initializePeerConnection = (
     });
   }
   const connectDataChannel = (dataChannel: RTCDataChannel) => {
+    let queue: string[] = [];
     dataChannel.onopen = () => {
       console.log("[DataChannel] Data channel open");
+      while (queue.length) {
+        const output = queue.shift();
+        if (output) {
+          console.log(`[WebRTC sending] ${output}`);
+          dataChannel.send(output);
+        }
+      }
     };
     dataChannel.onmessage = (event) => {
       if (connection.remoteData && event.data) {
         console.log(`[WebRTC onmessage] ${event.data}`);
-        connection.remoteData(event.data);
+        connection.remoteData(JSON.parse(String(event.data)));
       }
     };
-    connection.localData = (data: string) => {
-      console.log(`[WebRTC sending] ${data}`);
-      dataChannel.send(data);
+    connection.localData = (data: object) => {
+      const output = JSON.stringify(data);
+
+      if (dataChannel.readyState === "open") {
+        console.log(`[WebRTC sending] ${data}`);
+        dataChannel.send(output);
+      } else {
+        console.log(`[WebRTC queueing] ${data}`);
+        queue.push(output);
+      }
     };
   };
   if (isHost) {
@@ -271,7 +286,7 @@ type WebRTCHookProps = {
   config?: WebRTCConfig;
   localRef: MutableRefObject<HTMLVideoElement | null>;
   remoteRef: MutableRefObject<HTMLVideoElement | null>;
-  onDataReceived?: (_: string) => void;
+  onDataReceived?: (_: object) => void;
 };
 
 const assignMediaRef = (
@@ -381,6 +396,17 @@ export const useWebRTC = ({
     initialize();
   }, []);
 
+  const sendData = useCallback(
+    (data: object) => {
+      connectionRef.current.localData && connectionRef.current.localData(data);
+    },
+    [connectionRef]
+  );
+
+  const isVideoRunning =
+    isVideoInitialized &&
+    !!connectionRef.current.localStream?.getVideoTracks()[0].enabled;
+
   assignMediaRef(localRef.current, connectionRef.current.localStream);
   assignMediaRef(remoteRef.current, connectionRef.current.remoteStream);
 
@@ -390,11 +416,7 @@ export const useWebRTC = ({
     endCall,
     setAudioEnabled,
     setVideoEnabled,
-    sendData: (s) => {
-      connectionRef.current.localData && connectionRef.current.localData(s);
-    },
-    isVideoRunning:
-      isVideoInitialized &&
-      !!connectionRef.current.localStream?.getVideoTracks()[0].enabled,
+    sendData,
+    isVideoRunning,
   };
 };

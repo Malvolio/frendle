@@ -1,3 +1,4 @@
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { FC, useState } from "react";
@@ -98,7 +99,7 @@ const Questionnaire = () => {
             question={Questions[questionIndex]}
           />
         ) : (
-          <img src="/spiral.png" className="animate-spin-slow w-24" />
+          <Spinner />
         )}
       </div>
       <div className="flex justify-center gap-6 my-6">

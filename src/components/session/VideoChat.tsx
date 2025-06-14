@@ -1,61 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useWebRTC } from "@/lib/useWebRTC";
 import { useWebSocketSignaling } from "@/lib/useWebSocketSignaling";
 import { cn } from "@/lib/utils";
 import { Mic, MicOff, PhoneOff, Video, VideoOff } from "lucide-react";
 import { FC, useCallback, useRef, useState } from "react";
+import Spinner from "../Spinner";
+import GamePlay from "./GamePlay";
 import MovablePanes, { PaneStyle } from "./MovablePanes";
-
-type Message = {
-  local: boolean;
-  text: string;
-};
-
-const useTextChat = () => {
-  const [conversation, setConversation] = useState<Message[]>([]);
-  const addToConversation = useCallback((c: Message) => {
-    setConversation((ca) => [...ca, c]);
-  }, []);
-  return { conversation, addToConversation };
-};
-
-const TextChat: FC<{
-  conversation: Message[];
-  sendMessage: (text: string) => void;
-  disabled?: boolean;
-}> = ({ conversation, sendMessage, disabled }) => {
-  const [text, setText] = useState("");
-  const send = () => {
-    sendMessage(text);
-    setText("");
-  };
-  return (
-    <div className="w-full h-full flex flex-col bg-white p-2 gap-y-2">
-      <div className="scroll-overflow flex-1 border border-gray-200">
-        {conversation.map((message, index) => (
-          <div key={index}>
-            {message.local ? "you" : "him"}: {message.text}
-          </div>
-        ))}
-      </div>
-      <Input
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            send();
-          }
-        }}
-        value={text}
-        onChange={(e) => setText(e.currentTarget.value)}
-        disabled={disabled}
-        className="flex-0"
-      />
-      <Button className="flex-0" onClick={send} disabled={disabled}>
-        Send
-      </Button>
-    </div>
-  );
-};
+import ThirtySix from "./thirty-six";
 
 const defaultPaneStyles: Record<string, PaneStyle> = {
   localVideo: {
@@ -81,6 +33,9 @@ const defaultPaneStyles: Record<string, PaneStyle> = {
   },
 };
 
+const Games = {
+  thirtySix: ThirtySix,
+};
 const VideoChat: FC<{
   sessionId: string;
   isHost: boolean;
@@ -88,18 +43,19 @@ const VideoChat: FC<{
 }> = ({ sessionId, isHost, userId }) => {
   const [isAudioEnabled, setAudioEnabled] = useState(true);
   const [isVideoEnabled, setVideoEnabled] = useState(true);
-  const { conversation, addToConversation } = useTextChat();
   const url = "wss://frendle-signaling.fly.dev/signaling";
   const createSignaling = useWebSocketSignaling(url, sessionId, isHost, userId);
   const localRef = useRef<HTMLVideoElement>(null);
   const remoteRef = useRef<HTMLVideoElement>(null);
+  const [event, setEvent] = useState<object>();
+  const [paneStyles, setPaneStyles] = useState(defaultPaneStyles);
   const webrtc = useWebRTC({
     isHost,
     createSignaling,
     localRef,
     remoteRef,
-    onDataReceived: (text) => {
-      addToConversation({ local: false, text });
+    onDataReceived: (e) => {
+      setEvent(e);
     },
   });
   const localVideo = (
@@ -113,12 +69,20 @@ const VideoChat: FC<{
   );
   const remoteVideo = (
     <div className="bg-white h-full p-1 flex flex-col justify-between gap-3">
-      <video
-        className="flex-1 border border-gray-100"
-        ref={remoteRef}
-        autoPlay
-        playsInline
-      />
+      {webrtc.connectionState === "connected" && (
+        <video
+          className="flex-1 border border-gray-100"
+          ref={remoteRef}
+          autoPlay
+          playsInline
+        />
+      )}
+      {webrtc.connectionState === "connecting" && <Spinner />}
+      {webrtc.connectionState === "disconnected" && (
+        <div className="w-full h-full bg-gray-100 flex justify-center items-center">
+          <VideoOff />
+        </div>
+      )}
       <div className="flex-0">
         <div className="text-sm font-semibold">BENNY</div>
         <div className="text-xs">
@@ -131,20 +95,34 @@ const VideoChat: FC<{
       </div>
     </div>
   );
+  const setGameplayPaneSize = useCallback((width: number, height: number) => {
+    setPaneStyles((prev) => ({
+      ...prev,
+      gamePlay: {
+        ...prev["gamePlay"],
+        width,
+        height,
+      },
+    }));
+  }, []);
+
   const gamePlay = (
-    <TextChat
-      conversation={conversation}
-      sendMessage={(text: string) => {
-        addToConversation({ local: true, text });
-        webrtc.sendData(text);
+    <GamePlay
+      event={event}
+      sendEvent={(e: object) => {
+        webrtc.sendData(e);
       }}
       disabled={webrtc.connectionState !== "connected"}
+      isHost={isHost}
+      games={Games}
+      setPaneSize={setGameplayPaneSize}
     />
   );
   return (
     <div className="video-chat min-h-screen flex flex-col gap-5 h-full w-full items-center bg-[url('/bg-paper.png')] bg-repeat bg-auto">
       <MovablePanes
-        paneStyles={defaultPaneStyles}
+        paneStyles={paneStyles}
+        setPaneStyles={setPaneStyles}
         panes={{ localVideo, remoteVideo, gamePlay }}
       >
         {webrtc.connectionState === "disconnected" && (
