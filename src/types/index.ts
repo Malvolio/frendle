@@ -1,11 +1,9 @@
 export interface User {
   id: string;
-  email: string;
-  fullName?: string;
+  name?: string;
   bio?: string;
   avatarUrl?: string;
   selectedCharity?: string;
-  membershipStatus: 'free' | 'premium';
 }
 
 export interface Charity {
@@ -19,7 +17,7 @@ export interface Charity {
 
 export interface Subscription {
   id: string;
-  status: 'active' | 'canceled' | 'incomplete' | 'past_due' | 'trialing';
+  status: "active" | "canceled" | "incomplete" | "past_due" | "trialing";
   currentPeriodEnd: string;
   cancelAtPeriodEnd: boolean;
 }

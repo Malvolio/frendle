@@ -2,7 +2,7 @@ import Spinner from "@/components/Spinner";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import z from "zod";
 import { Button } from "../../ui/button";
-import { GameComponent } from "../GameControls";
+import { GameComponent } from "../GamePlayTypes";
 import Questions from "./questions";
 
 type Modes = "waiting" | "asking" | "listening" | "done";
@@ -26,7 +26,8 @@ const ThirtySixMessageSchema = z.discriminatedUnion("type", [
 // Infer the TypeScript type from the schema
 type ThirtySixMessage = z.infer<typeof ThirtySixMessageSchema>;
 
-const ThirtySix: GameComponent = ({ event, sendEvent, isHost }) => {
+const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
+  const { isHost } = session;
   const [mode, setMode] = useState<Modes>("waiting");
   const [questionId, setQuestionId] = useState("");
   const [usedQuestions, setUsedQuestions] = useState<Set<string>>(new Set());

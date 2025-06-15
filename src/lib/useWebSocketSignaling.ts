@@ -19,9 +19,8 @@ type SignalingMessage = {
 
 export const useWebSocketSignaling = (
   url: string,
-  sessionId: string,
-  isHost: boolean,
-  _userId: string
+  roomId: string,
+  isHost: boolean
 ): (() => Promise<Signaling>) => {
   return useCallback(async (): Promise<Signaling> => {
     const userId = String(Math.random());
@@ -72,7 +71,7 @@ export const useWebSocketSignaling = (
         // Join the session
         const joinMessage: SignalingMessage = {
           type: "join",
-          sessionId,
+          sessionId: roomId,
           userId,
           isHost,
         };
@@ -106,7 +105,7 @@ export const useWebSocketSignaling = (
           signalOffer: async (offer) => {
             const message: SignalingMessage = {
               type: "offer",
-              sessionId,
+              sessionId: roomId,
               userId,
               isHost,
               payload: offer,
@@ -117,7 +116,7 @@ export const useWebSocketSignaling = (
           signalAnswer: async (answer) => {
             const message: SignalingMessage = {
               type: "answer",
-              sessionId,
+              sessionId: roomId,
               userId,
               isHost,
               payload: answer,
@@ -128,7 +127,7 @@ export const useWebSocketSignaling = (
           signalIceCandidate: async (candidate) => {
             const message: SignalingMessage = {
               type: "ice-candidate",
-              sessionId,
+              sessionId: roomId,
               userId,
               isHost,
               payload: candidate,
@@ -146,7 +145,7 @@ export const useWebSocketSignaling = (
             if (ws.readyState === WebSocket.OPEN) {
               const leaveMessage: SignalingMessage = {
                 type: "leave",
-                sessionId,
+                sessionId: roomId,
                 userId,
                 isHost,
               };
@@ -232,5 +231,5 @@ export const useWebSocketSignaling = (
         reject(new Error("WebSocket connection failed"));
       };
     });
-  }, [url, sessionId, _userId, isHost]);
+  }, [url, roomId, isHost]);
 };

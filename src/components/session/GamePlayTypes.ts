@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { SessionDescription } from "./SessionDescription";
 
 type ControlMessage = {
   type: "control";
@@ -11,13 +12,12 @@ type GameMessage<T = object> = {
   type: "game";
   payload: T;
 };
-
 type GameComponent = FC<{
   event: GameMessage | undefined;
   sendEvent: (_: GameMessage) => void;
   disabled: boolean;
   setPaneSize?: (width: number, height: number) => void;
-  isHost: boolean;
+  session: SessionDescription;
 }>;
 
 type GamePlayProps = {
@@ -25,7 +25,7 @@ type GamePlayProps = {
   sendEvent: (_: object) => void;
   disabled: boolean;
   games: Record<string, GameComponent>;
-  isHost: boolean;
+  session: SessionDescription;
   setPaneSize?: (width: number, height: number) => void;
 };
 

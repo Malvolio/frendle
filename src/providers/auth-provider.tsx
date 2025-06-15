@@ -49,12 +49,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
             });
             setUser({
               id: profile.id,
-              email: profile.email,
-              fullName: profile.full_name || undefined,
+              name: profile.name || undefined,
               bio: profile.bio || undefined,
               avatarUrl: profile.avatar_url || undefined,
               selectedCharity: profile.selected_charity || undefined,
-              membershipStatus: profile.membership_status || "free",
             });
           } else {
             // Profile doesn't exist yet, create one
@@ -73,8 +71,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
               console.log("[Auth] New profile created");
               setUser({
                 id: newProfile.id,
-                email: newProfile.email,
-                membershipStatus: "free",
               });
             }
           }

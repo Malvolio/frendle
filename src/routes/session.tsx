@@ -1,6 +1,7 @@
 import { AuthLayout } from "@/components/layout/auth-layout";
+import useGetSession from "@/components/session/useGetSession";
 import VideoChat from "@/components/session/VideoChat";
-import { useAuth } from "@/providers/auth-provider";
+import Spinner from "@/components/Spinner";
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/session")({
@@ -9,16 +10,13 @@ export const Route = createFileRoute("/session")({
     host: Boolean(search.host),
   }),
   component: () => {
-    const { id: sessionId, host } = useSearch({ from: "/session" });
-    const { user } = useAuth();
-
+    const { id: sessionId, host: isHost } = useSearch({ from: "/session" });
+    const { loading, session, error } = useGetSession(sessionId, isHost);
     return (
-      <AuthLayout title={`Video Chat — ${host ? "Host" : "Guest"}`} clean>
-        <VideoChat
-          sessionId={sessionId}
-          isHost={host}
-          userId={user?.id ?? ""}
-        />
+      <AuthLayout title={`Session — ${isHost ? "Host" : "Guest"}`} clean>
+        {loading && <Spinner />}
+        {error}
+        {session && <VideoChat session={session} />}
       </AuthLayout>
     );
   },

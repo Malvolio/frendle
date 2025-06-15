@@ -7,6 +7,7 @@ import { FC, useCallback, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GamePlay from "./GamePlay";
 import MovablePanes, { PaneStyle } from "./MovablePanes";
+import { SessionDescription } from "./SessionDescription";
 import ThirtySix from "./thirty-six";
 
 const defaultPaneStyles: Record<string, PaneStyle> = {
@@ -37,20 +38,22 @@ const Games = {
   thirtySix: ThirtySix,
 };
 const VideoChat: FC<{
-  sessionId: string;
-  isHost: boolean;
-  userId: string;
-}> = ({ sessionId, isHost, userId }) => {
+  session: SessionDescription;
+}> = ({ session }) => {
   const [isAudioEnabled, setAudioEnabled] = useState(true);
   const [isVideoEnabled, setVideoEnabled] = useState(true);
   const url = "wss://frendle-signaling.fly.dev/signaling";
-  const createSignaling = useWebSocketSignaling(url, sessionId, isHost, userId);
+  const createSignaling = useWebSocketSignaling(
+    url,
+    session.id,
+    session.isHost
+  );
   const localRef = useRef<HTMLVideoElement>(null);
   const remoteRef = useRef<HTMLVideoElement>(null);
   const [event, setEvent] = useState<object>();
   const [paneStyles, setPaneStyles] = useState(defaultPaneStyles);
   const webrtc = useWebRTC({
-    isHost,
+    isHost: session.isHost,
     createSignaling,
     localRef,
     remoteRef,
@@ -84,13 +87,15 @@ const VideoChat: FC<{
         </div>
       )}
       <div className="flex-0">
-        <div className="text-sm font-semibold">BENNY</div>
+        <div className="text-sm font-semibold uppercase">
+          {session.partner.name || "unnamed"}
+        </div>
         <div className="text-xs">
           <span className="font-semibold">mood</span>: silly, quiet
         </div>
         <div className="text-xs">
-          Consider Benny may not be much for talking today but hanging out is
-          still welcomed.
+          Consider {session.partner.name || "Unnamed"} may not be much for
+          talking today but hanging out is still welcomed.
         </div>
       </div>
     </div>
@@ -113,7 +118,7 @@ const VideoChat: FC<{
         webrtc.sendData(e);
       }}
       disabled={webrtc.connectionState !== "connected"}
-      isHost={isHost}
+      session={session}
       games={Games}
       setPaneSize={setGameplayPaneSize}
     />

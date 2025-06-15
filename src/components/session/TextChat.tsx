@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import z from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { GameComponent, GameMessage } from "./GameControls";
+import { GameComponent, GameMessage } from "./GamePlayTypes";
 
 type InternalMessage = {
   local: boolean;

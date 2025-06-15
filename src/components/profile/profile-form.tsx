@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const profileSchema = z.object({
-  fullName: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
   bio: z.string().max(160, {
@@ -38,7 +38,7 @@ export function ProfileForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      fullName: user?.fullName || "",
+      name: user?.name || "",
       bio: user?.bio || "",
     },
   });
@@ -50,7 +50,7 @@ export function ProfileForm() {
 
     try {
       const { error } = await updateUserProfile(user.id, {
-        full_name: data.fullName,
+        name: data.name,
         bio: data.bio,
         updated_at: new Date().toISOString(),
       });
@@ -86,7 +86,7 @@ export function ProfileForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
-              name="fullName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>

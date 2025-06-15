@@ -4,7 +4,7 @@ import {
   GamePlayProps,
   isControlMessage,
   isGameMessage,
-} from "./GameControls";
+} from "./GamePlayTypes";
 
 const pickRandomGame = (availableGames: string[]): string => {
   const randomIndex = Math.floor(Math.random() * availableGames.length);
@@ -16,7 +16,7 @@ const GamePlay: FC<GamePlayProps> = ({
   sendEvent,
   disabled,
   games,
-  isHost,
+  session,
   setPaneSize,
 }) => {
   const [currentGame, setCurrentGame] = useState<string | null>(null);
@@ -34,7 +34,7 @@ const GamePlay: FC<GamePlayProps> = ({
 
   // Handle disabled state changes
   useEffect(() => {
-    if (!disabled && isHost && !currentGame) {
+    if (!disabled && session.isHost && !currentGame) {
       // Host picks a game and sends control message
       const availableGameNames = Object.keys(games);
       if (availableGameNames.length === 0) {
@@ -87,11 +87,11 @@ const GamePlay: FC<GamePlayProps> = ({
         sendEvent={sendEvent}
         disabled={disabled}
         setPaneSize={setPaneSize}
-        isHost={isHost}
+        session={session}
       />
     );
   }, [
-    isHost,
+    session,
     disabled,
     currentGame,
     gameId,
