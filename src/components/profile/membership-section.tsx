@@ -1,5 +1,4 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -132,11 +131,6 @@ export function MembershipSection() {
               Upgrade to Premium for unlimited matches and exclusive features
             </CardDescription>
           </div>
-          {user?.membershipStatus === "premium" && (
-            <Badge variant="outline" className="border-primary text-primary">
-              Premium
-            </Badge>
-          )}
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -235,18 +229,16 @@ export function MembershipSection() {
           </div>
         )}
       </CardContent>
-      {user?.membershipStatus !== "premium" && !subscription?.status && (
-        <CardFooter className="border-t pt-6 flex flex-col items-start">
-          <Alert variant="default" className="w-full bg-muted/50">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Contribution to charity</AlertTitle>
-            <AlertDescription>
-              20% of all Premium subscriptions go directly to your selected
-              charity.
-            </AlertDescription>
-          </Alert>
-        </CardFooter>
-      )}
+      <CardFooter className="border-t pt-6 flex flex-col items-start">
+        <Alert variant="default" className="w-full bg-muted/50">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Contribution to charity</AlertTitle>
+          <AlertDescription>
+            20% of all Premium subscriptions go directly to your selected
+            charity.
+          </AlertDescription>
+        </Alert>
+      </CardFooter>
     </Card>
   );
 }
