@@ -10,6 +10,7 @@ p {
   @font-face {
     font-family: 'marigny';
     src: url('https://use.typekit.net/pug2gxb.css');
+
   }
 
 
@@ -83,5 +84,9 @@ p {
 @layer utilities {
   font-marigny {
     font-family: 'marigny', sans-serif;
+  }
+
+  font-peachy {
+    font-family: 'peachy-keen-jf', sans-serif;
   }
 }

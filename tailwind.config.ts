@@ -83,6 +83,7 @@ export default {
     },
     fontFamily: {
       marigny: ["Marigny", "sans-serif"],
+      peachy: ["peachy-keen-jf", "sans-serif"],
     },
   },
   plugins: [TailwindAnimate],

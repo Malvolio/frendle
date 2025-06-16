@@ -3,29 +3,99 @@ import { Button } from "@/components/ui/button";
 import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
+import { motion, useInView, useAnimation } from "motion/react"
+import React, { useEffect, useState, useRef } from "react";
+
+
+function useScrollPosition() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return scrollY;
+}
 
 export const Route = createFileRoute("/")({
+
+
   component: () => {
+    const features = [
+      {
+        title: "Match for 1:1 casual convos",
+        description: "Match with others who share similar interests and looking for platonic connections that can lead to deeper friendships",
+        image: "index/prompt-based-conversations.png",
+        alt: "TODO"
+      },
+      {
+        title: "Shared experiences",
+        description: "From simple games to watching awe inspiring videos and art together. These playful interactions take the pressure off and create a shared sense of awe",
+        image: "index/guided-activities.png",
+        alt: "TODO"
+      },
+      {
+        title: "Prompt-based conversations",
+        description: "Inspired by the 36 questions from Author ___ to build connections this has been a blueprint for social encounters since the 80s. Fun prompts designed to create meaningful conversations. Questions are provided over time to get to know each other over the course of a couple of chats",
+        image: "index/safe-environment.png",
+        alt: "TODO"
+      },
+      {
+        title: "Focused time, safe space",
+        description: "We don’t do jerks, we create short, structured chats that respect your time and boundaries and look to cultivate a safe environment where all are welcome",
+        image: "index/support-charities.png",
+        alt: "TODO"
+      },
+      {
+        title: "Platonic by design",
+        description: "o focus on friendship and connection Backed by psychology, not social media metrics",
+        image: "index/support-charities.png",
+        alt: "TODO"
+      },
+      {
+        title: "Community-supported & supporting charities",
+        description: "We charge a small monthly fee to keep. Think of it as a swear jar but 20% goes to the charity of your choice, the rest to run the community.",
+        image: "index/support-charities.png",
+        alt: "TODO"
+      },
+    ]
+
     const { user } = useAuth();
     const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
+    const [expanded, setExpanded] = useState(false);
+    const scrollY = useScrollPosition();
+    useEffect(() => {
+      const onScroll = () => {
+        setExpanded(window.scrollY > 200);
+      };
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true });
+
+    useEffect(() => {
+      console.log(isInView)
+    }, [isInView])
 
     return (
       <PublicLayout>
-        <section className="relative">
+        <section className="relative bg-[url('/background.jpg')] bg-cover bg-center bg-fixed min-h-screen">
           {/* Hero section */}
-          <div className="relative h-[90vh] flex items-center overflow-hidden">
+          <div className="relative h-[60vh] flex items-center overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-40"></div>
 
             <div className="container relative z-10 pt-20 md:pt-0">
-              <div className="max-w-3xl mx-auto text-center">
-                <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight animate-fade-in">
-                  Kindle new friendships
+              <div className="max-w-3xl mx-auto text-center  items-center">
+                <img src="index/hero_image.png" alt="Questions, videos, games for friendly connections." className="m-auto" />
+                <h1 className="text-6xl md:text-7xl font-bold leading-tight animate-fade-in text-[#373737] font-peachy ">
+                  Create connections, make friends
                 </h1>
 
-                <p className="text-xl md:text-2xl mb-8 animate-fade-in font-medium">
-                  Get paired for brief 1:1 video chats and guided activities in
-                  a fun, casual environment designed to creating closer
-                  connections.
+                <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] mt-2">
+                  New faces, light games, real talk. Frendle makes it fun to connect with guided by simple prompts and playful activities. It&apos;s the good social app.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
                   {/* TODO: Login here */}
@@ -57,18 +127,77 @@ export const Route = createFileRoute("/")({
               </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div>
+            {/* <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div> */}
           </div>
+          {/* Features section */}
+          <motion.section
+            id="features"
+            initial={{ width: "90%", height: "500px" }}
+            animate={{ width: expanded ? "100%" : "90%", height: expanded ? "800px" : "500px" }}
+            transition={{ type: "spring", stiffness: 80, damping: 14 }}
+            className=""
+            style={{
+              margin: "0 auto",
+              padding: "0",
+              background: "#FFFDFA",
+              // position: "absolute",
+              top: "60vh",
 
+              // minHeight: "500px",
+
+            }}
+          >
+            {/*  */}
+            <div className="w-[auto] pt-[60px] m-auto text-center sticky top-0 z-10 bg-[#FFFDFA] h-auto  ">
+              <h2 className="text-4xl md:text-5xl font-peachy text-[#37251E] m-auto text-center">Built for real, human connection</h2>
+              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-[576px] m-auto mt-4">
+                Friendle is not about followers or feeds, it&apos;s about about cultivating real moments that bring people closer together.
+              </p>
+            </div>
+
+            {features.map((feature, index) => (
+
+              <div ref={ref} key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 w-[80vw] m-auto h-auto">
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, y: 100 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ type: "spring", stiffness: 80, damping: 14, delay: 0.25 }}
+                  className="w-[576px] text-[#37251E] mt-4">
+                  <h3 className="text-2xl font-bold">{feature.title}</h3>
+                  <p>{feature.description}</p>
+                </motion.div>
+
+                <div className="">
+                  <motion.img
+                    // initial={{ position: "absolute", right: "0", top: "0" }}
+                    // animate={{ position: scrollY > 400 ? "sticky" : "relative" }}
+                    // transition={{ type: "spring", stiffness: 80, damping: 14 }}
+                    src={feature.image} alt={feature.alt} className="w-fit" />
+                </div>
+              </div>
+
+            ))}
+
+
+
+
+          </motion.section>
+          {/* /////// */}
           {/* Features section */}
           <div className="bg-background py-20">
             <div className="container">
               <div className="text-center mb-16">
-                <h2 className="text-3xl font-bold mb-4">How Frendle Works</h2>
+                <h2 className="text-3xl font-bold mb-4 text-[#373737]">How Frendle Works</h2>
                 <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                   Our platform is designed to foster genuine connections in a
                   structured, time-boxed environment.
                 </p>
+
+
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
