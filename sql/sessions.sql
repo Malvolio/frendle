@@ -3,7 +3,7 @@ drop table sessions;
 create table
     sessions (
         id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
-        room UUID DEFAULT gen_random_uuid (),
+        room_id UUID DEFAULT gen_random_uuid (),
         created_at timestamp default now (),
         scheduled_for timestamp default now (),
         host_id uuid references auth.users,
