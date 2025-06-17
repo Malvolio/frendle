@@ -133,6 +133,7 @@ export function MembershipSection() {
 
             </CardDescription>
             <p className="font-bold text-red-700"> Note: was this placeholder or are you thinking there is tiered membership? "Upgrade to Premium for unlimited matches and exclusive features"</p>
+            <p className="font-bold text-red-700"> Nice to have: Add their name to the card below"</p>
           </div>
         </div>
       </CardHeader>
@@ -146,15 +147,15 @@ export function MembershipSection() {
 
 
 
-            <div className="gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
-              <img src="/profile/membership.svg" alt="" className="m-auto w-[120px]" />
-              <Alert className="bg-transparent w-fit m-auto">
+            <div className="bg-[#FFFDFA] gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+              <img src="/profile/membership_1.svg" alt="" className="m-auto w-[120px] mt-0" />
 
-                <div className=" flex flex-row gap-2 items-center pl-2 ">
+              <p className="text-5xl font-peachy m-auto -my-4">[Name]</p>
+              <Alert className="bg-transparent w-fit m-auto border-none mt-0">
 
-                  <RoughNotation type="highlight" show={true} color="#F0D8A0">
-                    <AlertTitle className="font-bold">Active Member</AlertTitle>
-                  </RoughNotation>
+                <AlertTitle className="font-peachy text-2xl w-fit m-auto">➡ Supporting member ⬅</AlertTitle>
+
+                <div className=" flex flex-row gap-2 items-center pl-2 mt-8">
                   <AlertDescription>
                     You have an active membership
                     {subscription.cancelAtPeriodEnd
@@ -167,20 +168,20 @@ export function MembershipSection() {
                 </div>
 
               </Alert>
-              <div >
-                {/* <h4 className="text-sm font-medium mb-1">Current plan</h4> */}
-                <p className="text-lg font-bold">Membership</p>
-                <p>$9.95/month</p>
-              </div>
+              <div className="rounded-lg p-4 border border-gray-200 gap-0 h-fit flex flex-col justify-normal">
+                <div className="p-0 h-auto flex flex-row justify-normal gap-4">
+                  <p className="text-lg">Membership:</p>
+                  <p className="">$9.95/month</p>
+                </div>
 
-              <div>
-                {/* <h4 className="text-sm font-medium mb-1">Billing period</h4> */}
-                <p className="text-lg font-bold">
-                  {subscription.cancelAtPeriodEnd ? "Ends" : "Renews"}
-                </p>
-                <p>
-                  {formatDate(subscription.currentPeriodEnd)}
-                </p>
+                <div className="p-0 h-auto flex flex-row justify-normal gap-4">
+                  <p className="text-lg">
+                    {subscription.cancelAtPeriodEnd ? "Ends:" : "Renews:"}
+                  </p>
+                  <p>
+                    {formatDate(subscription.currentPeriodEnd)}
+                  </p>
+                </div>
               </div>
             </div>
 
