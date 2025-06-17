@@ -1,5 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { RoughNotation } from "react-rough-notation";
 import {
   Card,
   CardContent,
@@ -122,14 +123,16 @@ export function MembershipSection() {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-start">
-          <div>
+          <div className="text-center m-auto items-center">
             <CardTitle className="flex items-center gap-2 mb-1">
-              <BadgeCheck className="w-5 h-5 text-green-600" />
-              Membership
+              {/* <BadgeCheck className="w-5 h-5 text-green-600" /> */}
+              <h1 className="m-auto">Membership</h1>
             </CardTitle>
-            <CardDescription>
-              Upgrade to Premium for unlimited matches and exclusive features
+            <CardDescription className="text-center">
+              We ask for a small membership fee to help keep Frendle intentional, positive, and troll-free. Your contribution supports the community—and a percentage goes to charity.
+
             </CardDescription>
+            <p className="font-bold text-red-700"> Note: was this placeholder or are you thinking there is tiered membership? "Upgrade to Premium for unlimited matches and exclusive features"</p>
           </div>
         </div>
       </CardHeader>
@@ -140,47 +143,58 @@ export function MembershipSection() {
           </div>
         ) : subscription?.status === "active" ? (
           <div className="space-y-4">
-            <Alert>
-              <CheckCircle2 className="h-4 w-4" />
-              <AlertTitle>Active Subscription</AlertTitle>
-              <AlertDescription>
-                You have an active Premium membership
-                {subscription.cancelAtPeriodEnd
-                  ? ` that will end on ${formatDate(
-                      subscription.currentPeriodEnd
-                    )}`
-                  : " that will automatically renew"}
-                .
-              </AlertDescription>
-            </Alert>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 border rounded-lg">
-                <h4 className="text-sm font-medium mb-1">Current plan</h4>
-                <p className="text-lg font-bold">Premium Membership</p>
-                <p className="text-sm text-muted-foreground">$9.99/month</p>
+
+
+            <div className="gap-4 w-fit m-auto flex flex-col p-8 rounded-lg border-black border-2 ">
+              <img src="/profile/membership.svg" alt="" className="m-auto w-[120px]" />
+              <Alert className="bg-transparent w-fit m-auto">
+
+                <div className=" flex flex-row gap-2 items-center pl-2 ">
+
+                  <RoughNotation type="highlight" show={true} color="#F0D8A0">
+                    <AlertTitle className="font-bold">Active Member</AlertTitle>
+                  </RoughNotation>
+                  <AlertDescription>
+                    You have an active membership
+                    {subscription.cancelAtPeriodEnd
+                      ? ` that will end on ${formatDate(
+                        subscription.currentPeriodEnd
+                      )}`
+                      : " that will automatically renew"}
+                    .
+                  </AlertDescription>
+                </div>
+
+              </Alert>
+              <div >
+                {/* <h4 className="text-sm font-medium mb-1">Current plan</h4> */}
+                <p className="text-lg font-bold">Membership</p>
+                <p>$9.95/month</p>
               </div>
 
-              <div className="p-4 border rounded-lg">
-                <h4 className="text-sm font-medium mb-1">Billing period</h4>
+              <div>
+                {/* <h4 className="text-sm font-medium mb-1">Billing period</h4> */}
                 <p className="text-lg font-bold">
                   {subscription.cancelAtPeriodEnd ? "Ends" : "Renews"}
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p>
                   {formatDate(subscription.currentPeriodEnd)}
                 </p>
               </div>
             </div>
 
             {!subscription.cancelAtPeriodEnd && (
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={handleCancelSubscription}
-                disabled={isProcessing}
-              >
-                {isProcessing ? "Processing..." : "Cancel Subscription"}
-              </Button>
+              <div className="m-auto text-center">
+                <Button
+                  variant="outline"
+                  className="w-fit m-auto text-red-700 bg-transparent font-bold border-none"
+                  onClick={handleCancelSubscription}
+                  disabled={isProcessing}
+                >
+                  {isProcessing ? "Processing..." : "Cancel Membership"}
+                </Button>
+              </div>
             )}
           </div>
         ) : (
@@ -229,7 +243,20 @@ export function MembershipSection() {
           </div>
         )}
       </CardContent>
-      <CardFooter className="border-t pt-6 flex flex-col items-start">
+      <hr></hr>
+      Your membership helps us:
+      <ul>
+        <li className="flex items-start">
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />Sustain and improve Frendle</li>
+        <li className="flex items-start">
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />Fund moderators and tools</li>
+        <li className="flex items-start">
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />Give back—20% of all fees will go to charity</li>
+        <li className="flex items-start">
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />We believe in making the internet a little more human. If you do too, join us. 💛</li>
+      </ul>
+      <p className="font-bold text-red-700"> Note: Can we include the charity on this tab?</p>
+      {/* <CardFooter className="border-t pt-6 flex flex-col items-start">
         <Alert variant="default" className="w-full bg-muted/50">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Contribution to charity</AlertTitle>
@@ -238,7 +265,7 @@ export function MembershipSection() {
             charity.
           </AlertDescription>
         </Alert>
-      </CardFooter>
-    </Card>
+      </CardFooter> */}
+    </Card >
   );
 }

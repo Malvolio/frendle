@@ -16,7 +16,7 @@ export const Route = createFileRoute("/onboarding")({
           <h1 className="text-4xl font-normal mb-4">
             Let's pair up with people who just get you
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl mb-8">
             We'll help you find people who share your interests and values.
           </p>
           <AnimatePresence mode="wait">
@@ -74,7 +74,7 @@ export function QuestionOne() {
         damping: 12,
         duration: 0.7,
       }}
-      // className="p-6 bg-white rounded-xl shadow-lg"
+    // className="p-6 bg-white rounded-xl shadow-lg"
     >
       {" "}
       <h2 className="text-2xl">What&apos;s your ideal weekend?</h2>
@@ -156,7 +156,7 @@ export function QuestionTwo() {
         damping: 12,
         duration: 0.7,
       }}
-      // className="p-6 bg-white rounded-xl shadow-lg"
+    // className="p-6 bg-white rounded-xl shadow-lg"
     >
       <h2 className="text-2xl">How do you handle curveballs?</h2>
       <form>

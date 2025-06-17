@@ -6,6 +6,7 @@ import { MembershipSection } from "@/components/profile/membership-section";
 import { ProfileForm } from "@/components/profile/profile-form";
 import TabSet from "@/components/TabSet";
 import { createFileRoute } from "@tanstack/react-router";
+import { RoughNotation } from "react-rough-notation";
 import {
   BadgeCheck,
   Calendar1,
@@ -16,15 +17,10 @@ import {
 const ProfileTabs = [
   { id: "profile", name: "About you", icon: User, body: ProfileForm },
 
-  {
-    id: "membership",
-    name: "Membership",
-    icon: BadgeCheck,
-    body: MembershipSection,
-  },
+
   {
     id: "inventory",
-    name: "Personality",
+    name: "Interests",
     icon: ListChecks,
     body: Inventory,
   },
@@ -33,6 +29,12 @@ const ProfileTabs = [
     name: "Availability",
     icon: Calendar1,
     body: AvailabilityPage,
+  },
+  {
+    id: "membership",
+    name: "Membership",
+    icon: BadgeCheck,
+    body: MembershipSection,
   },
   {
     id: "charity",

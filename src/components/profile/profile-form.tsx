@@ -77,19 +77,19 @@ export function ProfileForm() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <User className="w-5 h-5 text-green-600" />
+          {/* <User className="w-5 h-5 text-green-600" /> */}
           About you
         </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-1/2 m-auto">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel className="font-bold text-lg">Your Name</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
@@ -106,16 +106,16 @@ export function ProfileForm() {
               name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Bio</FormLabel>
+                  <FormLabel className="font-bold text-lg">Introduction</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Tell us a little about yourself..."
-                      className="resize-none"
+                      placeholder="Introduce yourself..."
+                      className="resize-none border rounded-none border-black p-4"
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Your bio will be shown to others during matched activities.
+                  <FormDescription className="">
+                    Tell folks a bit aobut yourself. What you're interested in at the moment and what they should ask you about.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -128,6 +128,7 @@ export function ProfileForm() {
           </form>
         </Form>
       </CardContent>
+      <p className="font-bold text-red-700">Note: we need next buttons. It's not obvious we are suppose to fill these things about because they are tabs</p>
     </Card>
   );
 }

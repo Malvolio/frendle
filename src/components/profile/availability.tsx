@@ -71,21 +71,25 @@ const Availability = () => {
   }, [totalSelections]);
   return (
     <div className="w-full flex-col justify-between items-start md:items-center mb-4">
-      <div>
+      {/* VP: Because people can select up to 20 it's no longer a precious resouce and seeing 20 is more overwhelming than helpful so I've commented this out. */}
+      {/* <div>
         <RoughNotation type="highlight" show={show} color="#F0D8A0">
           <span className="text-2xl font-bold">{totalSelections}</span> of{" "}
           {MAX_SLOTS} selected
         </RoughNotation>
-      </div>
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden max-w-6xl mx-auto">
-        <div className="flex">
+      </div> */}
+      <p className="font-bold text-red-700">NOTE: Seeing the tally vs the list of times selected for a particular date isn't as helpful. Folks would need to click on it again to remind themeselves what time was selected instead of seeing their availability at a glance. Let's discuss</p>
+      <p className="font-bold text-red-700">NOTE: I couldn't change the background to #58B4AE on day selected</p>
+      <div className="overflow-hidden max-w-6xl mx-auto border pb-6 border-black">
+        <p className="text-xl text-center">Pick a couple days and times that work for you for quick 15 min connects.</p>
+        <div className="flex ">
           {DAYS.map((day) => {
             const count = selectedTimes[day.short]?.length;
             const dayLabel = count ? `(${count})` : "";
             return (
               <motion.div
                 key={day.short}
-                className="border-r border-gray-200 last:border-r-0 overflow-hidden cursor-pointer"
+                className="border-r border-black last:border-r-0 overflow-hidden cursor-pointer"
                 onClick={() => setOpenColumn(day.short)}
                 initial={false}
                 animate={{
@@ -98,9 +102,11 @@ const Availability = () => {
               >
                 {/* Column Header */}
                 <motion.div
-                  className={`px-3 py-2 rounded font-semibold w-full text-center ${openColumn === day.short ? "" : "hover:border-b-2"}`}
-                  whileHover={{ backgroundColor: "#F0D8A0" }}
+                  className={`px-3 py-2 border-t-2 border-b-2 font-semibold w-full text-center ${openColumn === day.short ? "text-3xl" : "hover:border-b-2 rounded-t"}`}
+                  whileHover={{ backgroundColor: "#58B4AE" }}
                   whileTap={{ scale: 0.98 }}
+                  whileFocus={{ backgroundColor: "#58B4AE" }}
+
                 >
                   <div className="flex items-center justify-center">
                     <h3 className="font-semibold text-center text-lg whitespace-nowrap">
@@ -134,13 +140,12 @@ const Availability = () => {
                             return (
                               <button
                                 key={hour}
-                                className={`mb-1 px-2 py-1 rounded text-sm border ${
-                                  isSelected
-                                    ? "bg-primary text-white"
-                                    : isDisabled
-                                      ? "text-gray-500 cursor-not-allowed  text-italic"
-                                      : "hover:bg-[#F0D8A0]/60 border-transparent"
-                                }`}
+                                className={`mb-1 px-2 py-1 text-sm border ${isSelected
+                                  ? "bg-primary text-white"
+                                  : isDisabled
+                                    ? "text-gray-500 cursor-not-allowed  text-italic"
+                                    : "hover:bg-[#F0D8A0]/60 border-transparent"
+                                  }`}
                                 onClick={() => handleTimeClick(day.short, hour)}
                                 disabled={isDisabled}
                               >
@@ -158,7 +163,9 @@ const Availability = () => {
           })}
         </div>
       </div>
-    </div>
+
+
+    </div >
   );
 };
 
@@ -168,11 +175,12 @@ const AvailabilityPage = () => {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calendar1 className="w-5 h-5 text-green-600" />
-          Availability
+          Set aside some time
         </CardTitle>
 
         <CardDescription>
-          Pick up to {MAX_SLOTS} one-hour slots you’re available every week.
+
+
         </CardDescription>
       </CardHeader>
       <CardContent>

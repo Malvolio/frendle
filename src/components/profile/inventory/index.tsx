@@ -18,11 +18,11 @@ const Inventory = () => {
         </CardTitle>
 
         <CardDescription>
-          We’ll help you find people who share your interests and values.
+          Answer a couple of questions so we can help find people who share your interests and values.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4 h-96">
+        <div className="space-y-4 h-96 mt-6">
           <Questionnaire />
         </div>
       </CardContent>

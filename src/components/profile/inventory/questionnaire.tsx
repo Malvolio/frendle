@@ -34,7 +34,7 @@ const DisplayQuestion: FC<{
                 key={option.id}
                 type="box"
                 show={isSelected}
-                iterations={3}
+                iterations={8}
                 color={isSelected ? "#000000" : "#8F8F8F"}
                 animate={false}
               >
@@ -42,7 +42,7 @@ const DisplayQuestion: FC<{
                   className="flex flex-col h-full justify-between items-center gap-2 py-2 w-40 cursor-pointer bg-[#EBE3CF] border border-black/30 px-2"
                   htmlFor={option.id}
                 >
-                  <div>
+                  <div className={isSelected ? "transition-all scale-125" : "transition-all  scale-100 "}>
                     <img
                       src={`/inventory/q${id}-opt${option.id}.png`}
                       width={"100px"}
@@ -55,11 +55,7 @@ const DisplayQuestion: FC<{
                       id={option.id.toString()}
                     />
                     {option.text}
-                    <img
-                      src="/circle.svg"
-                      width={"24px"}
-                      className="m-auto saturate-50 mb-2"
-                    />
+
                   </div>
                 </label>
               </RoughNotation>
