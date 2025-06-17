@@ -80,7 +80,8 @@ const Availability = () => {
       </div> */}
       <p className="font-bold text-red-700">NOTE: Seeing the tally vs the list of times selected for a particular date isn't as helpful. Folks would need to click on it again to remind themeselves what time was selected instead of seeing their availability at a glance. Let's discuss</p>
       <p className="font-bold text-red-700">NOTE: I couldn't change the background to #58B4AE on day selected</p>
-      <div className="overflow-hidden max-w-6xl mx-auto border pb-6 border-black">
+      <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
+        <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
         <p className="text-xl text-center">Pick a couple days and times that work for you for quick 15 min connects.</p>
         <div className="flex ">
           {DAYS.map((day) => {
@@ -102,9 +103,9 @@ const Availability = () => {
               >
                 {/* Column Header */}
                 <motion.div
-                  className={`px-3 py-2 border-t-2 border-b-2 font-semibold w-full text-center ${openColumn === day.short ? "text-3xl" : "hover:border-b-2 rounded-t"}`}
+                  className={`px-3 py-2 border-black border-t border-b font-semibold w-full text-center ${openColumn === day.short ? "text-3xl" : "hover:border-b "}`}
                   whileHover={{ backgroundColor: "#58B4AE" }}
-                  whileTap={{ scale: 0.98 }}
+                  // whileTap={{ scale: 0.98 }}
                   whileFocus={{ backgroundColor: "#58B4AE" }}
 
                 >
@@ -174,7 +175,7 @@ const AvailabilityPage = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Calendar1 className="w-5 h-5 text-green-600" />
+          {/* <Calendar1 className="w-5 h-5 text-green-600" /> */}
           Set aside some time
         </CardTitle>
 

@@ -12,9 +12,9 @@ const Inventory = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <ListChecks className="w-5 h-5 text-green-600" />
-          Let’s pair up with people who just get you
+        <CardTitle className="flex items-center gap-2 mb-2">
+          {/* <ListChecks className="w-5 h-5 text-green-600" /> */}
+          Pair up with people who just get you
         </CardTitle>
 
         <CardDescription>

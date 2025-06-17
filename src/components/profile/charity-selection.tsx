@@ -113,7 +113,7 @@ export function CharitySelection() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <HeartHandshake className="w-5 h-5 text-green-600" />
+          {/* <HeartHandshake className="w-5 h-5 text-green-600" /> */}
           Support a Cause
         </CardTitle>
 

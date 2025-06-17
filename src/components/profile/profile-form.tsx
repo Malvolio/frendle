@@ -76,9 +76,9 @@ export function ProfileForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 mb-4">
           {/* <User className="w-5 h-5 text-green-600" /> */}
-          About you
+          Let's get to know you better.
         </CardTitle>
       </CardHeader>
       <CardContent>

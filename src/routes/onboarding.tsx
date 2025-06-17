@@ -14,7 +14,7 @@ export const Route = createFileRoute("/onboarding")({
         <nav>NAV HERE</nav>
         <div className="flex flex-col gap-8 mx-auto h-screen mt-20 justify-start text-center">
           <h1 className="text-4xl font-normal mb-4">
-            Let's pair up with people who just get you
+            Pair up with people who just get you
           </h1>
           <p className="text-xl mb-8">
             We'll help you find people who share your interests and values.

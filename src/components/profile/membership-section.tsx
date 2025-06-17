@@ -126,7 +126,7 @@ export function MembershipSection() {
           <div className="text-center m-auto items-center">
             <CardTitle className="flex items-center gap-2 mb-1">
               {/* <BadgeCheck className="w-5 h-5 text-green-600" /> */}
-              <h1 className="m-auto">Membership</h1>
+              <h1 className="m-auto text-5xl">Membership</h1>
             </CardTitle>
             <CardDescription className="text-center">
               We ask for a small membership fee to help keep Frendle intentional, positive, and troll-free. Your contribution supports the community—and a percentage goes to charity.
@@ -146,7 +146,7 @@ export function MembershipSection() {
 
 
 
-            <div className="gap-4 w-fit m-auto flex flex-col p-8 rounded-lg border-black border-2 ">
+            <div className="gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
               <img src="/profile/membership.svg" alt="" className="m-auto w-[120px]" />
               <Alert className="bg-transparent w-fit m-auto">
 
