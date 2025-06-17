@@ -2,8 +2,9 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { main } from "bun";
 import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
-import { motion, useInView, useAnimation } from "motion/react"
+import { motion, useInView, useAnimation, AnimatePresence } from "motion/react"
 import React, { useEffect, useState, useRef } from "react";
 
 
@@ -19,52 +20,57 @@ function useScrollPosition() {
   return scrollY;
 }
 
+const features = [
+  {
+    title: "Match for 1:1 casual convos",
+    description: "Match with others who share similar interests and looking for platonic connections that can lead to deeper friendships",
+    image: "index/match.svg",
+    alt: "TODO"
+  },
+  {
+    title: "Prompt-based conversations",
+    description: "Inspired by the 36 questions from Author ___ to build connections this has been a blueprint for social encounters since the 80s. Fun prompts designed to create meaningful conversations. Questions are provided over time to get to know each other over the course of a couple of chats",
+    image: "index/questions.svg",
+    alt: "TODO"
+  },
+  {
+    title: "Shared experiences",
+    description: "From simple games to watching awe inspiring videos and art together. These playful interactions take the pressure off and create a shared sense of awe",
+    image: "/hero-image.png",
+    alt: "TODO"
+  },
+  {
+    title: "Focused time, safe space",
+    description: "We don’t do jerks, we create short, structured chats that respect your time and boundaries and look to cultivate a safe environment where all are welcome",
+    image: "index/week.svg",
+    alt: "TODO"
+  },
+  {
+    title: "Platonic by design",
+    description: "o focus on friendship and connection Backed by psychology, not social media metrics",
+    image: "index/support-charities.png",
+    alt: "TODO"
+  },
+  {
+    title: "Community-supported & supporting charities",
+    description: "We charge a small monthly fee to keep. Think of it as a swear jar but 20% goes to the charity of your choice, the rest to run the community.",
+    image: "index/donation.svg",
+    alt: "TODO"
+  },
+]
+
+
+
 export const Route = createFileRoute("/")({
 
 
   component: () => {
-    const features = [
-      {
-        title: "Match for 1:1 casual convos",
-        description: "Match with others who share similar interests and looking for platonic connections that can lead to deeper friendships",
-        image: "index/prompt-based-conversations.png",
-        alt: "TODO"
-      },
-      {
-        title: "Shared experiences",
-        description: "From simple games to watching awe inspiring videos and art together. These playful interactions take the pressure off and create a shared sense of awe",
-        image: "index/guided-activities.png",
-        alt: "TODO"
-      },
-      {
-        title: "Prompt-based conversations",
-        description: "Inspired by the 36 questions from Author ___ to build connections this has been a blueprint for social encounters since the 80s. Fun prompts designed to create meaningful conversations. Questions are provided over time to get to know each other over the course of a couple of chats",
-        image: "index/safe-environment.png",
-        alt: "TODO"
-      },
-      {
-        title: "Focused time, safe space",
-        description: "We don’t do jerks, we create short, structured chats that respect your time and boundaries and look to cultivate a safe environment where all are welcome",
-        image: "index/support-charities.png",
-        alt: "TODO"
-      },
-      {
-        title: "Platonic by design",
-        description: "o focus on friendship and connection Backed by psychology, not social media metrics",
-        image: "index/support-charities.png",
-        alt: "TODO"
-      },
-      {
-        title: "Community-supported & supporting charities",
-        description: "We charge a small monthly fee to keep. Think of it as a swear jar but 20% goes to the charity of your choice, the rest to run the community.",
-        image: "index/support-charities.png",
-        alt: "TODO"
-      },
-    ]
+
 
     const { user } = useAuth();
     const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
     const [expanded, setExpanded] = useState(false);
+    const mainControls = useAnimation();
     const scrollY = useScrollPosition();
     useEffect(() => {
       const onScroll = () => {
@@ -77,17 +83,19 @@ export const Route = createFileRoute("/")({
     const isInView = useInView(ref, { once: true });
 
     useEffect(() => {
-      console.log(isInView)
+      if (isInView) {
+        mainControls.start("visible");
+      }
     }, [isInView])
 
     return (
       <PublicLayout>
         <section className="relative bg-[url('/background.jpg')] bg-cover bg-center bg-fixed min-h-screen">
           {/* Hero section */}
-          <div className="relative h-[60vh] flex items-center overflow-hidden">
+          <div className="relative h-[50vh] flex items-center overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-40"></div>
 
-            <div className="container relative z-10 pt-20 md:pt-0">
+            <div className="container relative z-10 pt-20 md:pt-0 mx-auto">
               <div className="max-w-3xl mx-auto text-center  items-center">
                 <img src="index/hero_image.png" alt="Questions, videos, games for friendly connections." className="m-auto" />
                 <h1 className="text-6xl md:text-7xl font-bold leading-tight animate-fade-in text-[#373737] font-peachy ">
@@ -132,63 +140,42 @@ export const Route = createFileRoute("/")({
           {/* Features section */}
           <motion.section
             id="features"
-            initial={{ width: "90%", height: "500px" }}
-            animate={{ width: expanded ? "100%" : "90%", height: expanded ? "800px" : "500px" }}
-            transition={{ type: "spring", stiffness: 80, damping: 14 }}
-            className=""
+            initial={{ width: "90%" }}
+            animate={expanded ? { width: "100%" } : {}}
+            transition={{ ease: "easeOut", stiffness: 80, damping: 20 }}
+            className="bg-[#FFFDFA] h-auto"
             style={{
               margin: "0 auto",
               padding: "0",
-              background: "#FFFDFA",
-              // position: "absolute",
-              top: "60vh",
-
-              // minHeight: "500px",
+              zIndex: 10,
+              minHeight: "fit-content",
+              position: "relative",
+              display: "block"
 
             }}
           >
             {/*  */}
-            <div className="w-[auto] pt-[60px] m-auto text-center sticky top-0 z-10 bg-[#FFFDFA] h-auto  ">
+            <div className="w-[auto]  m-auto text-center bg-[#FFFDFA] h-auto sticky top-[60px] z-50 pt-12">
               <h2 className="text-4xl md:text-5xl font-peachy text-[#37251E] m-auto text-center">Built for real, human connection</h2>
-              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-[576px] m-auto mt-4">
+              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-[576px] mx-auto my-4">
                 Friendle is not about followers or feeds, it&apos;s about about cultivating real moments that bring people closer together.
               </p>
             </div>
 
-            {features.map((feature, index) => (
 
-              <div ref={ref} key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 w-[80vw] m-auto h-auto">
-                <motion.div
-                  variants={{
-                    hidden: { opacity: 0, y: 100 },
-                    visible: { opacity: 1, y: 0 },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  transition={{ type: "spring", stiffness: 80, damping: 14, delay: 0.25 }}
-                  className="w-[576px] text-[#37251E] mt-4">
-                  <h3 className="text-2xl font-bold">{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </motion.div>
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-[80vw] m-auto h-auto overflow-visible relative"> */}
+            <div className="w-[80vw] m-auto h-auto overflow-visible relative">
+              {/* <div className="flex flex-col justify-center items-center gap-8 h-[100hv]"> */}
+              {features.map((feature) => (
+                <Feature key={feature.title} {...feature} />
+              ))}
 
-                <div className="">
-                  <motion.img
-                    // initial={{ position: "absolute", right: "0", top: "0" }}
-                    // animate={{ position: scrollY > 400 ? "sticky" : "relative" }}
-                    // transition={{ type: "spring", stiffness: 80, damping: 14 }}
-                    src={feature.image} alt={feature.alt} className="w-fit" />
-                </div>
-              </div>
-
-            ))}
-
-
-
+            </div>
 
           </motion.section>
           {/* /////// */}
           {/* Features section */}
-          <div className="bg-background py-20">
+          <div className="py-20">
             <div className="container">
               <div className="text-center mb-16">
                 <h2 className="text-3xl font-bold mb-4 text-[#373737]">How Frendle Works</h2>
@@ -278,3 +265,31 @@ export const Route = createFileRoute("/")({
     );
   },
 });
+
+export function Feature({ title, description, image, alt }: { title: string; description: string; image: string; alt: string }) {
+  const ref = useRef(null);
+  // const inView = useInView(ref, { once: false, margin: "-100px" });
+
+  return (
+
+
+    <div
+      ref={ref}
+      className="grid grid-cols-2 p-6 mb-8 top-40 left-0 h-96 z-30 relative"
+    >
+      <div className="w-[526px] text-[#37251E]"
+      >
+        <h3 className="text-2xl font-bold pt-7">{title}</h3>
+        <hr></hr>
+        <p className="">{description}</p>
+      </div>
+
+      <div>
+        <img
+          src={image} alt={alt} className="w-[500px]" />
+      </div>
+    </div>
+
+
+  );
+}
