@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ListChecks } from "lucide-react";
 import Questionnaire from "./questionnaire";
 
 const Inventory = () => {
@@ -18,7 +17,8 @@ const Inventory = () => {
         </CardTitle>
 
         <CardDescription>
-          Answer a couple of questions so we can help find people who share your interests and values.
+          Answer a couple of questions so we can help find people who share your
+          interests and values.
         </CardDescription>
       </CardHeader>
       <CardContent>

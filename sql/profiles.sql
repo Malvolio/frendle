@@ -1,33 +1,60 @@
--- Create the profiles table
+CREATE TYPE membership_status_enum AS ENUM ('unpaid', 'good', 'suspended', 'banned');
+
+-- Create main tables with corrected syntax
 CREATE TABLE
-    profiles (
-        id uuid NOT NULL references auth.users PRIMARY KEY,
+    system_profiles (
+        id uuid NOT NULL REFERENCES auth.users PRIMARY KEY,
+        name text,
+        membership_status membership_status_enum,
+        created_at timestamp DEFAULT now ()
+    );
+
+CREATE TABLE
+    private_profiles (
+        id uuid NOT NULL REFERENCES system_profiles PRIMARY KEY,
+        timezone text REFERENCES timezones (zone_name),
+        created_at timestamp DEFAULT now ()
+    );
+
+CREATE TABLE
+    public_profiles (
+        id uuid NOT NULL REFERENCES system_profiles PRIMARY KEY,
         name text,
         bio text,
         avatar_url text,
         selected_charity text,
-        created_at timestamp default now ()
+        created_at timestamp DEFAULT now ()
     );
 
 -- Enable Row Level Security
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE system_profiles ENABLE ROW LEVEL SECURITY;
 
--- Policy: Anyone can read all profiles
-CREATE POLICY "Anyone can read profiles" ON profiles FOR
+ALTER TABLE private_profiles ENABLE ROW LEVEL SECURITY;
+
+ALTER TABLE public_profiles ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for system_profiles
+-- Users can read their own profile
+CREATE POLICY "Users can read their own system profile" ON system_profiles FOR
+SELECT
+    USING (auth.uid () = id);
+
+-- RLS Policies for private_profiles  
+-- Users can read their own private profile
+CREATE POLICY "Users can read their own private profile" ON private_profiles FOR
+SELECT
+    USING (auth.uid () = id);
+
+-- Users can update their own private profile
+CREATE POLICY "Users can update their own private profile" ON private_profiles FOR
+UPDATE USING (auth.uid () = id);
+
+-- RLS Policies for public_profiles
+-- Everyone can read all public profiles
+CREATE POLICY "Everyone can read public profiles" ON public_profiles FOR
 SELECT
     USING (true);
 
--- Policy: Users can only update their own profile
-CREATE POLICY "Users can update own profile" ON profiles FOR
+-- Users can update their own public profile
+CREATE POLICY "Users can update their own public profile" ON public_profiles FOR
 UPDATE USING (auth.uid () = id);
-
--- Policy: Users can insert their own profile
-CREATE POLICY "Users can insert own profile" ON profiles FOR INSERT
-WITH
-    CHECK (auth.uid () = id);
-
-insert into
-    profiles (id, name)
-values
-    ('268e870d-2a80-468e-a87e-854b6c428afa', 'Michael'),
-    ('9387010b-d213-4f2a-99c7-3b5a33189822', 'Venessa');

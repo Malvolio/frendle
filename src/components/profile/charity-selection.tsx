@@ -17,14 +17,13 @@ import { toast } from "@/hooks/use-toast";
 import { updateUserProfile } from "@/lib/supabase";
 import { useAuth } from "@/providers/auth-provider";
 import { Charity } from "@/types";
-import { HeartHandshake } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function CharitySelection() {
   const { user } = useAuth();
   const [charities, setCharities] = useState<Charity[]>([]);
   const [selectedCharity, setSelectedCharity] = useState<string>(
-    user?.selectedCharity || ""
+    user?.public_profile.selected_charity || ""
   );
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -68,8 +67,8 @@ export function CharitySelection() {
 
         setCharities(mockCharities);
 
-        if (user?.selectedCharity) {
-          setSelectedCharity(user.selectedCharity);
+        if (user?.public_profile.selected_charity) {
+          setSelectedCharity(user.public_profile.selected_charity);
         }
       } catch (error) {
         console.error("Error fetching charities:", error);
@@ -87,7 +86,7 @@ export function CharitySelection() {
     setIsSaving(true);
 
     try {
-      const { error } = await updateUserProfile(user.id, {
+      const { error } = await updateUserProfile(user.auth.id, {
         selected_charity: selectedCharity,
       });
 

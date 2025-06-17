@@ -3,11 +3,11 @@ drop table sessions;
 create table
     sessions (
         id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
-        room_id UUID DEFAULT gen_random_uuid (),
+        room_id UUID NOT NULL DEFAULT gen_random_uuid (),
         created_at timestamp default now (),
         scheduled_for timestamp default now (),
-        host_id uuid references auth.users,
-        guest_id uuid references auth.users
+        host_id uuid NOT NULL references auth.users,
+        guest_id uuid NOT NULL references auth.users
     );
 
 -- Add RLS policies

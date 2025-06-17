@@ -5,10 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Calendar1 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { RoughNotation } from "react-rough-notation";
 
 const DAYS = [
   { short: "Sun", full: "Sunday" },
@@ -64,7 +62,7 @@ const Availability = () => {
       };
     });
   };
-  const [show, setShow] = useState(false); // or false, depending on when you want to show
+  const [_show, setShow] = useState(false); // or false, depending on when you want to show
   // Show highlight when 5 slots are selected
   useEffect(() => {
     setShow(totalSelections >= MAX_SLOTS);
@@ -78,11 +76,21 @@ const Availability = () => {
           {MAX_SLOTS} selected
         </RoughNotation>
       </div> */}
-      <p className="font-bold text-red-700">NOTE: Seeing the tally vs the list of times selected for a particular date isn't as helpful. Folks would need to click on it again to remind themeselves what time was selected instead of seeing their availability at a glance. Let's discuss</p>
-      <p className="font-bold text-red-700">NOTE: I couldn't change the background to #58B4AE on day selected</p>
+      <p className="font-bold text-red-700">
+        NOTE: Seeing the tally vs the list of times selected for a particular
+        date isn't as helpful. Folks would need to click on it again to remind
+        themeselves what time was selected instead of seeing their availability
+        at a glance. Let's discuss
+      </p>
+      <p className="font-bold text-red-700">
+        NOTE: I couldn't change the background to #58B4AE on day selected
+      </p>
       <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
-        <p className="text-xl text-center">Pick a couple days and times that work for you for quick 15 min connects.</p>
+        <p className="text-xl text-center">
+          Pick a couple days and times that work for you for quick 15 min
+          connects.
+        </p>
         <div className="flex ">
           {DAYS.map((day) => {
             const count = selectedTimes[day.short]?.length;
@@ -107,7 +115,6 @@ const Availability = () => {
                   whileHover={{ backgroundColor: "#58B4AE" }}
                   // whileTap={{ scale: 0.98 }}
                   whileFocus={{ backgroundColor: "#58B4AE" }}
-
                 >
                   <div className="flex items-center justify-center">
                     <h3 className="font-semibold text-center text-lg whitespace-nowrap">
@@ -141,12 +148,13 @@ const Availability = () => {
                             return (
                               <button
                                 key={hour}
-                                className={`mb-1 px-2 py-1 text-sm border ${isSelected
-                                  ? "bg-primary text-white"
-                                  : isDisabled
-                                    ? "text-gray-500 cursor-not-allowed  text-italic"
-                                    : "hover:bg-[#F0D8A0]/60 border-transparent"
-                                  }`}
+                                className={`mb-1 px-2 py-1 text-sm border ${
+                                  isSelected
+                                    ? "bg-primary text-white"
+                                    : isDisabled
+                                      ? "text-gray-500 cursor-not-allowed  text-italic"
+                                      : "hover:bg-[#F0D8A0]/60 border-transparent"
+                                }`}
                                 onClick={() => handleTimeClick(day.short, hour)}
                                 disabled={isDisabled}
                               >
@@ -164,9 +172,7 @@ const Availability = () => {
           })}
         </div>
       </div>
-
-
-    </div >
+    </div>
   );
 };
 
@@ -179,10 +185,7 @@ const AvailabilityPage = () => {
           Set aside some time
         </CardTitle>
 
-        <CardDescription>
-
-
-        </CardDescription>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4 h-96">

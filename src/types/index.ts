@@ -1,10 +1,19 @@
-export interface User {
-  id: string;
-  name?: string;
-  bio?: string;
-  avatarUrl?: string;
-  selectedCharity?: string;
-}
+import { User } from "@supabase/supabase-js";
+import { Database } from "./supabase";
+
+export type SystemProfile =
+  Database["public"]["Tables"]["system_profiles"]["Row"];
+export type PrivateProfile =
+  Database["public"]["Tables"]["private_profiles"]["Row"];
+export type PublicProfile =
+  Database["public"]["Tables"]["public_profiles"]["Row"];
+
+export type SignedInUser = {
+  auth: User;
+  system_profile: SystemProfile;
+  private_profile: PrivateProfile;
+  public_profile: PublicProfile;
+};
 
 export interface Charity {
   id: string;
