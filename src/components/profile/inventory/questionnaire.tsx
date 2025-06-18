@@ -88,11 +88,13 @@ const Questionnaire: FC<{ userId: string }> = ({ userId }) => {
   useEffect(() => {
     if (answers && questionIndex < 1) {
       const unansweredQuestions = Questions.findIndex(({ id }) => !answers[id]);
-      if (unansweredQuestions < 0) {
-        setQuestionIndex(Questions.length - 1);
-      } else {
-        setQuestionIndex(unansweredQuestions);
-      }
+      setTimeout(() => {
+        if (unansweredQuestions < 0) {
+          setQuestionIndex(Questions.length - 1);
+        } else {
+          setQuestionIndex(unansweredQuestions);
+        }
+      }, 400);
     }
   }, [answers]);
   if (error) {
