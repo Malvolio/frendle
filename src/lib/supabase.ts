@@ -39,9 +39,9 @@ export const getCurrentUser = async () => {
   return data?.user;
 };
 
-export const getUserProfile = async (userId: string) => {
+export const getPublicProfile = async (userId: string) => {
   const { data, error } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .select("*")
     .eq("id", userId)
     .single();
@@ -49,9 +49,9 @@ export const getUserProfile = async (userId: string) => {
   return { data, error };
 };
 
-export const updateUserProfile = async (userId: string, updates: any) => {
+export const updatePublicProfile = async (userId: string, updates: any) => {
   const { data, error } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .update(updates)
     .eq("id", userId);
 

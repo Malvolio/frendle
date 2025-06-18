@@ -12,16 +12,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-import { updateUserProfile } from "@/lib/supabase";
+import { updatePublicProfile } from "@/lib/supabase";
 import { useAuth } from "@/providers/auth-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence } from "framer-motion";
+import { motion } from "motion/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { MembershipSection } from "./membership-section";
 import { CharitySelection } from "./charity-selection";
-import { AnimatePresence } from "framer-motion";
-import { motion } from "motion/react";
+import { MembershipSection } from "./membership-section";
 
 const profileSchema = z.object({
   name: z.string().min(2, {
@@ -52,7 +52,7 @@ export function ProfileForm() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await updateUserProfile(user.auth.id, {
+      const { error } = await updatePublicProfile(user.auth.id, {
         name: data.name,
         bio: data.bio,
         updated_at: new Date().toISOString(),
@@ -78,7 +78,6 @@ export function ProfileForm() {
 
   return (
     <Card>
-
       <CardHeader>
         <CardTitle className="flex items-center gap-2 mb-4">
           {/* <User className="w-5 h-5 text-green-600" /> */}
@@ -89,7 +88,6 @@ export function ProfileForm() {
         <AnimatePresence>
           {/* TODO: Make each one animate in seperately */}
           <motion.div className="bg-[#FFFDFA] gap-4 w-[500px]  m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
-
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -128,8 +126,8 @@ export function ProfileForm() {
                         />
                       </FormControl>
                       <FormDescription className="">
-                        Tell folks a bit aobut yourself. What you're interested in
-                        at the moment and what they should ask you about.
+                        Tell folks a bit aobut yourself. What you're interested
+                        in at the moment and what they should ask you about.
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -151,9 +149,6 @@ export function ProfileForm() {
         Note: we need next buttons. It's not obvious we are suppose to fill
         these things about because they are tabs
       </p>
-
-
     </Card>
-
   );
 }

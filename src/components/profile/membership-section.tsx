@@ -1,12 +1,6 @@
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
 import {
   cancelSubscription,
@@ -131,7 +125,6 @@ export function MembershipSection() {
               intentional, positive, and troll-free. Your contribution supports
               the community—and a percentage goes to charity.
             </CardDescription> */}
-
           </div>
         </div>
       </CardHeader>
@@ -149,23 +142,16 @@ export function MembershipSection() {
                 className="m-auto w-[120px] mt-0"
               />
 
-              <p className="text-5xl font-peachy m-auto -my-4">[Name]</p>
+              <p className="text-5xl font-peachy m-auto -my-4">
+                {user?.public_profile.name || "[Name]"}
+              </p>
               <Alert className="bg-transparent w-fit m-auto border-none mt-0">
-                <AlertTitle className="text-1xl w-fit m-auto">
-                  ➡ Supporting member since [DATE] ⬅
-                </AlertTitle>
-
-                {/* <div className=" flex flex-row gap-2 items-center pl-2 mt-8">
-                  <AlertDescription>
-                    You have an active membership
-                    {subscription.cancelAtPeriodEnd
-                      ? ` that will end on ${formatDate(
-                        subscription.currentPeriodEnd
-                      )}`
-                      : " that will automatically renew"}
-                    .
-                  </AlertDescription>
-                </div> */}
+                {user?.system_profile.created_at && (
+                  <AlertTitle className="text-1xl w-fit m-auto">
+                    ➡ Supporting member since {user?.system_profile.created_at}{" "}
+                    ⬅
+                  </AlertTitle>
+                )}
               </Alert>
               <div className="rounded-lg border border-gray-200 gap-0 h-auto flex flex-col justify-normal p-6 ">
                 <div className="p-0 m-0 flex flex-col justify-around gap-2">
@@ -173,7 +159,6 @@ export function MembershipSection() {
                     <p className="leading-none m-0">Membership: $9.95/month</p>
 
                     {!subscription.cancelAtPeriodEnd && (
-
                       <Button
                         className=" text-red-700 bg-transparent font-bold border-none shadow-none text-left w-9 border-8 "
                         onClick={handleCancelSubscription}
@@ -181,27 +166,22 @@ export function MembershipSection() {
                       >
                         {isProcessing ? "Processing..." : "Cancel"}
                       </Button>
-
                     )}
                   </div>
                   <div className="flex flex-row gap-2">
                     <p className="leading-none m-0">
-                      {subscription.cancelAtPeriodEnd ? "Ends:" : "Auto-renews:"} &nbsp;
+                      {subscription.cancelAtPeriodEnd
+                        ? "Ends:"
+                        : "Auto-renews:"}{" "}
+                      &nbsp;
                       {formatDate(subscription.currentPeriodEnd)}
                     </p>
-
-
                   </div>
                 </div>
 
-                <div className="p-0 h-auto flex flex-row justify-normal gap-4">
-
-                </div>
+                <div className="p-0 h-auto flex flex-row justify-normal gap-4"></div>
               </div>
             </div>
-
-
-
           </div>
         ) : (
           <div className="space-y-6">
@@ -271,7 +251,6 @@ export function MembershipSection() {
           join us. 💛
         </li>
       </ul> */}
-
     </Card>
   );
 }

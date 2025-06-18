@@ -56,7 +56,7 @@ const useGetSession = (
 
         // Fetch partner profile
         const { data: partnerProfile, error: profileError } = await supabase
-          .from("profiles")
+          .from("public_profiles")
           .select("id, name, bio, avatar_url, selected_charity")
           .eq("id", partnerId)
           .single();
