@@ -1,27 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
-import { supabase } from "./supabase";
+import { supabase } from "../lib/supabase";
+import { DataHook } from "./DataHook";
 
 type UpdateAvailability = (hour: number, available: boolean) => Promise<void>;
 
-type AvailabilityReturn =
-  | {
-      updateAvailability: UpdateAvailability;
-      loading: true;
-      data?: undefined;
-      error?: undefined;
-    }
-  | {
-      updateAvailability: UpdateAvailability;
-      loading: false;
-      data?: undefined;
-      error: string;
-    }
-  | {
-      updateAvailability: UpdateAvailability;
-      loading: false;
-      data: Set<number>;
-      error?: undefined;
-    };
+type AvailabilityReturn = DataHook<
+  Set<number>,
+  {
+    updateAvailability: UpdateAvailability;
+  }
+>;
 
 const useAvailability = (userId: string): AvailabilityReturn => {
   // Fetch initial availability data
@@ -92,7 +80,7 @@ const useAvailability = (userId: string): AvailabilityReturn => {
 
           // Update local state
           setAv(({ data: prev }) => {
-            const data = new Set(prev || new Set<number>());
+            const data = new Set(prev);
             data.delete(hour);
             return {
               loading: false,
@@ -102,7 +90,6 @@ const useAvailability = (userId: string): AvailabilityReturn => {
           });
         }
       } catch (err) {
-        // Optionally, you could set an error state here or handle it differently
         console.error("Error updating availability:", err);
         // Refresh data to ensure consistency
         await fetchAvailability();

@@ -5,9 +5,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAuth } from "@/providers/auth-provider";
 import Questionnaire from "./questionnaire";
 
 const Inventory = () => {
+  const { user } = useAuth();
   return (
     <Card>
       <CardHeader>
@@ -17,13 +19,14 @@ const Inventory = () => {
         </CardTitle>
 
         <CardDescription>
-          Answer a couple of questions so we can help find people who share your
-          interests and values.
+          Answer some questions so we can help find people who share your
+          interests and values. You don’t have to answer them all, but the more
+          you answer, the better the matches we can find you
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4 h-96 mt-6">
-          <Questionnaire />
+          {user && <Questionnaire userId={user.auth.id} />}
         </div>
       </CardContent>
     </Card>

@@ -31,16 +31,19 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          interests: Json
           timezone: string | null
         }
         Insert: {
           created_at?: string | null
           id: string
+          interests?: Json
           timezone?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
+          interests?: Json
           timezone?: string | null
         }
         Relationships: [

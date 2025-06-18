@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import useAvailability from "@/lib/useAvailability";
+import useAvailability from "@/hooks/useAvailability";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { AnimatePresence, motion } from "motion/react";
@@ -124,22 +124,6 @@ const Availability = ({ userId }: AvailabilityProps) => {
 
   return (
     <div className="w-full flex-col justify-between items-start md:items-center mb-4">
-      {/* VP: Because people can select up to 20 it's no longer a precious resouce and seeing 20 is more overwhelming than helpful so I've commented this out. */}
-      {/* <div>
-        <RoughNotation type="highlight" show={show} color="#F0D8A0">
-          <span className="text-2xl font-bold">{totalSelections}</span> of{" "}
-          {MAX_SLOTS} selected
-        </RoughNotation>
-      </div> */}
-      <p className="font-bold text-red-700">
-        NOTE: Seeing the tally vs the list of times selected for a particular
-        date isn't as helpful. Folks would need to click on it again to remind
-        themeselves what time was selected instead of seeing their availability
-        at a glance. Let's discuss
-      </p>
-      <p className="font-bold text-red-700">
-        NOTE: I couldn't change the background to #58B4AE on day selected
-      </p>
       <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
         <p className="text-xl text-center">

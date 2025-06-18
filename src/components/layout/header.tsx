@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export function Header() {
   const pathname = useRouterState().location.pathname;
   const { theme, setTheme } = useTheme();
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export function Header() {
               </Button>
             </Link>
           ) : null}
-          {user ? (
+          {loading ? null : user ? (
             <Button onClick={signOut} size="sm">
               Sign Out
             </Button>

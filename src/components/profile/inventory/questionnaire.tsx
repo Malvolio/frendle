@@ -1,7 +1,8 @@
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
+import useProfileInterests from "@/hooks/useProfileInterests";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import { Questions } from "./Questions";
 
@@ -42,7 +43,13 @@ const DisplayQuestion: FC<{
                   className="flex flex-col h-full justify-between items-center gap-2 py-2 w-40 cursor-pointer bg-[#EBE3CF] border border-black/30 px-2"
                   htmlFor={option.id}
                 >
-                  <div className={isSelected ? "transition-all scale-125" : "transition-all  scale-100 "}>
+                  <div
+                    className={
+                      isSelected
+                        ? "transition-all scale-125"
+                        : "transition-all  scale-100 "
+                    }
+                  >
                     <img
                       src={`/inventory/q${id}-opt${option.id}.png`}
                       width={"100px"}
@@ -55,7 +62,6 @@ const DisplayQuestion: FC<{
                       id={option.id.toString()}
                     />
                     {option.text}
-
                   </div>
                 </label>
               </RoughNotation>
@@ -67,41 +73,47 @@ const DisplayQuestion: FC<{
   </>
 );
 
-const Questionnaire = () => {
-  const [questionIndex, setQuestionIndex] = useState(0);
-  const [visible, setVisible] = useState(true);
-  const [answers, setAnswers] = useState<string[]>([]);
-  const updateQuestionIndex = (f: (n: number) => number) => {
-    const n = f(questionIndex);
-    setVisible(false);
-    setTimeout(() => {
-      setQuestionIndex(n);
-      setVisible(true);
-    }, 800);
-  };
+const Questionnaire: FC<{ userId: string }> = ({ userId }) => {
+  const [questionIndex, setQuestionIndex] = useState(-1);
+
+  const {
+    loading,
+    error,
+    data: answers,
+    updateAnswer,
+  } = useProfileInterests(userId);
+  useEffect(() => {
+    if (answers && questionIndex < 1) {
+      const unansweredQuestions = Questions.findIndex(({ id }) => !answers[id]);
+      if (unansweredQuestions < 0) {
+        setQuestionIndex(Questions.length - 1);
+      } else {
+        setQuestionIndex(unansweredQuestions);
+      }
+    }
+  }, [answers]);
+  if (error) {
+    return <div>{error}</div>;
+  }
   return (
     <div>
       <div className="h-72 w-full flex flex-col justify-center items-center">
-        {visible ? (
+        {loading || questionIndex < 0 ? (
+          <Spinner />
+        ) : (
           <DisplayQuestion
-            selectedId={answers[questionIndex] ?? ""}
-            setSelectedId={(id) => {
-              setAnswers((v) => {
-                const p = [...v];
-                p[questionIndex] = id;
-                return p;
-              });
+            selectedId={(answers && answers[Questions[questionIndex].id]) ?? ""}
+            setSelectedId={(answerId) => {
+              updateAnswer(Questions[questionIndex].id, answerId);
             }}
             question={Questions[questionIndex]}
           />
-        ) : (
-          <Spinner />
         )}
       </div>
       <div className="flex justify-center gap-6 my-6">
         <Button
           onClick={() => {
-            updateQuestionIndex((n) => n - 1);
+            setQuestionIndex((n) => n - 1);
           }}
           disabled={questionIndex <= 0}
         >
@@ -109,7 +121,7 @@ const Questionnaire = () => {
         </Button>
         <Button
           onClick={() => {
-            updateQuestionIndex((n) => n + 1);
+            setQuestionIndex((n) => n + 1);
           }}
           disabled={questionIndex >= Questions.length - 1}
         >

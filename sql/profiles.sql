@@ -13,6 +13,7 @@ CREATE TABLE
     private_profiles (
         id uuid NOT NULL REFERENCES system_profiles PRIMARY KEY,
         timezone text REFERENCES timezones (zone_name),
+        interests JSONB DEFAULT '{}' NOT NULL,
         created_at timestamp DEFAULT now ()
     );
 
