@@ -148,7 +148,14 @@ export function MembershipSection() {
               <Alert className="bg-transparent w-fit m-auto border-none mt-0">
                 {user?.system_profile.created_at && (
                   <AlertTitle className="text-1xl w-fit m-auto">
-                    ➡ Supporting member since {user?.system_profile.created_at}{" "}
+                    ➡ Supporting member since{" "}
+                    {new Date(
+                      user.system_profile.created_at
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}{" "}
                     ⬅
                   </AlertTitle>
                 )}
