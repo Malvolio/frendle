@@ -5,6 +5,7 @@ import { FC } from "react";
 // import { RoughNotation } from "react-rough-notation";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "motion/react";
+import { RoughNotation } from "react-rough-notation";
 
 type TabDescription = {
   icon: FC<{ className?: string }>;
@@ -31,14 +32,21 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
     >
       <TabsList className="w-7/12 mx-auto flex mb-3">
         {tabs.map(({ icon: Icon, name, id }) => (
-          <TabsTrigger
-            key={id}
-            value={id}
-            className="flex-1 flex items-center gap-2"
+          <RoughNotation
+            type="box"
+            show={id === currentTab}
+            iterations={2}
+            animate={false}
           >
-            <Icon className="w-4 h-4" />
-            {name}
-          </TabsTrigger>
+            <TabsTrigger
+              key={id}
+              value={id}
+              className="flex-1 flex items-center gap-2"
+            >
+              <Icon className="w-4 h-4" />
+              {name}
+            </TabsTrigger>
+          </RoughNotation>
         ))}
       </TabsList>
 
