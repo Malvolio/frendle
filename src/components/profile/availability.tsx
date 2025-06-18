@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useAvailability from "@/lib/useAvailability";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
@@ -146,98 +147,125 @@ const Availability = ({ userId }: AvailabilityProps) => {
           connects.
         </p>
         <div className="flex ">
-          {DAYS.map((day, dayIndex) => {
-            const count = getSelectedCountForDay(dayIndex, selectedHours);
-            const dayLabel = count ? `(${count})` : "";
-            return (
+          {DAYS.map((day, dayIndex) => (
+            <motion.div
+              key={day.short}
+              className="border-r border-black last:border-r-0 overflow-hidden cursor-pointer"
+              onClick={() => setOpenColumn(day.short)}
+              initial={false}
+              animate={{
+                width: openColumn === day.short ? "400px" : "200px",
+              }}
+              transition={{
+                duration: 0.4,
+                ease: [0.4, 0, 0.2, 1],
+              }}
+            >
+              {/* Column Header */}
               <motion.div
-                key={day.short}
-                className="border-r border-black last:border-r-0 overflow-hidden cursor-pointer"
-                onClick={() => setOpenColumn(day.short)}
-                initial={false}
-                animate={{
-                  width: openColumn === day.short ? "400px" : "200px",
-                }}
-                transition={{
-                  duration: 0.4,
-                  ease: [0.4, 0, 0.2, 1],
-                }}
+                className={cn(
+                  `border-black border-t border-b font-semibold w-full text-center`,
+                  {
+                    "text-3xl": openColumn === day.short,
+                    "hover:border-b": openColumn !== day.short,
+                  }
+                )}
+                whileHover={{ backgroundColor: "#58B4AE" }}
+                whileFocus={{ backgroundColor: "#58B4AE" }}
               >
-                {/* Column Header */}
-                <motion.div
-                  className={`px-3 py-2 border-black border-t border-b font-semibold w-full text-center ${openColumn === day.short ? "text-3xl" : "hover:border-b "}`}
-                  whileHover={{ backgroundColor: "#58B4AE" }}
-                  // whileTap={{ scale: 0.98 }}
-                  whileFocus={{ backgroundColor: "#58B4AE" }}
-                >
-                  <div className="flex items-center justify-center">
-                    <h3 className="font-semibold text-center text-lg whitespace-nowrap">
-                      {openColumn === day.short ? day.full : day.short}{" "}
-                      {dayLabel}
-                    </h3>
-                  </div>
-                </motion.div>
-
-                {/* Column Content */}
-                <AnimatePresence>
-                  {openColumn === day.short && (
-                    <div className="flex gap-2 px-2 ">
-                      {TIME_BLOCKS.map((block) => (
-                        <motion.div
-                          layout
-                          key={block.label}
-                          exit={{ opacity: 0 }}
-                          className="flex flex-col items-center"
-                        >
-                          <img
-                            src={block.label + ".svg"}
-                            alt={block.label}
-                            className="mb-2"
-                          />
-                          {block.hours.map((hour) => {
-                            const isSelected = isTimeSelected(
-                              hour,
-                              dayIndex,
-                              selectedHours
-                            );
-                            const isDisabled =
-                              !isSelected && totalSelections >= MAX_SLOTS;
-                            return (
-                              <button
-                                key={hour}
-                                className={`mb-1 px-2 py-1 text-sm border ${
-                                  isSelected
-                                    ? "bg-primary text-white"
-                                    : isDisabled
-                                      ? "text-gray-500 cursor-not-allowed  text-italic"
-                                      : "hover:bg-[#F0D8A0]/60 border-transparent"
-                                }`}
-                                onClick={() => handleTimeClick(day.short, hour)}
-                                disabled={isDisabled || loading}
-                              >
-                                {hour}
-                              </button>
-                            );
-                          })}
-                        </motion.div>
-                      ))}
-                    </div>
+                <div
+                  className={cn(
+                    "flex items-center justify-center px-2 py-2 h-full w-full",
+                    {
+                      "bg-[#58B4AE]": openColumn === day.short,
+                    }
                   )}
-                </AnimatePresence>
+                >
+                  <h3 className="font-semibold text-center text-lg whitespace-nowrap">
+                    {openColumn === day.short ? day.full : day.short}
+                  </h3>
+                </div>
               </motion.div>
-            );
-          })}
+
+              {/* Column Content */}
+              <AnimatePresence>
+                {openColumn === day.short ? (
+                  <div className="flex gap-2 px-2 ">
+                    {TIME_BLOCKS.map((block) => (
+                      <motion.div
+                        layout
+                        key={block.label}
+                        exit={{ opacity: 0 }}
+                        className="flex flex-col items-center"
+                      >
+                        <img
+                          src={block.label + ".svg"}
+                          alt={block.label}
+                          className="mb-2"
+                        />
+                        {block.hours.map((hour) => {
+                          const isSelected = isTimeSelected(
+                            hour,
+                            dayIndex,
+                            selectedHours
+                          );
+                          const isDisabled =
+                            !isSelected && totalSelections >= MAX_SLOTS;
+                          return (
+                            <button
+                              key={hour}
+                              className={`mb-1 px-2 py-1 text-sm border ${
+                                isSelected
+                                  ? "bg-primary text-white"
+                                  : isDisabled
+                                    ? "text-gray-500 cursor-not-allowed  text-italic"
+                                    : "hover:bg-[#F0D8A0]/60 border-transparent"
+                              }`}
+                              onClick={() => handleTimeClick(day.short, hour)}
+                              disabled={isDisabled || loading}
+                            >
+                              {hour}
+                            </button>
+                          );
+                        })}
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center py-4">
+                    {(() => {
+                      const hours = TIME_BLOCKS.flatMap((block) =>
+                        block.hours.filter((hour) =>
+                          isTimeSelected(hour, dayIndex, selectedHours)
+                        )
+                      );
+                      const thours = hours.slice(0, 5).map((hour) => (
+                        <div
+                          key={`m-${hour}`}
+                          className="mb-1 px-2 py-1 text-sm border bg-primary text-white w-12 text-center"
+                        >
+                          {hour}
+                        </div>
+                      ));
+                      return hours.length === thours.length
+                        ? thours
+                        : [
+                            ...thours,
+                            <div className="font-bold">&hellip;</div>,
+                          ];
+                    })()}
+                  </div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-interface AvailabilityPageProps {
-  userId: string;
-}
-
-const AvailabilityPage = ({ userId }: AvailabilityPageProps) => {
+const AvailabilityPage = () => {
   const { user } = useAuth();
 
   return (
