@@ -76,7 +76,7 @@ const initializePeerConnection = (
   };
 
   pc.onicecandidate = async (event) => {
-    // console.log("[WebRTC] ICE candidate event:", event);
+    console.log("[WebRTC] local ICE candidate");
     if (event.candidate) {
       try {
         await connection.signaling?.signalIceCandidate(
@@ -187,7 +187,7 @@ const doStartCall = async (
   const handleIncomingOffer = async (
     offer: RTCSessionDescriptionInit | null
   ) => {
-    console.log("[WebRTC] Received offer");
+    console.log("[WebRTC] Received remote offer");
     const pc = peerConnectionRef.current;
     if (!pc) return;
     if (!offer) {
@@ -209,7 +209,7 @@ const doStartCall = async (
   const handleIncomingAnswer = async (
     answer: RTCSessionDescriptionInit | null
   ) => {
-    console.log("[WebRTC] Received answer:");
+    console.log("[WebRTC] Received remote answer");
     const pc = peerConnectionRef.current;
     if (!pc) return;
     if (!answer) {
@@ -226,6 +226,7 @@ const doStartCall = async (
   };
 
   const handleIceCandidate = async (candidate: RTCIceCandidateInit) => {
+    console.log("[WebRTC] Received remote ICE candidate");
     const pc = peerConnectionRef.current;
     if (!pc) return;
 

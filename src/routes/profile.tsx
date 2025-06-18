@@ -6,7 +6,6 @@ import { MembershipSection } from "@/components/profile/membership-section";
 import { ProfileForm } from "@/components/profile/profile-form";
 import TabSet from "@/components/TabSet";
 import { createFileRoute } from "@tanstack/react-router";
-import { RoughNotation } from "react-rough-notation";
 import {
   BadgeCheck,
   Calendar1,
@@ -16,7 +15,6 @@ import {
 } from "lucide-react";
 const ProfileTabs = [
   { id: "profile", name: "About you", icon: User, body: ProfileForm },
-
 
   {
     id: "inventory",

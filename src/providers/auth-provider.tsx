@@ -1,5 +1,5 @@
 import { getCurrentUser, signInWithGoogle, supabase } from "@/lib/supabase";
-import { User } from "@/types";
+import { SignedInUser } from "@/types";
 import {
   createContext,
   ReactNode,
@@ -13,7 +13,7 @@ interface AuthProviderProps {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: SignedInUser | null;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -25,55 +25,36 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SignedInUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const currentUser = await getCurrentUser();
+        const auth = await getCurrentUser();
 
-        if (currentUser) {
+        if (auth) {
           console.log("[Auth] User found, fetching profile");
-          // Fetch user profile from profiles table
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", currentUser.id)
-            .single();
-
-          if (profile) {
-            console.log("[Auth] Profile loaded", {
-              id: profile.id,
-              membershipStatus: profile.membership_status,
-            });
-            setUser({
-              id: profile.id,
-              name: profile.name || undefined,
-              bio: profile.bio || undefined,
-              avatarUrl: profile.avatar_url || undefined,
-              selectedCharity: profile.selected_charity || undefined,
-            });
-          } else {
-            // Profile doesn't exist yet, create one
-            console.log("[Auth] Creating new profile");
-            const { data: newProfile } = await supabase
-              .from("profiles")
-              .insert({
-                id: currentUser.id,
-                email: currentUser.email || "",
-                membership_status: "free",
-              })
-              .select()
-              .single();
-
-            if (newProfile) {
-              console.log("[Auth] New profile created");
-              setUser({
-                id: newProfile.id,
-              });
+          const { data, error } = await supabase.functions.invoke(
+            "ensure-user-profiles",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
             }
+          );
+          if (error) {
+            console.error("Error fetching user:", error);
+            return;
           }
+          const user: SignedInUser = {
+            auth,
+            ...data,
+          };
+          setUser(user);
+
+          console.error("Error fetching user:", error);
         }
       } catch (error) {
         console.error("Error fetching user:", error);

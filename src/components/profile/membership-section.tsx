@@ -1,11 +1,9 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { RoughNotation } from "react-rough-notation";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,7 +15,7 @@ import {
 } from "@/lib/stripe";
 import { useAuth } from "@/providers/auth-provider";
 import { Subscription } from "@/types";
-import { AlertCircle, BadgeCheck, CheckCircle2 } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function MembershipSection() {
@@ -31,7 +29,7 @@ export function MembershipSection() {
       if (!user) return;
 
       try {
-        const { data, error } = await getSubscription(user.id);
+        const { data, error } = await getSubscription(user.auth.id);
 
         if (error) throw error;
 
@@ -57,7 +55,7 @@ export function MembershipSection() {
       // Premium plan price ID
       const priceId = "price_premium_monthly";
 
-      const { url, error } = await createCheckoutSession(priceId, user.id);
+      const { url, error } = await createCheckoutSession(priceId, user.auth.id);
 
       if (error) throw error;
 
@@ -129,11 +127,20 @@ export function MembershipSection() {
               <h1 className="m-auto text-5xl">Membership</h1>
             </CardTitle>
             <CardDescription className="text-center">
-              We ask for a small membership fee to help keep Frendle intentional, positive, and troll-free. Your contribution supports the community—and a percentage goes to charity.
-
+              We ask for a small membership fee to help keep Frendle
+              intentional, positive, and troll-free. Your contribution supports
+              the community—and a percentage goes to charity.
             </CardDescription>
-            <p className="font-bold text-red-700"> Note: was this placeholder or are you thinking there is tiered membership? "Upgrade to Premium for unlimited matches and exclusive features"</p>
-            <p className="font-bold text-red-700"> Nice to have: Add their name to the card below"</p>
+            <p className="font-bold text-red-700">
+              {" "}
+              Note: was this placeholder or are you thinking there is tiered
+              membership? "Upgrade to Premium for unlimited matches and
+              exclusive features"
+            </p>
+            <p className="font-bold text-red-700">
+              {" "}
+              Nice to have: Add their name to the card below"
+            </p>
           </div>
         </div>
       </CardHeader>
@@ -144,29 +151,30 @@ export function MembershipSection() {
           </div>
         ) : subscription?.status === "active" ? (
           <div className="space-y-4">
-
-
-
             <div className="bg-[#FFFDFA] gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
-              <img src="/profile/membership_1.svg" alt="" className="m-auto w-[120px] mt-0" />
+              <img
+                src="/profile/membership_1.svg"
+                alt=""
+                className="m-auto w-[120px] mt-0"
+              />
 
               <p className="text-5xl font-peachy m-auto -my-4">[Name]</p>
               <Alert className="bg-transparent w-fit m-auto border-none mt-0">
-
-                <AlertTitle className="font-peachy text-2xl w-fit m-auto">➡ Supporting member ⬅</AlertTitle>
+                <AlertTitle className="font-peachy text-2xl w-fit m-auto">
+                  ➡ Supporting member ⬅
+                </AlertTitle>
 
                 <div className=" flex flex-row gap-2 items-center pl-2 mt-8">
                   <AlertDescription>
                     You have an active membership
                     {subscription.cancelAtPeriodEnd
                       ? ` that will end on ${formatDate(
-                        subscription.currentPeriodEnd
-                      )}`
+                          subscription.currentPeriodEnd
+                        )}`
                       : " that will automatically renew"}
                     .
                   </AlertDescription>
                 </div>
-
               </Alert>
               <div className="rounded-lg p-4 border border-gray-200 gap-0 h-fit flex flex-col justify-normal">
                 <div className="p-0 h-auto flex flex-row justify-normal gap-4">
@@ -178,9 +186,7 @@ export function MembershipSection() {
                   <p className="text-lg">
                     {subscription.cancelAtPeriodEnd ? "Ends:" : "Renews:"}
                   </p>
-                  <p>
-                    {formatDate(subscription.currentPeriodEnd)}
-                  </p>
+                  <p>{formatDate(subscription.currentPeriodEnd)}</p>
                 </div>
               </div>
             </div>
@@ -248,15 +254,27 @@ export function MembershipSection() {
       Your membership helps us:
       <ul>
         <li className="flex items-start">
-          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />Sustain and improve Frendle</li>
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />
+          Sustain and improve Frendle
+        </li>
         <li className="flex items-start">
-          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />Fund moderators and tools</li>
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />
+          Fund moderators and tools
+        </li>
         <li className="flex items-start">
-          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />Give back—20% of all fees will go to charity</li>
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />
+          Give back—20% of all fees will go to charity
+        </li>
         <li className="flex items-start">
-          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />We believe in making the internet a little more human. If you do too, join us. 💛</li>
+          <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />
+          We believe in making the internet a little more human. If you do too,
+          join us. 💛
+        </li>
       </ul>
-      <p className="font-bold text-red-700"> Note: Can we include the charity on this tab?</p>
+      <p className="font-bold text-red-700">
+        {" "}
+        Note: Can we include the charity on this tab?
+      </p>
       {/* <CardFooter className="border-t pt-6 flex flex-col items-start">
         <Alert variant="default" className="w-full bg-muted/50">
           <AlertCircle className="h-4 w-4" />
@@ -267,6 +285,6 @@ export function MembershipSection() {
           </AlertDescription>
         </Alert>
       </CardFooter> */}
-    </Card >
+    </Card>
   );
 }

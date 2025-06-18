@@ -37,7 +37,7 @@ const useGetSession = (
         // First fetch the session
         const { data: sessionData, error: sessionError } = await supabase
           .from("sessions")
-          .select("id, host_id, guest_id")
+          .select("id, room_id, host_id, guest_id")
           .eq("id", sessionId)
           .single();
 

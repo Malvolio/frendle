@@ -15,7 +15,6 @@ import { toast } from "@/hooks/use-toast";
 import { updateUserProfile } from "@/lib/supabase";
 import { useAuth } from "@/providers/auth-provider";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -38,8 +37,8 @@ export function ProfileForm() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      name: user?.name || "",
-      bio: user?.bio || "",
+      name: user?.public_profile.name || "",
+      bio: user?.public_profile.bio || "",
     },
   });
 
@@ -49,7 +48,7 @@ export function ProfileForm() {
     setIsSubmitting(true);
 
     try {
-      const { error } = await updateUserProfile(user.id, {
+      const { error } = await updateUserProfile(user.auth.id, {
         name: data.name,
         bio: data.bio,
         updated_at: new Date().toISOString(),
@@ -83,7 +82,10 @@ export function ProfileForm() {
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 w-1/2 m-auto">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-6 w-1/2 m-auto"
+          >
             <FormField
               control={form.control}
               name="name"
@@ -106,7 +108,9 @@ export function ProfileForm() {
               name="bio"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-bold text-lg">Introduction</FormLabel>
+                  <FormLabel className="font-bold text-lg">
+                    Introduction
+                  </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Introduce yourself..."
@@ -115,7 +119,8 @@ export function ProfileForm() {
                     />
                   </FormControl>
                   <FormDescription className="">
-                    Tell folks a bit aobut yourself. What you're interested in at the moment and what they should ask you about.
+                    Tell folks a bit aobut yourself. What you're interested in
+                    at the moment and what they should ask you about.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -128,7 +133,10 @@ export function ProfileForm() {
           </form>
         </Form>
       </CardContent>
-      <p className="font-bold text-red-700">Note: we need next buttons. It's not obvious we are suppose to fill these things about because they are tabs</p>
+      <p className="font-bold text-red-700">
+        Note: we need next buttons. It's not obvious we are suppose to fill
+        these things about because they are tabs
+      </p>
     </Card>
   );
 }
