@@ -1,10 +1,11 @@
+
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
-import useProfileInterests from "@/hooks/useProfileInterests";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import { Questions } from "./Questions";
+import { motion } from "motion/react";
 
 type Answer = {
   id: string;
@@ -24,10 +25,10 @@ const DisplayQuestion: FC<{
   setSelectedId: (_: string) => void;
 }> = ({ question: { id, text, options }, selectedId, setSelectedId }) => (
   <>
-    <h2 className="text-2xl mb-3">{text}</h2>
-    <form>
+    <h2 className="text-3xl mb-6 font-bold text-[#373737]">{text}</h2>
+    <form className="w-full">
       <RadioGroup onValueChange={setSelectedId} value={selectedId}>
-        <div className="flex flex-row gap-6 m-auto w-fit h-64">
+        <motion.div className="flex flex-row gap-4 w-[100%]  h-fit" initial={{ x: 20, opacity: .5 }} animate={{ x: 0, opacity: 1 }} transition={{ duration: 0.3 }}>
           {options.map((option) => {
             const isSelected = selectedId === option.id;
             return (
@@ -40,80 +41,71 @@ const DisplayQuestion: FC<{
                 animate={false}
               >
                 <label
-                  className="flex flex-col h-full justify-between items-center gap-2 py-2 w-40 cursor-pointer bg-[#EBE3CF] border border-black/30 px-2"
+                  className="flex flex-col h-full justify-around items-center gap-2 py-2 max-w-72 cursor-pointer border border-black/30 px-2"
                   htmlFor={option.id}
                 >
-                  <div
-                    className={
-                      isSelected
-                        ? "transition-all scale-125"
-                        : "transition-all  scale-100 "
-                    }
-                  >
+                  <div className="text-2xl h-[80%]">
+
                     <img
                       src={`/inventory/q${id}-opt${option.id}.png`}
-                      width={"100px"}
-                      className="m-auto saturate-50 mt-2"
+                      width={"140px"}
+                      className={"m-auto transition-all " + (isSelected ? "scale-110 " : "scale-100 ")}
                     />
                   </div>
-                  <div>
+                  <div >
                     <RadioGroupItem
                       value={option.id.toString()}
                       id={option.id.toString()}
                     />
-                    {option.text}
+                    <span className={"px-2 text-2xl  leading-tight block mt-0 " + (isSelected ? "font-semibold" : "")}>{option.text}</span>
+
                   </div>
                 </label>
               </RoughNotation>
             );
           })}
-        </div>
+        </motion.div>
       </RadioGroup>
     </form>
   </>
 );
 
-const Questionnaire: FC<{ userId: string }> = ({ userId }) => {
-  const [questionIndex, setQuestionIndex] = useState(-1);
-
-  const {
-    loading,
-    error,
-    data: answers,
-    updateAnswer,
-  } = useProfileInterests(userId);
-  useEffect(() => {
-    if (answers && questionIndex < 1) {
-      const unansweredQuestions = Questions.findIndex(({ id }) => !answers[id]);
-      if (unansweredQuestions < 0) {
-        setQuestionIndex(Questions.length - 1);
-      } else {
-        setQuestionIndex(unansweredQuestions);
-      }
-    }
-  }, [answers]);
-  if (error) {
-    return <div>{error}</div>;
-  }
+const Questionnaire = () => {
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [visible, setVisible] = useState(true);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const updateQuestionIndex = (f: (n: number) => number) => {
+    const n = f(questionIndex);
+    setVisible(false);
+    setTimeout(() => {
+      setQuestionIndex(n);
+      setVisible(true);
+    }, 800);
+  };
   return (
     <div>
-      <div className="h-72 w-full flex flex-col justify-center items-center">
-        {loading || questionIndex < 0 ? (
-          <Spinner />
-        ) : (
+      <div className="w-full flex flex-col justify-center items-center h-auto">
+        {visible ? (
           <DisplayQuestion
-            selectedId={(answers && answers[Questions[questionIndex].id]) ?? ""}
-            setSelectedId={(answerId) => {
-              updateAnswer(Questions[questionIndex].id, answerId);
+            selectedId={answers[questionIndex] ?? ""}
+            setSelectedId={(id) => {
+              setAnswers((v) => {
+                const p = [...v];
+                p[questionIndex] = id;
+                return p;
+              });
             }}
             question={Questions[questionIndex]}
           />
+        ) : (
+          <Spinner />
         )}
       </div>
+
       <div className="flex justify-center gap-6 my-6">
         <Button
           onClick={() => {
-            setQuestionIndex((n) => n - 1);
+            updateQuestionIndex((n) => n - 1);
           }}
           disabled={questionIndex <= 0}
         >
@@ -121,7 +113,7 @@ const Questionnaire: FC<{ userId: string }> = ({ userId }) => {
         </Button>
         <Button
           onClick={() => {
-            setQuestionIndex((n) => n + 1);
+            updateQuestionIndex((n) => n + 1);
           }}
           disabled={questionIndex >= Questions.length - 1}
         >

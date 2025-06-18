@@ -22,6 +22,7 @@ export interface Charity {
   website: string;
   logoUrl?: string;
   category: string;
+
 }
 
 export interface Subscription {
