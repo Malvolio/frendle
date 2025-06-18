@@ -124,23 +124,14 @@ export function MembershipSection() {
           <div className="text-center m-auto items-center">
             <CardTitle className="flex items-center gap-2 mb-1">
               {/* <BadgeCheck className="w-5 h-5 text-green-600" /> */}
-              <h1 className="m-auto text-5xl">Membership</h1>
+              {/* <h1 className="m-auto text-5xl">Membership</h1> */}
             </CardTitle>
-            <CardDescription className="text-center">
+            {/* <CardDescription className="text-center">
               We ask for a small membership fee to help keep Frendle
               intentional, positive, and troll-free. Your contribution supports
               the community—and a percentage goes to charity.
-            </CardDescription>
-            <p className="font-bold text-red-700">
-              {" "}
-              Note: was this placeholder or are you thinking there is tiered
-              membership? "Upgrade to Premium for unlimited matches and
-              exclusive features"
-            </p>
-            <p className="font-bold text-red-700">
-              {" "}
-              Nice to have: Add their name to the card below"
-            </p>
+            </CardDescription> */}
+
           </div>
         </div>
       </CardHeader>
@@ -160,49 +151,57 @@ export function MembershipSection() {
 
               <p className="text-5xl font-peachy m-auto -my-4">[Name]</p>
               <Alert className="bg-transparent w-fit m-auto border-none mt-0">
-                <AlertTitle className="font-peachy text-2xl w-fit m-auto">
-                  ➡ Supporting member ⬅
+                <AlertTitle className="text-1xl w-fit m-auto">
+                  ➡ Supporting member since [DATE] ⬅
                 </AlertTitle>
 
-                <div className=" flex flex-row gap-2 items-center pl-2 mt-8">
+                {/* <div className=" flex flex-row gap-2 items-center pl-2 mt-8">
                   <AlertDescription>
                     You have an active membership
                     {subscription.cancelAtPeriodEnd
                       ? ` that will end on ${formatDate(
-                          subscription.currentPeriodEnd
-                        )}`
+                        subscription.currentPeriodEnd
+                      )}`
                       : " that will automatically renew"}
                     .
                   </AlertDescription>
-                </div>
+                </div> */}
               </Alert>
-              <div className="rounded-lg p-4 border border-gray-200 gap-0 h-fit flex flex-col justify-normal">
-                <div className="p-0 h-auto flex flex-row justify-normal gap-4">
-                  <p className="text-lg">Membership:</p>
-                  <p className="">$9.95/month</p>
+              <div className="rounded-lg border border-gray-200 gap-0 h-auto flex flex-col justify-normal p-6 ">
+                <div className="p-0 m-0 flex flex-col justify-around gap-2">
+                  <div className="flex flex-row gap-4 p-0 m-0 h-auto align-left justify-start items-center">
+                    <p className="leading-none m-0">Membership: $9.95/month</p>
+
+                    {!subscription.cancelAtPeriodEnd && (
+
+                      <Button
+                        className=" text-red-700 bg-transparent font-bold border-none shadow-none text-left w-9 border-8 "
+                        onClick={handleCancelSubscription}
+                        disabled={isProcessing}
+                      >
+                        {isProcessing ? "Processing..." : "Cancel"}
+                      </Button>
+
+                    )}
+                  </div>
+                  <div className="flex flex-row gap-2">
+                    <p className="leading-none m-0">
+                      {subscription.cancelAtPeriodEnd ? "Ends:" : "Auto-renews:"} &nbsp;
+                      {formatDate(subscription.currentPeriodEnd)}
+                    </p>
+
+
+                  </div>
                 </div>
 
                 <div className="p-0 h-auto flex flex-row justify-normal gap-4">
-                  <p className="text-lg">
-                    {subscription.cancelAtPeriodEnd ? "Ends:" : "Renews:"}
-                  </p>
-                  <p>{formatDate(subscription.currentPeriodEnd)}</p>
+
                 </div>
               </div>
             </div>
 
-            {!subscription.cancelAtPeriodEnd && (
-              <div className="m-auto text-center">
-                <Button
-                  variant="outline"
-                  className="w-fit m-auto text-red-700 bg-transparent font-bold border-none"
-                  onClick={handleCancelSubscription}
-                  disabled={isProcessing}
-                >
-                  {isProcessing ? "Processing..." : "Cancel Membership"}
-                </Button>
-              </div>
-            )}
+
+
           </div>
         ) : (
           <div className="space-y-6">
@@ -251,7 +250,8 @@ export function MembershipSection() {
         )}
       </CardContent>
       <hr></hr>
-      Your membership helps us:
+      {/* May want this for people who have not signed up */}
+      {/* Your membership helps us:
       <ul>
         <li className="flex items-start">
           <CheckCircle2 className="h-5 w-5 text-primary mr-2 shrink-0" />
@@ -270,21 +270,8 @@ export function MembershipSection() {
           We believe in making the internet a little more human. If you do too,
           join us. 💛
         </li>
-      </ul>
-      <p className="font-bold text-red-700">
-        {" "}
-        Note: Can we include the charity on this tab?
-      </p>
-      {/* <CardFooter className="border-t pt-6 flex flex-col items-start">
-        <Alert variant="default" className="w-full bg-muted/50">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Contribution to charity</AlertTitle>
-          <AlertDescription>
-            20% of all Premium subscriptions go directly to your selected
-            charity.
-          </AlertDescription>
-        </Alert>
-      </CardFooter> */}
+      </ul> */}
+
     </Card>
   );
 }

@@ -36,10 +36,11 @@ export function CharitySelection() {
         const mockCharities: Charity[] = [
           {
             id: "1",
-            name: "Global Education Fund",
-            description: "Providing education opportunities worldwide",
-            website: "https://example.com/gef",
-            category: "Education",
+            name: "Curationist",
+            description: "Curationist is a free online resource that brings together arts and culture communities to find, share, collaborate, and reimagine cultural narratives.",
+            website: "https://www.curationist.org/",
+            category: "Culture",
+            logoUrl: "profile/charity_curationist.svg"
           },
           {
             id: "2",
@@ -109,60 +110,64 @@ export function CharitySelection() {
   };
 
   return (
-    <Card>
+    <Card className="max-w-[200px] ">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          {/* <HeartHandshake className="w-5 h-5 text-green-600" /> */}
-          Support a Cause
-        </CardTitle>
+
 
         <CardDescription>
-          Choose a charity to support. 100% of your donation will go directly to
-          your selected charity.
+
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4 h-96">
-          <div className="space-y-2">
-            <label htmlFor="charitySelect" className="text-sm font-medium">
-              Select Charity
-            </label>
-            <Select
-              disabled={isLoading}
-              value={selectedCharity}
-              onValueChange={setSelectedCharity}
-            >
-              <SelectTrigger id="charitySelect">
-                <SelectValue placeholder="Select a charity" />
-              </SelectTrigger>
-              <SelectContent>
-                {charities.map((charity) => (
-                  <SelectItem key={charity.id} value={charity.id}>
-                    {charity.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
 
-          {selectedCharity && (
-            <div className="rounded-md bg-muted p-4">
-              <h4 className="font-medium mb-1">
-                {charities.find((c) => c.id === selectedCharity)?.name}
-              </h4>
-              <p className="text-sm text-muted-foreground mb-2">
-                {charities.find((c) => c.id === selectedCharity)?.description}
-              </p>
-              <a
-                href={charities.find((c) => c.id === selectedCharity)?.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-primary hover:underline"
+        <div className="bg-[#FFFDFA] gap-4 w-[500px] rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+          <p className="font-bold text-red-700 m-0">Michael: Can we make this a carousel instead and it defaults to the selected one?</p>
+          <p className="font-bold text-lg m-0">Your just cause</p>
+
+          <div className="space-y-4 ">
+            <div className="space-y-2">
+              <label htmlFor="charitySelect" className="text-sm font-medium">
+                Select Charity
+              </label>
+              <Select
+                disabled={isLoading}
+                value={selectedCharity}
+                onValueChange={setSelectedCharity}
               >
-                Visit website
-              </a>
+                <SelectTrigger id="charitySelect">
+                  <SelectValue placeholder="Select a charity" />
+                </SelectTrigger>
+                <SelectContent>
+                  {charities.map((charity) => (
+                    <SelectItem key={charity.id} value={charity.id}>
+                      {charity.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {selectedCharity && (
+                <div className="rounded-md bg-muted p-4">
+                  <img className="w-fit" alt="charity logo" src={charities.find((c) => c.id === selectedCharity)?.logoUrl} />
+                  <h4 className="font-medium mb-1">
+                    {charities.find((c) => c.id === selectedCharity)?.name}
+                  </h4>
+                  <p className="mb-2">
+                    {charities.find((c) => c.id === selectedCharity)?.description}
+                  </p>
+                  <a
+                    href={charities.find((c) => c.id === selectedCharity)?.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Visit website
+                  </a>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+          <p className="m-0">55% of your subscription fee will go to your selected charity.</p>
+
 
           <Button
             onClick={handleSaveCharity}

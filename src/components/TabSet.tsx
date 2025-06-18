@@ -50,8 +50,8 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
             className="w-7/12 mx-auto mb-6 bg-transparent h-screen"
           >
             <motion.div
-              initial={{ x: 0, opacity: 0.5 }}
-              animate={{ x: 0, opacity: 1 }}
+              initial={{ y: 30, opacity: 0.5 }}
+              animate={{ y: 0, opacity: 1 }}
               transition={{ ease: "easeInOut" }}
             >
               <Component />
