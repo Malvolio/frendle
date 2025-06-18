@@ -1,111 +1,133 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
-import { updatePublicProfile } from "@/lib/supabase";
+import useUpdatePublicProfile from "@/hooks/useUpdatePublicProfile";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { Charity } from "@/types";
-import { useEffect, useState } from "react";
+import { FC, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../ui/carousel";
+
+const Charities: Charity[] = [
+  {
+    id: "curationist",
+    name: "Curationist",
+    description:
+      "Curationist is a free online resource that brings together arts and culture communities to find, share, collaborate, and reimagine cultural narratives.",
+    website: "https://www.curationist.org/",
+    category: "Culture",
+    logoUrl: "profile/charity_curationist.svg",
+  },
+  {
+    id: "doctors-without-borders",
+    name: "Doctors Without Borders",
+    description:
+      "Medical humanitarian organization providing emergency aid worldwide",
+    website: "https://www.doctorswithoutborders.org",
+    logoUrl:
+      "https://www.doctorswithoutborders.org/themes/custom/msf/meta_image.png",
+    category: "Healthcare",
+  },
+  {
+    id: "american-red-cross",
+    name: "American Red Cross",
+    description:
+      "International humanitarian movement providing emergency assistance and disaster relief",
+    website: "https://www.redcross.org",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/American_Red_Cross_Logo.svg/1200px-American_Red_Cross_Logo.svg.png",
+    category: "Humanitarian",
+  },
+  {
+    id: "unicef",
+    name: "UNICEF",
+    description:
+      "United Nations agency focused on children's rights, survival, development and protection",
+    website: "https://www.unicef.org",
+    logoUrl:
+      "https://1000logos.net/wp-content/uploads/2021/03/UNICEF-logo-500x281.png",
+    category: "Children's Welfare",
+  },
+  {
+    id: "world-wildlife-fund",
+    name: "World Wildlife Fund",
+    description:
+      "Global conservation organization working to protect wildlife and their habitats",
+    website: "https://www.worldwildlife.org",
+    logoUrl:
+      "https://upload.wikimedia.org/wikipedia/en/thumb/2/24/WWF_logo.svg/1200px-WWF_logo.svg.png",
+    category: "Environmental",
+  },
+  {
+    id: "feeding-america",
+    name: "Feeding America",
+    description: "Largest hunger-relief organization in the United States",
+    website: "https://www.feedingamerica.org",
+    logoUrl:
+      "https://www.feedingamerica.org/themes/custom/ts_feeding_america/images/svgs/logo-2020.svg",
+    category: "Food Security",
+  },
+  {
+    id: "st-jude-hospital",
+    name: "St. Jude Children's Research Hospital",
+    description:
+      "Pediatric treatment and research facility focused on children's catastrophic diseases",
+    website: "https://www.stjude.org",
+    logoUrl:
+      "https://1000logos.net/wp-content/uploads/2023/03/St.-Jude-logo.png",
+    category: "Healthcare",
+  },
+];
+
+const DisplayCharity: FC<{
+  charity: Charity;
+  onSelect: () => void;
+  selected: boolean;
+}> = ({ charity, onSelect, selected }) => (
+  <div
+    className={cn("rounded-md bg-muted p-4 h-full w-full border", {
+      "border-gray-900": selected,
+      "cursor-pointer": !selected,
+    })}
+    onClick={onSelect}
+  >
+    <img className="object-fit h-20" alt="charity logo" src={charity.logoUrl} />
+    <h4 className="font-medium mb-1">{charity.name}</h4>
+    <p className="mb-2">{charity.description}</p>
+    <a
+      href={charity.website}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-xs text-primary hover:underline"
+    >
+      Visit website
+    </a>
+  </div>
+);
 
 export function CharitySelection() {
   const { user } = useAuth();
-  const [charities, setCharities] = useState<Charity[]>([]);
-  const [selectedCharity, setSelectedCharity] = useState<string>(
-    user?.public_profile.selected_charity || ""
+  const { onSubmit } = useUpdatePublicProfile(user);
+  const [selectedCharity, setSelectedCharity] = useState<Charity | null>(
+    () =>
+      Charities.find(
+        ({ id }) => id === user?.public_profile.selected_charity
+      ) ?? null
   );
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => {
-    const fetchCharities = async () => {
-      try {
-        // In a real app, this would fetch from the Supabase charities table
-        // Here we're using mock data
-        const mockCharities: Charity[] = [
-          {
-            id: "1",
-            name: "Curationist",
-            description:
-              "Curationist is a free online resource that brings together arts and culture communities to find, share, collaborate, and reimagine cultural narratives.",
-            website: "https://www.curationist.org/",
-            category: "Culture",
-            logoUrl: "profile/charity_curationist.svg",
-          },
-          {
-            id: "2",
-            name: "Ocean Conservation Initiative",
-            description: "Protecting marine ecosystems globally",
-            website: "https://example.com/oci",
-            category: "Environment",
-          },
-          {
-            id: "3",
-            name: "Digital Inclusion Alliance",
-            description:
-              "Bridging the digital divide in underserved communities",
-            website: "https://example.com/dia",
-            category: "Technology",
-          },
-          {
-            id: "4",
-            name: "Mental Health Awareness Foundation",
-            description: "Supporting mental health research and awareness",
-            website: "https://example.com/mhaf",
-            category: "Health",
-          },
-        ];
-
-        setCharities(mockCharities);
-
-        if (user?.public_profile.selected_charity) {
-          setSelectedCharity(user.public_profile.selected_charity);
-        }
-      } catch (error) {
-        console.error("Error fetching charities:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCharities();
-  }, [user]);
-
-  const handleSaveCharity = async () => {
-    if (!user) return;
-
-    setIsSaving(true);
-
-    try {
-      const { error } = await updatePublicProfile(user.auth.id, {
-        selected_charity: selectedCharity,
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Charity updated",
-        description: "Your selected charity has been updated successfully.",
-      });
-    } catch (error) {
-      console.error("Error updating charity:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update charity. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSaving(false);
+  const onSelect = async (charity: Charity) => {
+    if (selectedCharity?.id !== charity.id) {
+      await onSubmit({ selected_charity: charity.id });
+      setSelectedCharity(charity);
     }
   };
 
@@ -116,75 +138,35 @@ export function CharitySelection() {
       </CardHeader>
       <CardContent>
         <div className="bg-[#FFFDFA] gap-4 w-[500px] rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
-          <p className="font-bold text-red-700 m-0">
-            Michael: Can we make this a carousel instead and it defaults to the
-            selected one?
-          </p>
           <p className="font-bold text-lg m-0">Your just cause</p>
 
           <div className="space-y-4 ">
             <div className="space-y-2">
               <label htmlFor="charitySelect" className="text-sm font-medium">
-                Select Charity
+                {selectedCharity
+                  ? `${selectedCharity.name} selected`
+                  : "Select Charity"}
               </label>
-              <Select
-                disabled={isLoading}
-                value={selectedCharity}
-                onValueChange={setSelectedCharity}
-              >
-                <SelectTrigger id="charitySelect">
-                  <SelectValue placeholder="Select a charity" />
-                </SelectTrigger>
-                <SelectContent>
-                  {charities.map((charity) => (
-                    <SelectItem key={charity.id} value={charity.id}>
-                      {charity.name}
-                    </SelectItem>
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {Charities.map((charity) => (
+                    <CarouselItem key={charity.id} className="w-full">
+                      <DisplayCharity
+                        charity={charity}
+                        onSelect={() => onSelect(charity)}
+                        selected={selectedCharity?.id === charity.id}
+                      />
+                    </CarouselItem>
                   ))}
-                </SelectContent>
-              </Select>
-              {selectedCharity && (
-                <div className="rounded-md bg-muted p-4">
-                  <img
-                    className="w-fit"
-                    alt="charity logo"
-                    src={
-                      charities.find((c) => c.id === selectedCharity)?.logoUrl
-                    }
-                  />
-                  <h4 className="font-medium mb-1">
-                    {charities.find((c) => c.id === selectedCharity)?.name}
-                  </h4>
-                  <p className="mb-2">
-                    {
-                      charities.find((c) => c.id === selectedCharity)
-                        ?.description
-                    }
-                  </p>
-                  <a
-                    href={
-                      charities.find((c) => c.id === selectedCharity)?.website
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-primary hover:underline"
-                  >
-                    Visit website
-                  </a>
-                </div>
-              )}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
             </div>
           </div>
           <p className="m-0">
             55% of your subscription fee will go to your selected charity.
           </p>
-
-          <Button
-            onClick={handleSaveCharity}
-            disabled={!selectedCharity || isSaving}
-          >
-            {isSaving ? "Saving..." : "Save Selection"}
-          </Button>
         </div>
       </CardContent>
     </Card>

@@ -11,70 +11,30 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
-import { updatePublicProfile } from "@/lib/supabase";
+import useUpdatePublicProfile from "@/hooks/useUpdatePublicProfile";
 import { useAuth } from "@/providers/auth-provider";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { PublicProfile } from "@/types";
 import { AnimatePresence } from "framer-motion";
 import { motion } from "motion/react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { CharitySelection } from "./charity-selection";
 import { MembershipSection } from "./membership-section";
 
-const profileSchema = z.object({
-  name: z.string().min(2, {
-    message: "Full name must be at least 2 characters.",
-  }),
-  bio: z.string().max(160, {
-    message: "Bio must not be longer than 160 characters.",
-  }),
-});
+type NonNullableObject<T> = {
+  [K in keyof T]: NonNullable<T[K]>;
+};
 
-type ProfileFormValues = z.infer<typeof profileSchema>;
-
+type ProfileForm = NonNullableObject<Pick<PublicProfile, "bio" | "name">>;
 export function ProfileForm() {
   const { user } = useAuth();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isSubmitting, onSubmit } = useUpdatePublicProfile(user);
 
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
+  const form = useForm<ProfileForm>({
     defaultValues: {
       name: user?.public_profile.name || "",
       bio: user?.public_profile.bio || "",
     },
   });
-
-  const onSubmit = async (data: ProfileFormValues) => {
-    if (!user) return;
-
-    setIsSubmitting(true);
-
-    try {
-      const { error } = await updatePublicProfile(user.auth.id, {
-        name: data.name,
-        bio: data.bio,
-        updated_at: new Date().toISOString(),
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
-      });
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update profile. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <Card>
