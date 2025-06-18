@@ -29,7 +29,7 @@ const DisplayQuestion: FC<{
     <form className="w-full">
       <RadioGroup onValueChange={setSelectedId} value={selectedId}>
         <motion.div
-          className="flex flex-row gap-4 w-[100%]  h-fit"
+          className="flex flex-row gap-4 w-[100%]  h-72"
           initial={{ x: 20, opacity: 0.5 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}
@@ -46,15 +46,15 @@ const DisplayQuestion: FC<{
                 animate={false}
               >
                 <label
-                  className="flex flex-col h-full justify-around items-center gap-2 py-2 max-w-72 cursor-pointer border border-black/30 px-2"
+                  className="flex flex-col h-full justify-around items-center gap-2 py-2 max-w-72 cursor-pointer border border-black/30 px-2 w-full"
                   htmlFor={option.id}
                 >
                   <div className="text-2xl h-[80%]">
                     <img
                       src={`/inventory/q${id}-opt${option.id}.png`}
-                      width={"140px"}
+                      // width={"140px"}
                       className={
-                        "m-auto transition-all " +
+                        "m-auto transition-all max-h-36 w-fit" +
                         (isSelected ? "scale-110 " : "scale-100 ")
                       }
                     />
