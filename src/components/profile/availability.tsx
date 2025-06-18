@@ -5,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import useAvailability from "@/lib/useAvailability";
+import { useAuth } from "@/providers/auth-provider";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 
@@ -27,46 +29,98 @@ const TIME_BLOCKS = [
 
 const MAX_SLOTS = 20;
 
-const Availability = () => {
+// Helper function to convert time string to hour number
+const timeToHour = (timeString: string, dayIndex: number): number => {
+  const hour24 = convertTo24Hour(timeString);
+  return dayIndex * 24 + hour24;
+};
+
+// Helper function to convert 12-hour format to 24-hour format
+const convertTo24Hour = (time12: string): number => {
+  const [time, modifier] = time12.split(/([ap]m)/i);
+  const [hours] = time.split(":");
+  let hour = parseInt(hours, 10);
+
+  if (modifier.toLowerCase() === "pm" && hour !== 12) {
+    hour += 12;
+  } else if (modifier.toLowerCase() === "am" && hour === 12) {
+    hour = 0;
+  }
+
+  return hour;
+};
+
+// Helper function to check if a time is selected based on hour number
+const isTimeSelected = (
+  timeString: string,
+  dayIndex: number,
+  selectedHours: Set<number>
+): boolean => {
+  const hourNumber = timeToHour(timeString, dayIndex);
+  return selectedHours.has(hourNumber);
+};
+
+// Helper function to get count of selected times for a day
+const getSelectedCountForDay = (
+  dayIndex: number,
+  selectedHours: Set<number>
+): number => {
+  let count = 0;
+  for (let hour = 0; hour < 24; hour++) {
+    const hourNumber = dayIndex * 24 + hour;
+    if (selectedHours.has(hourNumber)) {
+      count++;
+    }
+  }
+  return count;
+};
+
+interface AvailabilityProps {
+  userId: string;
+}
+
+const Availability = ({ userId }: AvailabilityProps) => {
   const [openColumn, setOpenColumn] = useState("Mon");
+  const { updateAvailability, loading, data, error } = useAvailability(userId);
 
-  const [selectedTimes, setSelectedTimes] = useState<Record<string, string[]>>(
-    {}
-  );
+  const selectedHours = data || new Set<number>();
+  const totalSelections = selectedHours.size;
 
-  // Count total selections across all days
-  const totalSelections = Object.values(selectedTimes).reduce(
-    (sum, arr) => sum + arr.length,
-    0
-  );
-  const handleTimeClick = (day: string, time: string) => {
-    setSelectedTimes((prev) => {
-      const dayTimes = prev[day] || [];
-      const isSelected = dayTimes.includes(time);
+  const handleTimeClick = async (day: string, time: string) => {
+    const dayIndex = DAYS.findIndex((d) => d.short === day);
+    const hourNumber = timeToHour(time, dayIndex);
+    const isSelected = selectedHours.has(hourNumber);
 
-      // Remove if already selected
-      if (isSelected) {
-        return {
-          ...prev,
-          [day]: dayTimes.filter((t) => t !== time),
-        };
-      }
+    // Remove if already selected
+    if (isSelected) {
+      await updateAvailability(hourNumber, false);
+      return;
+    }
 
-      // Prevent more than 5 total selections
-      if (totalSelections >= MAX_SLOTS) return prev;
+    // Prevent more than MAX_SLOTS total selections
+    if (totalSelections >= MAX_SLOTS) return;
 
-      // Add new selection
-      return {
-        ...prev,
-        [day]: [...dayTimes, time],
-      };
-    });
+    // Add new selection
+    await updateAvailability(hourNumber, true);
   };
-  const [_show, setShow] = useState(false); // or false, depending on when you want to show
-  // Show highlight when 5 slots are selected
+
+  const [_show, setShow] = useState(false);
+
+  // Show highlight when MAX_SLOTS slots are selected
   useEffect(() => {
     setShow(totalSelections >= MAX_SLOTS);
   }, [totalSelections]);
+
+  if (error) {
+    return (
+      <div className="w-full flex-col justify-between items-start md:items-center mb-4">
+        <div className="text-red-600 text-center p-4">
+          Error loading availability: {error}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex-col justify-between items-start md:items-center mb-4">
       {/* VP: Because people can select up to 20 it's no longer a precious resouce and seeing 20 is more overwhelming than helpful so I've commented this out. */}
@@ -92,8 +146,8 @@ const Availability = () => {
           connects.
         </p>
         <div className="flex ">
-          {DAYS.map((day) => {
-            const count = selectedTimes[day.short]?.length;
+          {DAYS.map((day, dayIndex) => {
+            const count = getSelectedCountForDay(dayIndex, selectedHours);
             const dayLabel = count ? `(${count})` : "";
             return (
               <motion.div
@@ -141,8 +195,11 @@ const Availability = () => {
                             className="mb-2"
                           />
                           {block.hours.map((hour) => {
-                            const isSelected =
-                              selectedTimes[day.short]?.includes(hour);
+                            const isSelected = isTimeSelected(
+                              hour,
+                              dayIndex,
+                              selectedHours
+                            );
                             const isDisabled =
                               !isSelected && totalSelections >= MAX_SLOTS;
                             return (
@@ -156,7 +213,7 @@ const Availability = () => {
                                       : "hover:bg-[#F0D8A0]/60 border-transparent"
                                 }`}
                                 onClick={() => handleTimeClick(day.short, hour)}
-                                disabled={isDisabled}
+                                disabled={isDisabled || loading}
                               >
                                 {hour}
                               </button>
@@ -176,7 +233,13 @@ const Availability = () => {
   );
 };
 
-const AvailabilityPage = () => {
+interface AvailabilityPageProps {
+  userId: string;
+}
+
+const AvailabilityPage = ({ userId }: AvailabilityPageProps) => {
+  const { user } = useAuth();
+
   return (
     <Card>
       <CardHeader>
@@ -189,10 +252,11 @@ const AvailabilityPage = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4 h-96">
-          <Availability />
+          {user && <Availability userId={user.auth.id} />}
         </div>
       </CardContent>
     </Card>
   );
 };
+
 export default AvailabilityPage;

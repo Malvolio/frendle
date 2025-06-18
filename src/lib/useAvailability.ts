@@ -24,11 +24,6 @@ type AvailabilityReturn =
     };
 
 const useAvailability = (userId: string): AvailabilityReturn => {
-  const [av, setAv] = useState<AvailabilityReturn>(() => ({
-    loading: true,
-    updateAvailability,
-  }));
-
   // Fetch initial availability data
   const fetchAvailability = useCallback(async () => {
     try {
@@ -115,7 +110,10 @@ const useAvailability = (userId: string): AvailabilityReturn => {
     },
     [userId, fetchAvailability]
   );
-
+  const [av, setAv] = useState<AvailabilityReturn>(() => ({
+    loading: true,
+    updateAvailability,
+  }));
   // Set up real-time subscription
   useEffect(() => {
     fetchAvailability();

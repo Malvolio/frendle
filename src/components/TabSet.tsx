@@ -24,7 +24,11 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
     });
   };
   return (
-    <Tabs value={currentTab} onValueChange={handleTabChange} className="w-full mt-12">
+    <Tabs
+      value={currentTab}
+      onValueChange={handleTabChange}
+      className="w-full mt-12"
+    >
       <TabsList className="w-7/12 mx-auto flex mb-3">
         {tabs.map(({ icon: Icon, name, id }) => (
           <TabsTrigger
@@ -39,18 +43,23 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
       </TabsList>
 
       {tabs.map(({ body: Component, id }) => (
-        <AnimatePresence>
-
-          <TabsContent key={id} value={id} className="w-7/12 mx-auto mb-6 bg-transparent h-screen">
-            <motion.div initial={{ x: 0, opacity: .5 }} animate={{ x: 0, opacity: 1 }} transition={{ ease: "easeInOut" }} >
+        <AnimatePresence key={id}>
+          <TabsContent
+            key={id}
+            value={id}
+            className="w-7/12 mx-auto mb-6 bg-transparent h-screen"
+          >
+            <motion.div
+              initial={{ x: 0, opacity: 0.5 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ ease: "easeInOut" }}
+            >
               <Component />
             </motion.div>
           </TabsContent>
-
         </AnimatePresence>
-      ))
-      }
-    </Tabs >
+      ))}
+    </Tabs>
   );
 };
 
