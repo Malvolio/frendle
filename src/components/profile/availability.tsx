@@ -9,7 +9,7 @@ import useAvailability from "@/hooks/useAvailability";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { FC, useState } from "react";
 
 const DAYS = [
   { short: "Sun", full: "Sunday" },
@@ -61,26 +61,9 @@ const isTimeSelected = (
   return selectedHours.has(hourNumber);
 };
 
-// Helper function to get count of selected times for a day
-const getSelectedCountForDay = (
-  dayIndex: number,
-  selectedHours: Set<number>
-): number => {
-  let count = 0;
-  for (let hour = 0; hour < 24; hour++) {
-    const hourNumber = dayIndex * 24 + hour;
-    if (selectedHours.has(hourNumber)) {
-      count++;
-    }
-  }
-  return count;
-};
-
-interface AvailabilityProps {
+const Availability: FC<{
   userId: string;
-}
-
-const Availability = ({ userId }: AvailabilityProps) => {
+}> = ({ userId }) => {
   const [openColumn, setOpenColumn] = useState("Mon");
   const { updateAvailability, loading, data, error } = useAvailability(userId);
 
@@ -105,13 +88,6 @@ const Availability = ({ userId }: AvailabilityProps) => {
     await updateAvailability(hourNumber, true);
   };
 
-  const [_show, setShow] = useState(false);
-
-  // Show highlight when MAX_SLOTS slots are selected
-  useEffect(() => {
-    setShow(totalSelections >= MAX_SLOTS);
-  }, [totalSelections]);
-
   if (error) {
     return (
       <div className="w-full flex-col justify-between items-start md:items-center mb-4">
@@ -126,9 +102,11 @@ const Availability = ({ userId }: AvailabilityProps) => {
     <div className="w-full flex-col justify-between items-start md:items-center mb-4">
       <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
-        <p className="text-xl text-center">
-          Pick a couple days and times that work for you for quick 15 min
-          connects.
+
+        <p className="text-xl text-center h-12 mx-12 text-balance">
+          {totalSelections < MAX_SLOTS
+            ? "Pick a couple days and times that work for you for quick 15-min connects."
+            : `We only need ${MAX_SLOTS} slots to find you a match`}
         </p>
         <div className="flex ">
           {DAYS.map((day, dayIndex) => (
