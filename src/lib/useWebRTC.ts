@@ -1,3 +1,4 @@
+import useGetTurn from "@/hooks/useGetTurn";
 import {
   MutableRefObject,
   useCallback,
@@ -23,58 +24,6 @@ export type WebRTCHookReturn = {
   dataConnected: boolean;
   mediaConnected: boolean;
 };
-
-const Twilio: RTCConfiguration = {
-  // account_sid: "ACa32b0a89007aed1ab560bc0d76906656",
-  // date_created: "Thu, 19 Jun 2025 19:45:47 +0000",
-  // date_updated: "Thu, 19 Jun 2025 19:45:47 +0000",
-  iceServers: [
-    {
-      // url: "stun:global.stun.twilio.com:3478",
-      urls: "stun:global.stun.twilio.com:3478",
-    },
-    {
-      credential: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
-      // url: "turn:global.turn.twilio.com:3478?transport=udp",
-      urls: "turn:global.turn.twilio.com:3478?transport=udp",
-      username:
-        "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
-    },
-    {
-      credential: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
-      // url: "turn:global.turn.twilio.com:3478?transport=tcp",
-      urls: "turn:global.turn.twilio.com:3478?transport=tcp",
-      username:
-        "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
-    },
-    {
-      credential: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
-      // url: "turn:global.turn.twilio.com:443?transport=tcp",
-      urls: "turn:global.turn.twilio.com:443?transport=tcp",
-      username:
-        "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
-    },
-  ],
-  iceTransportPolicy: "relay",
-
-  // password: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
-  // ttl: "86400",
-  // username: "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
-};
-// Default Configuration
-const DEFAULT_CONFIG = Twilio;
-// const DEFAULT_CONFIG: RTCConfiguration = {
-//   iceServers: [
-// { urls: "stun:stun.l.google.com:19302" },
-// { urls: "stun:stun1.l.google.com:19302" },
-// {
-//   urls: ["turn:numb.viagenie.ca"],
-//   credential: "muazkh",
-//   username: "webrtc@live.com",
-// },
-//   ],
-//   iceTransportPolicy: "relay",
-// };
 
 type Connection = {
   signaling: Signaling | undefined;
@@ -344,7 +293,6 @@ const doStartCall = async (
 type WebRTCHookProps = {
   isHost: boolean;
   createSignaling: () => Promise<Signaling>;
-  config?: RTCConfiguration;
   localRef: MutableRefObject<HTMLVideoElement | null>;
   remoteRef: MutableRefObject<HTMLVideoElement | null>;
   onDataReceived?: (_: object) => void;
@@ -366,7 +314,6 @@ export const useWebRTC = ({
   createSignaling,
   localRef,
   remoteRef,
-  config = DEFAULT_CONFIG,
   onDataReceived,
 }: WebRTCHookProps): WebRTCHookReturn => {
   const [connectionState, setConnectionState] =
@@ -375,6 +322,7 @@ export const useWebRTC = ({
   const [mediaConnected, setMediaConnected] = useState(false);
   // Refs for maintaining stable references
   const peerConnectionRef = useRef<RTCPeerConnection>();
+  const { data: config } = useGetTurn();
   const connectionRef = useRef<Connection>({
     signaling: undefined,
     localStream: undefined,
@@ -391,20 +339,22 @@ export const useWebRTC = ({
    */
   const startCall = useCallback(
     () =>
-      doStartCall(
-        isHost,
-        peerConnectionRef,
-        createSignaling,
-        connectionRef.current,
-        (state: ConnectionState) => {
-          setConnectionState(state);
-          if (state === "disconnected") {
-            cleanupCall(peerConnectionRef, connectionRef.current);
-            startCall();
-          }
-        },
-        config
-      ),
+      config
+        ? doStartCall(
+            isHost,
+            peerConnectionRef,
+            createSignaling,
+            connectionRef.current,
+            (state: ConnectionState) => {
+              setConnectionState(state);
+              if (state === "disconnected") {
+                cleanupCall(peerConnectionRef, connectionRef.current);
+                // startCall();
+              }
+            },
+            config
+          )
+        : Promise.reject(new Error("not set up yet")),
     [isHost, setConnectionState, createSignaling, config]
   );
 
