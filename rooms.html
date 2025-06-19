@@ -19,31 +19,105 @@
 
 <body>
     <h2>Open Session Windows</h2>
+    <table>
+        <tr>
+            <td>
+                Local Michael/Michael
+            </td>
+            <td>
+                <button
+                    onclick="openWin('http://localhost:2000/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=true')">
+                    Host</button>
+            </td>
+            <td>
+                <button
+                    onclick="openWin('http://localhost:2000/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=false')">
+                    Guest</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Local Venessa/Venessa
+            </td>
+            <td>
+                <button
+                    onclick="openWin('http://localhost:2000/session?id=2c56983e-2b91-49db-94a9-e467524cf4e1&host=true')">
+                    Host</button>
+            </td>
+            <td>
+                <button
+                    onclick="openWin('http://localhost:2000/session?id=2c56983e-2b91-49db-94a9-e467524cf4e1&host=false')">
+                    Guest</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Live Michael/Michael
+            </td>
+            <td>
+                <button
+                    onclick="openWin('https://demo.frendle.space/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=true')">
+                    Host</button>
+            </td>
+            <td>
+                <button
+                    onclick="openWin('https://demo.frendle.space/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=false')">
+                    Guest</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Live Venessa/Venessa
+            </td>
+            <td>
+                <button
+                    onclick="openWin('https://demo.frendle.space/session?id=2c56983e-2b91-49db-94a9-e467524cf4e1&host=true')">
+                    Host</button>
+            </td>
+            <td>
+                <button
+                    onclick="openWin('https://demo.frendle.space/session?id=2c56983e-2b91-49db-94a9-e467524cf4e1&host=false')">
+                    Guest</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Live Michael/Venessa
+            </td>
+            <td>
+                <button
+                    onclick="openWin('https://demo.frendle.space/session?id=ffcc25ea-b2d5-4193-9648-4033659da678&host=true')">
+                    Host</button>
+            </td>
+            <td>
+                <button
+                    onclick="openWin('https://demo.frendle.space/session?id=ffcc25ea-b2d5-4193-9648-4033659da678&host=false')">
+                    Guest</button>
+            </td>
+        </tr>
+    </table>
+    <table cellpadding="30">
+        <tr>
+            <td colspan="2" align="center">
+                Mobile Michael/Michael
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    <div>Live Host:</div>
+                    <img src="public/frendle_host.png" />
+                </div>
+            </td>
+            <td>
+                <div>
+                    <div>Live Guest:</div>
+                    <img src="public/frendle_guest.png" />
+                </div>
+            </td>
+        </tr>
+    </table>
 
-    <button onclick="openWin('http://localhost:2000/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=true')">Local
-        Host</button>
-    <button onclick="openWin('http://localhost:2000/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=false')">Local
-        Guest</button>
-    <button
-        onclick="openWin('https://demo.frendle.space/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=true')">Live
-        Host</button>
-    <button
-        onclick="openWin('https://demo.frendle.space/session?id=89825e4f-eaae-4e1a-9277-1af9d45df4d7&host=false')">Live
-        Guest</button>
-    <button
-        onclick="openWin('https://demo.frendle.space/session?id=ffcc25ea-b2d5-4193-9648-4033659da678&host=true')">Live
-        Host (V)</button>
-    <br />
-    <div style="display:flex; gap: 40px">
-        <div>
-            <div>Live Host:</div>
-            <img src="public/frendle_host.png" />
-        </div>
-        <div>
-            <div>Live Guest:</div>
-            <img src="public/frendle_guest.png" />
-        </div>
-    </div>
 
     <script>
         const openWin = (url) => {

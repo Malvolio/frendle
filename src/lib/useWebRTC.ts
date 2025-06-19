@@ -1,3 +1,4 @@
+import useGetTurn from "@/hooks/useGetTurn";
 import {
   MutableRefObject,
   useCallback,
@@ -9,9 +10,9 @@ import { Signaling } from "./Signaling";
 
 export type ConnectionState = "connecting" | "connected" | "disconnected";
 
-export type WebRTCConfig = {
-  iceServers?: RTCIceServer[];
-};
+// export type RTCConfiguration = {
+//   iceServers?: RTCIceServer[];
+// };
 
 export type WebRTCHookReturn = {
   connectionState: ConnectionState;
@@ -22,14 +23,6 @@ export type WebRTCHookReturn = {
   sendData: (_: object) => void;
   dataConnected: boolean;
   mediaConnected: boolean;
-};
-
-// Default Configuration
-const DEFAULT_CONFIG: WebRTCConfig = {
-  iceServers: [
-    { urls: "stun:stun.l.google.com:19302" },
-    { urls: "stun:stun1.l.google.com:19302" },
-  ],
 };
 
 type Connection = {
@@ -46,7 +39,7 @@ const initializePeerConnection = (
   isHost: boolean,
   connection: Connection,
   onStateChange: (state: ConnectionState) => void,
-  config?: WebRTCConfig
+  config?: RTCConfiguration
 ) => {
   console.log("[initializePeerConnection");
   const pc = new RTCPeerConnection(config);
@@ -80,6 +73,10 @@ const initializePeerConnection = (
 
   pc.onicecandidate = async (event) => {
     console.log("[WebRTC] local ICE candidate");
+    if (event.candidate) {
+      console.log("Candidate type:", event.candidate.type);
+      console.log("Full candidate:", event.candidate.candidate);
+    }
     if (event.candidate) {
       try {
         await connection.signaling?.signalIceCandidate(
@@ -179,7 +176,7 @@ const doStartCall = async (
   createSignaling: () => Promise<Signaling>,
   connection: Connection,
   onStateChange: (state: ConnectionState) => void,
-  config: WebRTCConfig
+  config: RTCConfiguration
 ) => {
   const iceCandidateQueue: RTCIceCandidateInit[] = [];
 
@@ -296,7 +293,6 @@ const doStartCall = async (
 type WebRTCHookProps = {
   isHost: boolean;
   createSignaling: () => Promise<Signaling>;
-  config?: WebRTCConfig;
   localRef: MutableRefObject<HTMLVideoElement | null>;
   remoteRef: MutableRefObject<HTMLVideoElement | null>;
   onDataReceived?: (_: object) => void;
@@ -318,7 +314,6 @@ export const useWebRTC = ({
   createSignaling,
   localRef,
   remoteRef,
-  config = DEFAULT_CONFIG,
   onDataReceived,
 }: WebRTCHookProps): WebRTCHookReturn => {
   const [connectionState, setConnectionState] =
@@ -327,6 +322,7 @@ export const useWebRTC = ({
   const [mediaConnected, setMediaConnected] = useState(false);
   // Refs for maintaining stable references
   const peerConnectionRef = useRef<RTCPeerConnection>();
+  const { data: config } = useGetTurn();
   const connectionRef = useRef<Connection>({
     signaling: undefined,
     localStream: undefined,
@@ -343,20 +339,22 @@ export const useWebRTC = ({
    */
   const startCall = useCallback(
     () =>
-      doStartCall(
-        isHost,
-        peerConnectionRef,
-        createSignaling,
-        connectionRef.current,
-        (state: ConnectionState) => {
-          setConnectionState(state);
-          if (state === "disconnected") {
-            cleanupCall(peerConnectionRef, connectionRef.current);
-            startCall();
-          }
-        },
-        config
-      ),
+      config
+        ? doStartCall(
+            isHost,
+            peerConnectionRef,
+            createSignaling,
+            connectionRef.current,
+            (state: ConnectionState) => {
+              setConnectionState(state);
+              if (state === "disconnected") {
+                cleanupCall(peerConnectionRef, connectionRef.current);
+                // startCall();
+              }
+            },
+            config
+          )
+        : Promise.reject(new Error("not set up yet")),
     [isHost, setConnectionState, createSignaling, config]
   );
 
