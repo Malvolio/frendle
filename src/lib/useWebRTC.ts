@@ -24,19 +24,57 @@ export type WebRTCHookReturn = {
   mediaConnected: boolean;
 };
 
-// Default Configuration
-const DEFAULT_CONFIG: RTCConfiguration = {
+const Twilio: RTCConfiguration = {
+  // account_sid: "ACa32b0a89007aed1ab560bc0d76906656",
+  // date_created: "Thu, 19 Jun 2025 19:45:47 +0000",
+  // date_updated: "Thu, 19 Jun 2025 19:45:47 +0000",
   iceServers: [
-    // { urls: "stun:stun.l.google.com:19302" },
-    // { urls: "stun:stun1.l.google.com:19302" },
     {
-      urls: ["turn:numb.viagenie.ca"],
-      credential: "muazkh",
-      username: "webrtc@live.com",
+      // url: "stun:global.stun.twilio.com:3478",
+      urls: "stun:global.stun.twilio.com:3478",
+    },
+    {
+      credential: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
+      // url: "turn:global.turn.twilio.com:3478?transport=udp",
+      urls: "turn:global.turn.twilio.com:3478?transport=udp",
+      username:
+        "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
+    },
+    {
+      credential: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
+      // url: "turn:global.turn.twilio.com:3478?transport=tcp",
+      urls: "turn:global.turn.twilio.com:3478?transport=tcp",
+      username:
+        "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
+    },
+    {
+      credential: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
+      // url: "turn:global.turn.twilio.com:443?transport=tcp",
+      urls: "turn:global.turn.twilio.com:443?transport=tcp",
+      username:
+        "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
     },
   ],
   iceTransportPolicy: "relay",
+
+  // password: "vfZj0kdRdNkSMSxLiwAvR/PA0kka1PxPdJ9Cvunrbwo=",
+  // ttl: "86400",
+  // username: "f4f403a3c1c67deb7b58ed4c76cb24572630938fa21d283d0106185c01053601",
 };
+// Default Configuration
+const DEFAULT_CONFIG = Twilio;
+// const DEFAULT_CONFIG: RTCConfiguration = {
+//   iceServers: [
+// { urls: "stun:stun.l.google.com:19302" },
+// { urls: "stun:stun1.l.google.com:19302" },
+// {
+//   urls: ["turn:numb.viagenie.ca"],
+//   credential: "muazkh",
+//   username: "webrtc@live.com",
+// },
+//   ],
+//   iceTransportPolicy: "relay",
+// };
 
 type Connection = {
   signaling: Signaling | undefined;
