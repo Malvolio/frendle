@@ -44,10 +44,10 @@ export function ProfileForm() {
           All about you, yes, you!
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-row items-center">
+      <CardContent className="flex flex-col md:flex-row justify-between md:max-w-6xl md:min-w-fit items-center">
         <AnimatePresence>
           {/* TODO: Make each one animate in seperately */}
-          <motion.div className="bg-[#FFFDFA] gap-4 w-[500px]  m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+          <motion.div className="bg-[#FFFDFA] gap-4  max-w-2xl min-w-xs m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -63,7 +63,7 @@ export function ProfileForm() {
                         <Input placeholder="John Doe" {...field} />
                       </FormControl>
                       <FormDescription>
-                        This is the name that will be displayed on your profile.
+                        (Displays on your profile and in the app)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -100,9 +100,9 @@ export function ProfileForm() {
               </form>
             </Form>
           </motion.div>
-
-          <MembershipSection />
           <CharitySelection />
+          <MembershipSection />
+
         </AnimatePresence>
       </CardContent>
       <p className="font-bold text-red-700">

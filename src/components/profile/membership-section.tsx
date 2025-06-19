@@ -128,65 +128,69 @@ export function MembershipSection() {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent>
         {isLoading ? (
           <div className="h-24 flex items-center justify-center">
             <div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full"></div>
           </div>
         ) : subscription?.status === "active" ? (
-          <div className="space-y-4">
-            <div className="bg-[#FFFDFA] gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
-              <img
-                src="/profile/membership_1.svg"
-                alt=""
-                className="m-auto w-[120px] mt-0"
-              />
+          <div>
+            <div className="relative bg-[#FFFDFA] pb-4 rotate-2 m-auto flex flex-col border-2 border-black   border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-xl md:max-w-2xl ">
 
-              <p className="text-5xl font-peachy m-auto -my-4">
-                {user?.public_profile.name || "[Name]"}
-              </p>
-              <Alert className="bg-transparent w-fit m-auto border-none mt-0">
-                {user?.system_profile.created_at && (
-                  <AlertTitle className="text-1xl w-fit m-auto">
-                    ➡ Supporting member since{" "}
-                    {new Date(
-                      user.system_profile.created_at
-                    ).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}{" "}
-                    ⬅
-                  </AlertTitle>
-                )}
-              </Alert>
-              <div className="rounded-lg border border-gray-200 gap-0 h-auto flex flex-col justify-normal p-6 ">
-                <div className="p-0 m-0 flex flex-col justify-around gap-2">
-                  <div className="flex flex-row gap-4 p-0 m-0 h-auto align-left justify-start items-center">
-                    <p className="leading-none m-0">Membership: $9.95/month</p>
+              <div className="text-center bg-[#FDBE7C] font-bold text-sm leading-loose py-1 rounded-t-md mt-1 mx-1 text-[#914D06]">SUPPORTING MEMBER</div>
+              <div className="gap-6 px-6 space-y-0 ">
+                <img
+                  src="/profile/membership_1.svg"
+                  alt=""
+                  className="m-auto w-[100px] mt-3 mb-0"
+                />
 
-                    {!subscription.cancelAtPeriodEnd && (
-                      <Button
-                        className=" text-red-700 bg-transparent font-bold border-none shadow-none text-left w-9 border-8 "
-                        onClick={handleCancelSubscription}
-                        disabled={isProcessing}
-                      >
-                        {isProcessing ? "Processing..." : "Cancel"}
-                      </Button>
-                    )}
+                <p className="text-5xl font-peachy m-auto -my-4 uppercase">
+                  {user?.public_profile.name || "[Name]"}
+                </p>
+                <Alert className="bg-transparent w-fit m-auto border-none mt-0">
+                  {user?.system_profile.created_at && (
+                    <AlertTitle className="text-1xl w-fit m-auto">
+                      ➡ Member since{" "}
+                      {new Date(
+                        user.system_profile.created_at
+                      ).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        // day: "numeric",
+                      })}{" "}
+                      ⬅
+                    </AlertTitle>
+                  )}
+                </Alert>
+                <div className="rounded-lg border border-gray-200 gap-0 h-auto flex flex-col justify-normal p-6  ">
+                  <div className="p-0 m-0 flex flex-col justify-around gap-2">
+                    <div className="flex flex-row gap-4 p-0 m-0 h-auto align-left justify-start items-center ">
+                      <p className="leading-none m-0">Membership: $9.95/month</p>
+
+                      {!subscription.cancelAtPeriodEnd && (
+                        <Button
+                          className=" text-red-700 bg-transparent font-bold border-none shadow-none text-left w-9 border-8 "
+                          onClick={handleCancelSubscription}
+                          disabled={isProcessing}
+                        >
+                          {isProcessing ? "Processing..." : "Cancel"}
+                        </Button>
+                      )}
+                    </div>
+                    <div className="flex flex-row gap-2 ">
+                      <p className="leading-none m-0">
+                        {subscription.cancelAtPeriodEnd
+                          ? "Ends:"
+                          : "Auto-renews:"}{" "}
+                        &nbsp;
+                        {formatDate(subscription.currentPeriodEnd)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex flex-row gap-2">
-                    <p className="leading-none m-0">
-                      {subscription.cancelAtPeriodEnd
-                        ? "Ends:"
-                        : "Auto-renews:"}{" "}
-                      &nbsp;
-                      {formatDate(subscription.currentPeriodEnd)}
-                    </p>
-                  </div>
+
+
                 </div>
-
-                <div className="p-0 h-auto flex flex-row justify-normal gap-4"></div>
               </div>
             </div>
           </div>

@@ -30,13 +30,15 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
       onValueChange={handleTabChange}
       className="w-full mt-12"
     >
-      <TabsList className="w-7/12 mx-auto flex mb-3">
+      <TabsList className="w-7/12 mx-auto flex mb-3 gap-4">
         {tabs.map(({ icon: Icon, name, id }) => (
           <RoughNotation
-            type="box"
+            type="underline"
             show={id === currentTab}
             iterations={2}
             animate={false}
+            strokeWidth={6}
+            color="#373737"
           >
             <TabsTrigger
               key={id}
@@ -55,7 +57,7 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
           <TabsContent
             key={id}
             value={id}
-            className="w-7/12 mx-auto mb-6 bg-transparent h-screen"
+            className="w-7/12 mx-auto mb-6 bg-transparent h-screen "
           >
             <motion.div
               initial={{ y: 30, opacity: 0.5 }}

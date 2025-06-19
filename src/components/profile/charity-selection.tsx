@@ -132,20 +132,18 @@ export function CharitySelection() {
   };
 
   return (
-    <Card className="max-w-[200px] ">
+    <Card className="md:max-w-2xl md:min-w-fit">
       <CardHeader>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="bg-[#FFFDFA] gap-4 w-[500px] rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
-          <p className="font-bold text-lg m-0">Your just cause</p>
+        <div className="bg-[#FFFDFA] gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+          <p className="font-bold text-lg m-0">Your just cause {selectedCharity && `: ${selectedCharity.name}`}</p>
 
           <div className="space-y-4 ">
-            <div className="space-y-2">
+            <div className="space-y-2 ">
               <label htmlFor="charitySelect" className="text-sm font-medium">
-                {selectedCharity
-                  ? `${selectedCharity.name} selected`
-                  : "Select Charity"}
+                {!selectedCharity && "Select Charity"}
               </label>
               <Carousel className="w-full">
                 <CarouselContent>
@@ -162,11 +160,12 @@ export function CharitySelection() {
                 <CarouselPrevious className="left-2" />
                 <CarouselNext className="right-2" />
               </Carousel>
+              <p className="m-0 p-2 border border-gray-200 rounded-md">
+                55% of your subscription fee will go to your selected charity.
+              </p>
             </div>
           </div>
-          <p className="m-0">
-            55% of your subscription fee will go to your selected charity.
-          </p>
+
         </div>
       </CardContent>
     </Card>
