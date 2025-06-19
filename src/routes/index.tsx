@@ -3,7 +3,7 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Heart, Scroll, Shield, Smile, Users } from "lucide-react";
+import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -19,50 +19,50 @@ import { useEffect, useRef, useState } from "react";
 //   return scrollY;
 // }
 
-const features = [
-  {
-    title: "Match for 1:1 casual convos",
-    description:
-      "Match with others who share similar interests and looking for platonic connections that can lead to deeper friendships",
-    image: "index/match.svg",
-    alt: "TODO",
-  },
-  {
-    title: "Prompt-based conversations",
-    description:
-      "Inspired by the 36 questions from Author ___ to build connections this has been a blueprint for social encounters since the 80s. Fun prompts designed to create meaningful conversations. Questions are provided over time to get to know each other over the course of a couple of chats",
-    image: "index/questions.svg",
-    alt: "TODO",
-  },
-  {
-    title: "Shared experiences",
-    description:
-      "From simple games to watching awe inspiring videos and art together. These playful interactions take the pressure off and create a shared sense of awe",
-    image: "/hero-image.png",
-    alt: "TODO",
-  },
-  {
-    title: "Focused time, safe space",
-    description:
-      "We don’t do jerks, we create short, structured chats that respect your time and boundaries and look to cultivate a safe environment where all are welcome",
-    image: "index/week.svg",
-    alt: "TODO",
-  },
-  {
-    title: "Platonic by design",
-    description:
-      "o focus on friendship and connection Backed by psychology, not social media metrics",
-    image: "index/support-charities.png",
-    alt: "TODO",
-  },
-  {
-    title: "Community-supported & supporting charities",
-    description:
-      "We charge a small monthly fee to keep. Think of it as a swear jar but 20% goes to the charity of your choice, the rest to run the community.",
-    image: "index/donation.svg",
-    alt: "TODO",
-  },
-];
+// const features = [
+//   {
+//     title: "Match for 1:1 casual convos",
+//     description:
+//       "Match with others who share similar interests and looking for platonic connections that can lead to deeper friendships",
+//     image: "index/match.svg",
+//     alt: "TODO",
+//   },
+//   {
+//     title: "Prompt-based conversations",
+//     description:
+//       "Inspired by the 36 questions from Author ___ to build connections this has been a blueprint for social encounters since the 80s. Fun prompts designed to create meaningful conversations. Questions are provided over time to get to know each other over the course of a couple of chats",
+//     image: "index/questions.svg",
+//     alt: "TODO",
+//   },
+//   {
+//     title: "Shared experiences",
+//     description:
+//       "From simple games to watching awe inspiring videos and art together. These playful interactions take the pressure off and create a shared sense of awe",
+//     image: "/hero-image.png",
+//     alt: "TODO",
+//   },
+//   {
+//     title: "Focused time, safe space",
+//     description:
+//       "We don’t do jerks, we create short, structured chats that respect your time and boundaries and look to cultivate a safe environment where all are welcome",
+//     image: "index/week.svg",
+//     alt: "TODO",
+//   },
+//   {
+//     title: "Platonic by design",
+//     description:
+//       "o focus on friendship and connection Backed by psychology, not social media metrics",
+//     image: "index/support-charities.png",
+//     alt: "TODO",
+//   },
+//   {
+//     title: "Community-supported & supporting charities",
+//     description:
+//       "We charge a small monthly fee to keep. Think of it as a swear jar but 20% goes to the charity of your choice, the rest to run the community.",
+//     image: "index/donation.svg",
+//     alt: "TODO",
+//   },
+// ];
 
 export const Route = createFileRoute("/")({
   component: () => {
@@ -164,12 +164,12 @@ export const Route = createFileRoute("/")({
                 Built for real, human connection
               </h2>
               <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-6/12 mx-auto my-4">
-                No feeds. No followers. Just honest, one-on-one conversations that bring people closer together. Frendle is about  matching you with kind, curious humans for meaningful, platonic chats.
+                No feeds. No followers. Just honest, one-on-one conversations
+                that bring people closer together. Frendle is about matching you
+                with kind, curious humans for meaningful, platonic chats.
               </p>
             </div>
             <ScrollTriggeredImages />
-
-
           </motion.section>
           {/* /////// */}
           {/* Features section */}
