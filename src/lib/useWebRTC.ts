@@ -9,9 +9,9 @@ import { Signaling } from "./Signaling";
 
 export type ConnectionState = "connecting" | "connected" | "disconnected";
 
-export type WebRTCConfig = {
-  iceServers?: RTCIceServer[];
-};
+// export type RTCConfiguration = {
+//   iceServers?: RTCIceServer[];
+// };
 
 export type WebRTCHookReturn = {
   connectionState: ConnectionState;
@@ -25,7 +25,7 @@ export type WebRTCHookReturn = {
 };
 
 // Default Configuration
-const DEFAULT_CONFIG: WebRTCConfig = {
+const DEFAULT_CONFIG: RTCConfiguration = {
   iceServers: [
     // { urls: "stun:stun.l.google.com:19302" },
     // { urls: "stun:stun1.l.google.com:19302" },
@@ -35,6 +35,7 @@ const DEFAULT_CONFIG: WebRTCConfig = {
       credential: "openrelayproject",
     },
   ],
+  iceTransportPolicy: "relay",
 };
 
 type Connection = {
@@ -51,7 +52,7 @@ const initializePeerConnection = (
   isHost: boolean,
   connection: Connection,
   onStateChange: (state: ConnectionState) => void,
-  config?: WebRTCConfig
+  config?: RTCConfiguration
 ) => {
   console.log("[initializePeerConnection");
   const pc = new RTCPeerConnection(config);
@@ -188,7 +189,7 @@ const doStartCall = async (
   createSignaling: () => Promise<Signaling>,
   connection: Connection,
   onStateChange: (state: ConnectionState) => void,
-  config: WebRTCConfig
+  config: RTCConfiguration
 ) => {
   const iceCandidateQueue: RTCIceCandidateInit[] = [];
 
@@ -305,7 +306,7 @@ const doStartCall = async (
 type WebRTCHookProps = {
   isHost: boolean;
   createSignaling: () => Promise<Signaling>;
-  config?: WebRTCConfig;
+  config?: RTCConfiguration;
   localRef: MutableRefObject<HTMLVideoElement | null>;
   remoteRef: MutableRefObject<HTMLVideoElement | null>;
   onDataReceived?: (_: object) => void;
