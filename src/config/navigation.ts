@@ -5,26 +5,26 @@ export const NAV_ITEMS: NavItem[] = [
     title: "Home",
     href: "/",
   },
+  // {
+  //   title: "About",
+  //   href: "/about",
+  // },
+  // {
+  //   title: "Resources",
+  //   href: "/resources",
+  // },
   {
-    title: "About",
-    href: "/about",
-  },
-  {
-    title: "Resources",
-    href: "/resources",
-  },
-  {
-    title: "Community Expectations",
+    title: "House Rules",
     href: "/expectations",
   },
   {
-    title: "Profile",
+    title: "My Profile",
     href: "/profile",
     requiresAuth: true,
   },
-  {
-    title: "UI Kit",
-    href: "/uikit",
-    requiresAuth: true,
-  },
+  // {
+  //   title: "UI Kit",
+  //   href: "/uikit",
+  //   requiresAuth: true,
+  // },
 ];

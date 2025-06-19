@@ -1,8 +1,9 @@
+import ScrollTriggeredImages from "@/components/index/ScrollTriggeredImages";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
+import { ArrowRight, Heart, Scroll, Shield, Smile, Users } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -90,7 +91,7 @@ export const Route = createFileRoute("/")({
       <PublicLayout>
         <section className="relative bg-[url('/background.jpg')] bg-cover bg-center bg-fixed min-h-screen">
           {/* Hero section */}
-          <div className="relative h-[50vh] flex items-center overflow-hidden">
+          <div className="relative h-[70vh] flex items-center overflow-hidden">
             <div className="absolute inset-0 z-0 opacity-40"></div>
 
             <div className="container relative z-10 pt-20 md:pt-0 mx-auto">
@@ -162,19 +163,13 @@ export const Route = createFileRoute("/")({
               <h2 className="text-4xl md:text-5xl font-peachy text-[#37251E] m-auto text-center">
                 Built for real, human connection
               </h2>
-              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-[576px] mx-auto my-4">
-                Friendle is not about followers or feeds, it&apos;s about about
-                cultivating real moments that bring people closer together.
+              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-6/12 mx-auto my-4">
+                No feeds. No followers. Just honest, one-on-one conversations that bring people closer together. Frendle is about  matching you with kind, curious humans for meaningful, platonic chats.
               </p>
             </div>
+            <ScrollTriggeredImages />
 
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-[80vw] m-auto h-auto overflow-visible relative"> */}
-            <div className="w-[80vw] m-auto h-auto overflow-visible relative">
-              {/* <div className="flex flex-col justify-center items-center gap-8 h-[100hv]"> */}
-              {features.map((feature) => (
-                <Feature key={feature.title} {...feature} />
-              ))}
-            </div>
+
           </motion.section>
           {/* /////// */}
           {/* Features section */}

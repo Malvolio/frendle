@@ -12,7 +12,7 @@ const AboutMission = () => (
   <Card>
     <CardHeader>
       <CardTitle className="flex items-center gap-2">
-        <Target className="w-5 h-5 text-green-600" />
+        {/* <Target className="w-5 h-5 text-green-600" /> */}
         Our Mission
       </CardTitle>
       <CardDescription>Why are we doing this?</CardDescription>
