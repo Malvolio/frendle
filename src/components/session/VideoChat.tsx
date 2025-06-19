@@ -72,7 +72,7 @@ const VideoChat: FC<{
   );
   const remoteVideo = (
     <div className="bg-white h-full p-1 flex flex-col justify-between gap-3">
-      {webrtc.connectionState === "connected" && (
+      {webrtc.connectionState === "connected" && webrtc.mediaConnected && (
         <video
           className="flex-1 border border-gray-100"
           ref={remoteRef}
@@ -80,7 +80,10 @@ const VideoChat: FC<{
           playsInline
         />
       )}
-      {webrtc.connectionState === "connecting" && <Spinner />}
+      {(webrtc.connectionState === "connecting" ||
+        (webrtc.connectionState === "connected" && !webrtc.mediaConnected)) && (
+        <Spinner />
+      )}
       {webrtc.connectionState === "disconnected" && (
         <div className="w-full h-full bg-gray-100 flex justify-center items-center">
           <VideoOff />
@@ -117,7 +120,7 @@ const VideoChat: FC<{
       sendEvent={(e: object) => {
         webrtc.sendData(e);
       }}
-      disabled={webrtc.connectionState !== "connected"}
+      disabled={webrtc.connectionState !== "connected" || !webrtc.dataConnected}
       session={session}
       games={Games}
       setPaneSize={setGameplayPaneSize}
