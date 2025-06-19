@@ -3,7 +3,8 @@ import { useWebRTC } from "@/lib/useWebRTC";
 import { useWebSocketSignaling } from "@/lib/useWebSocketSignaling";
 import { cn } from "@/lib/utils";
 import { Mic, MicOff, PhoneOff, Video, VideoOff } from "lucide-react";
-import { FC, useCallback, useRef, useState } from "react";
+import PQueue from "p-queue";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GamePlay from "./GamePlay";
 import MovablePanes, { PaneStyle } from "./MovablePanes";
@@ -37,6 +38,13 @@ const defaultPaneStyles: Record<string, PaneStyle> = {
 const Games = {
   thirtySix: ThirtySix,
 };
+
+// React doesn’t like the immediate calls
+const messageQueue = new PQueue({
+  interval: 100, // 100ms
+  intervalCap: 1,
+});
+
 const VideoChat: FC<{
   session: SessionDescription;
 }> = ({ session }) => {
@@ -58,7 +66,9 @@ const VideoChat: FC<{
     localRef,
     remoteRef,
     onDataReceived: (e) => {
-      setEvent(e);
+      messageQueue.add(() => {
+        setEvent(e);
+      });
     },
   });
   const localVideo = (
@@ -72,7 +82,7 @@ const VideoChat: FC<{
   );
   const remoteVideo = (
     <div className="bg-white h-full p-1 flex flex-col justify-between gap-3">
-      {webrtc.connectionState === "connected" && (
+      {webrtc.connectionState === "connected" && webrtc.mediaConnected && (
         <video
           className="flex-1 border border-gray-100"
           ref={remoteRef}
@@ -80,7 +90,10 @@ const VideoChat: FC<{
           playsInline
         />
       )}
-      {webrtc.connectionState === "connecting" && <Spinner />}
+      {(webrtc.connectionState === "connecting" ||
+        (webrtc.connectionState === "connected" && !webrtc.mediaConnected)) && (
+        <Spinner />
+      )}
       {webrtc.connectionState === "disconnected" && (
         <div className="w-full h-full bg-gray-100 flex justify-center items-center">
           <VideoOff />
@@ -111,13 +124,17 @@ const VideoChat: FC<{
     }));
   }, []);
 
+  useEffect(() => {
+    console.log(`[Video Chat] event ${JSON.stringify(event)}`);
+  }, [event]);
+
   const gamePlay = (
     <GamePlay
       event={event}
       sendEvent={(e: object) => {
         webrtc.sendData(e);
       }}
-      disabled={webrtc.connectionState !== "connected"}
+      disabled={webrtc.connectionState !== "connected" || !webrtc.dataConnected}
       session={session}
       games={Games}
       setPaneSize={setGameplayPaneSize}

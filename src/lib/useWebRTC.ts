@@ -20,7 +20,8 @@ export type WebRTCHookReturn = {
   setAudioEnabled: (_: boolean) => void;
   setVideoEnabled: (_: boolean) => void;
   sendData: (_: object) => void;
-  isVideoRunning: boolean;
+  dataConnected: boolean;
+  mediaConnected: boolean;
 };
 
 // Default Configuration
@@ -37,6 +38,8 @@ type Connection = {
   localData: ((s: object) => void) | undefined;
   remoteStream: MediaStream | undefined;
   remoteData: ((s: object) => void) | undefined;
+  onDataConnection: (_: boolean) => void;
+  onMediaConnection: (_: boolean) => void;
 };
 
 const initializePeerConnection = (
@@ -91,8 +94,11 @@ const initializePeerConnection = (
   // Remote stream handler
   pc.ontrack = (event) => {
     const [remoteStream] = event.streams;
+    console.log("[WebRTC] pc.onTrack");
+
     if (remoteStream) {
       connection.remoteStream = remoteStream;
+      connection.onMediaConnection(true);
     }
   };
 
@@ -110,6 +116,7 @@ const initializePeerConnection = (
   const connectDataChannel = (dataChannel: RTCDataChannel) => {
     let queue: string[] = [];
     dataChannel.onopen = () => {
+      connection.onDataConnection(true);
       console.log("[DataChannel] Data channel open");
       while (queue.length) {
         const output = queue.shift();
@@ -119,6 +126,11 @@ const initializePeerConnection = (
         }
       }
     };
+    dataChannel.onclose = () => {
+      console.log("[DataChannel] Data channel closed");
+      connection.onDataConnection(false);
+    };
+
     dataChannel.onmessage = (event) => {
       if (connection.remoteData && event.data) {
         console.log(`[WebRTC onmessage] ${event.data}`);
@@ -311,7 +323,8 @@ export const useWebRTC = ({
 }: WebRTCHookProps): WebRTCHookReturn => {
   const [connectionState, setConnectionState] =
     useState<ConnectionState>("disconnected");
-
+  const [dataConnected, setDataConnected] = useState(false);
+  const [mediaConnected, setMediaConnected] = useState(false);
   // Refs for maintaining stable references
   const peerConnectionRef = useRef<RTCPeerConnection>();
   const connectionRef = useRef<Connection>({
@@ -320,9 +333,10 @@ export const useWebRTC = ({
     localData: undefined,
     remoteStream: undefined,
     remoteData: undefined,
+    onDataConnection: setDataConnected,
+    onMediaConnection: setMediaConnected,
   });
   connectionRef.current.remoteData = onDataReceived;
-  const [isVideoInitialized, setIsVideoInitialized] = useState(false);
 
   /**
    * Start the call (create offer for hosts, wait for offer for guests)
@@ -391,7 +405,6 @@ export const useWebRTC = ({
           audio: true,
           video: true,
         });
-      setIsVideoInitialized(true);
     };
 
     initialize();
@@ -404,10 +417,6 @@ export const useWebRTC = ({
     [connectionRef]
   );
 
-  const isVideoRunning =
-    isVideoInitialized &&
-    !!connectionRef.current.localStream?.getVideoTracks()[0].enabled;
-
   assignMediaRef(localRef.current, connectionRef.current.localStream);
   assignMediaRef(remoteRef.current, connectionRef.current.remoteStream);
 
@@ -418,6 +427,7 @@ export const useWebRTC = ({
     setAudioEnabled,
     setVideoEnabled,
     sendData,
-    isVideoRunning,
+    dataConnected,
+    mediaConnected,
   };
 };

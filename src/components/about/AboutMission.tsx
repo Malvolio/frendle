@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Globe, Handshake, Heart, Target, Users } from "lucide-react";
+import { Globe, Handshake, Heart, Users } from "lucide-react";
 
 const AboutMission = () => (
   <Card>

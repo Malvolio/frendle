@@ -34,8 +34,17 @@
         onclick="openWin('https://demo.frendle.space/session?id=ffcc25ea-b2d5-4193-9648-4033659da678&host=true')">Live
         Host (V)</button>
     <br />
-    <div>Live Guest:</div>
-    <img src="public/frendle_guest.png" />
+    <div style="display:flex; gap: 40px">
+        <div>
+            <div>Live Host:</div>
+            <img src="public/frendle_host.png" />
+        </div>
+        <div>
+            <div>Live Guest:</div>
+            <img src="public/frendle_guest.png" />
+        </div>
+    </div>
+
     <script>
         const openWin = (url) => {
             window.open(url, '__blank', 'width=800,height=600,resizable=yes');

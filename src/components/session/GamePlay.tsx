@@ -24,6 +24,8 @@ const GamePlay: FC<GamePlayProps> = ({
 
   // Handle incoming events
   useEffect(() => {
+    console.log(`[Gameplay] event ${JSON.stringify(event)}`);
+
     if (isControlMessage(event)) {
       if (event.controlType === "start-game") {
         setCurrentGame(event.gameType);
