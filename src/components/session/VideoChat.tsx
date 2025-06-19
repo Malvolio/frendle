@@ -3,7 +3,8 @@ import { useWebRTC } from "@/lib/useWebRTC";
 import { useWebSocketSignaling } from "@/lib/useWebSocketSignaling";
 import { cn } from "@/lib/utils";
 import { Mic, MicOff, PhoneOff, Video, VideoOff } from "lucide-react";
-import { FC, useCallback, useRef, useState } from "react";
+import PQueue from "p-queue";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import Spinner from "../Spinner";
 import GamePlay from "./GamePlay";
 import MovablePanes, { PaneStyle } from "./MovablePanes";
@@ -37,6 +38,13 @@ const defaultPaneStyles: Record<string, PaneStyle> = {
 const Games = {
   thirtySix: ThirtySix,
 };
+
+// React doesn’t like the immediate calls
+const messageQueue = new PQueue({
+  interval: 100, // 100ms
+  intervalCap: 1,
+});
+
 const VideoChat: FC<{
   session: SessionDescription;
 }> = ({ session }) => {
@@ -58,7 +66,9 @@ const VideoChat: FC<{
     localRef,
     remoteRef,
     onDataReceived: (e) => {
-      setEvent(e);
+      messageQueue.add(() => {
+        setEvent(e);
+      });
     },
   });
   const localVideo = (
@@ -113,6 +123,10 @@ const VideoChat: FC<{
       },
     }));
   }, []);
+
+  useEffect(() => {
+    console.log(`[Video Chat] event ${JSON.stringify(event)}`);
+  }, [event]);
 
   const gamePlay = (
     <GamePlay

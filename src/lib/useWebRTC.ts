@@ -116,7 +116,6 @@ const initializePeerConnection = (
   const connectDataChannel = (dataChannel: RTCDataChannel) => {
     let queue: string[] = [];
     dataChannel.onopen = () => {
-      console.log("[DataChannel] Data channel open");
       connection.onDataConnection(true);
       console.log("[DataChannel] Data channel open");
       while (queue.length) {
