@@ -100,36 +100,36 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
     sendGameMessage(
       isHost
         ? {
-            type: "ask",
-            questionId,
-          }
+          type: "ask",
+          questionId,
+        }
         : { type: "done-asking" }
     );
     setMode(isHost ? "listening" : "waiting");
   };
   return (
-    <div className="w-full h-full flex flex-col bg-white p-2 gap-y-2 justify-between items-center">
+    <div className="w-full h-full flex flex-col bg-[#EBE3CF] p-4 gap-y-2 justify-between items-center rounded-sm border-[#37251E] border-2">
       {mode === "waiting" && <Spinner />}
       {mode === "done" && <div className="text-center">Thanks for playing</div>}
       {(mode === "asking" || mode === "listening") && (
         <img src={`/session/thirty-six/${questionId}.png`} />
       )}
       {mode === "asking" && (
-        <div className="text-sm flex flex-col bg-white p-2 gap-y-2 justify-between items-center text-center">
-          <div>
-            <div className="font-bold mr-1 ">
-              Ask your partner the following question:
+        <div className="text-sm flex flex-col p-2 gap-y-2 justify-between items-center ">
+          <div className="text-left">
+            <div className="mr-1">
+              Ask:
             </div>
-            <div>{question?.text}</div>
+            <div className=" font-peachy text-[1.25rem] leading-6 text-[#37251E]">{question?.text}</div>
           </div>
           <Button className="flex-0 mx-3" onClick={doneAsking}>
-            done asking
+            Asked
           </Button>
         </div>
       )}
       {mode === "listening" && (
-        <div className="font-bold mr-1 text-center mb-5">
-          Respond to your partner’s question
+        <div className="mr-1 text-left mb-5 italic">
+          [Name] is answering. <span className="font-bold">TIP:</span> Listen intently, ask follow-up questions. Then, take your turn.
         </div>
       )}
     </div>

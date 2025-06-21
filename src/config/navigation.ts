@@ -17,11 +17,11 @@ export const NAV_ITEMS: NavItem[] = [
     title: "House Rules",
     href: "/expectations",
   },
-  {
-    title: "My Profile",
-    href: "/profile",
-    requiresAuth: true,
-  },
+  // {
+  //   title: "My Profile",
+  //   href: "/profile",
+  //   requiresAuth: true,
+  // },
   // {
   //   title: "UI Kit",
   //   href: "/uikit",
