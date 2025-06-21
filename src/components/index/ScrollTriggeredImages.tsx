@@ -91,7 +91,12 @@ const ScrollTriggeredImages: React.FC = () => {
 
     return (
         <div className="min-h[50vh] ">
-            <div className="flex relative m-auto justify-center">
+
+            <div className="flex relative m-auto justify-center md:flex-row-reverse">
+
+                {/* INITIAL ROW */}
+
+
                 {/* Content Sections - Left Side */}
                 <div className="w-full lg:w-2/5 relative z-10">
                     {sections.map((section, index) => (
@@ -107,11 +112,11 @@ const ScrollTriggeredImages: React.FC = () => {
                                         style={{ backgroundColor: section.accent }}
                                     ></div> */}
                                     <RoughNotation type="highlight" show={activeSection === section.id} color={section.accent} animationDelay={500} animationDuration={1000}>
-                                        <h2 className="font-peachy text-2xl lg:text-3xl font-bold text-[#37251E]  mb-6 leading-tight">
+                                        <h2 className="font-peachy text-2xl lg:text-5xl font-bold text-[#37251E]  mb-6 leading-tight">
                                             {section.title}
                                         </h2>
                                     </RoughNotation>
-                                    <p className="text-xl text-[#37251E] leading-relaxed mb-8">
+                                    <p className="text-xl lg:text-2xl lg:leading-8 text-[#37251E] leading-relaxed mb-8">
                                         {section.description}
                                     </p>
                                     {/* <button
@@ -136,6 +141,7 @@ const ScrollTriggeredImages: React.FC = () => {
                 {/* Fixed Image Panel - Right Side */}
                 <div className="hidden lg:block lg:w-2/5 sticky left-0 top-12 h-screen">
                     <div className="relative w-full h-full overflow-hidden">
+
                         {sections.map((section) => (
                             <div
                                 key={section.id}

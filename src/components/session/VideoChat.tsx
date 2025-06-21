@@ -92,8 +92,8 @@ const VideoChat: FC<{
       )}
       {(webrtc.connectionState === "connecting" ||
         (webrtc.connectionState === "connected" && !webrtc.mediaConnected)) && (
-        <Spinner />
-      )}
+          <Spinner />
+        )}
       {webrtc.connectionState === "disconnected" && (
         <div className="w-full h-full bg-gray-100 flex justify-center items-center">
           <VideoOff />

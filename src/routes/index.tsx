@@ -3,66 +3,10 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Heart, Shield, Smile, Users } from "lucide-react";
+import { ArrowRight, Heart, Shield, Smile, Users, Wrench } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-// function useScrollPosition() {
-//   const [scrollY, setScrollY] = useState(0);
-
-//   useEffect(() => {
-//     const handleScroll = () => setScrollY(window.scrollY);
-//     window.addEventListener("scroll", handleScroll, { passive: true });
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
-
-//   return scrollY;
-// }
-
-// const features = [
-//   {
-//     title: "Match for 1:1 casual convos",
-//     description:
-//       "Match with others who share similar interests and looking for platonic connections that can lead to deeper friendships",
-//     image: "index/match.svg",
-//     alt: "TODO",
-//   },
-//   {
-//     title: "Prompt-based conversations",
-//     description:
-//       "Inspired by the 36 questions from Author ___ to build connections this has been a blueprint for social encounters since the 80s. Fun prompts designed to create meaningful conversations. Questions are provided over time to get to know each other over the course of a couple of chats",
-//     image: "index/questions.svg",
-//     alt: "TODO",
-//   },
-//   {
-//     title: "Shared experiences",
-//     description:
-//       "From simple games to watching awe inspiring videos and art together. These playful interactions take the pressure off and create a shared sense of awe",
-//     image: "/hero-image.png",
-//     alt: "TODO",
-//   },
-//   {
-//     title: "Focused time, safe space",
-//     description:
-//       "We don’t do jerks, we create short, structured chats that respect your time and boundaries and look to cultivate a safe environment where all are welcome",
-//     image: "index/week.svg",
-//     alt: "TODO",
-//   },
-//   {
-//     title: "Platonic by design",
-//     description:
-//       "o focus on friendship and connection Backed by psychology, not social media metrics",
-//     image: "index/support-charities.png",
-//     alt: "TODO",
-//   },
-//   {
-//     title: "Community-supported & supporting charities",
-//     description:
-//       "We charge a small monthly fee to keep. Think of it as a swear jar but 20% goes to the charity of your choice, the rest to run the community.",
-//     image: "index/donation.svg",
-//     alt: "TODO",
-//   },
-// ];
 
 export const Route = createFileRoute("/")({
   component: () => {
@@ -176,70 +120,26 @@ export const Route = createFileRoute("/")({
           <div className="py-20">
             <div className="container">
               <div className="text-center mb-16">
-                <h2 className="text-3xl font-bold mb-4 text-[#373737]">
+                <h2 className="font-peachy text-3xl font-bold mb-4 text-[#373737]">
                   How Frendle Works
                 </h2>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Our platform is designed to foster genuine connections in a
-                  structured, time-boxed environment.
+
+                <p className="text-xl max-w-2xl mx-auto">
+                  We keep things cozy, kind, and troll-free—and that takes work. A small membership fee helps us stay intentional, support the community, and give back.
                 </p>
+                <img src="index/graph.png" alt="Membership fees go towards supporting the platform and the charity of your choice." className="w-[300px] m-auto" />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Users className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Match with Others
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Get matched with people who share your interests and
-                    conversation goals.
-                  </p>
-                </div>
 
-                <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Safe Environment
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Enjoy conversations in a moderated, safe space with clear
-                    community guidelines.
-                  </p>
-                </div>
+              <ol className="grid grid-cols-1 md:grid-cols-3 gap- max-w-4xl m-auto">
+                <li><Wrench className="h-14 w-14 text-primary" /> Keeping Frendle up and running (and getting better)</li>
+                <li><Users className="h-14 w-14 text-primary" /> Funding thoughtful moderation and safety tools</li>
+                <li><Heart className="h-14 w-14 text-primary" /> Giving back—55% of every membership goes to the charity you choose</li>
+              </ol>
 
-                <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Smile className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Guided Activities
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Follow fun prompts designed to create meaningful
-                    conversations.
-                  </p>
-                </div>
-
-                <div className="bg-card rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Heart className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    Support Charities
-                  </h3>
-                  <p className="text-muted-foreground">
-                    20% of premium subscriptions go to your selected 501(c)
-                    charity.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
+
 
           {/* CTA section */}
           <div className="bg-muted/30 py-20">
@@ -259,7 +159,7 @@ export const Route = createFileRoute("/")({
             </div>
           </div>
         </section>
-      </PublicLayout>
+      </PublicLayout >
     );
   },
 });
