@@ -116,12 +116,12 @@ export const Route = createFileRoute("/")({
             <ScrollTriggeredImages />
           </motion.section>
           {/* /////// */}
-          {/* Features section */}
+          {/* Money section */}
           <div className="py-20">
-            <div className="container">
+            <div className="container m-auto">
               <div className="text-center mb-16">
                 <h2 className="font-peachy text-3xl font-bold mb-4 text-[#373737]">
-                  How Frendle Works
+                  Where the money goes
                 </h2>
 
                 <p className="text-xl max-w-2xl mx-auto">
@@ -145,14 +145,15 @@ export const Route = createFileRoute("/")({
           <div className="bg-muted/30 py-20">
             <div className="container">
               <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl font-bold mb-4">Ready to Connect?</h2>
+                <h2 className="font-peachy text-3xl font-bold mb-4 text-[#373737]">
+                  Ready to connect?
+                </h2>
                 <p className="text-xl text-muted-foreground mb-8">
-                  Join thousands of people using Frendle to create meaningful
-                  connections and reduce social isolation.
+                  Join to start connecting with new friends today!
                 </p>
                 <Link to="/match">
                   <Button size="lg">
-                    Start Matching Now <ArrowRight className="ml-2 h-4 w-4" />
+                    Get started  <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               </div>
