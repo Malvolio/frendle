@@ -143,7 +143,7 @@ export const Route = createFileRoute("/")({
 
           {/* CTA section */}
           <div className="bg-muted/30 py-20">
-            <div className="container">
+            <div className="container m-auto">
               <div className="max-w-4xl mx-auto text-center">
                 <h2 className="font-peachy text-3xl font-bold mb-4 text-[#373737]">
                   Ready to connect?
