@@ -37,6 +37,8 @@ export const Route = createFileRoute("/uikit")({
           </Button>
         </div>
       </div>
+      {/* EMAIL TEMPLATE */}
+      email template
     </div>
   ),
 });

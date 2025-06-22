@@ -77,14 +77,14 @@ const VideoChat: FC<{
       autoPlay
       muted
       playsInline
-      className="bg-white h-full"
+      className="h-full"
     />
   );
   const remoteVideo = (
-    <div className="bg-white h-full p-1 flex flex-col justify-between gap-3">
+    <div className="bg-transparent h-full p-1 flex flex-col justify-between gap-3">
       {webrtc.connectionState === "connected" && webrtc.mediaConnected && (
         <video
-          className="flex-1 border border-gray-100"
+          className="flex-1 border border-[#211F1B]"
           ref={remoteRef}
           autoPlay
           playsInline
@@ -148,48 +148,70 @@ const VideoChat: FC<{
         panes={{ localVideo, remoteVideo, gamePlay }}
       >
         {webrtc.connectionState === "disconnected" && (
-          <div className="relative z-50 h-1/2 w-1/2 border border-green-200 rounded bg-green-100 flex flex-col justify-center items-center drop-shadow-lg gap-3">
-            <span className="font-bold text-xl">Frendle</span>
-            <span>Get ready for your session</span>
-            <Button className="w-32" onClick={webrtc.startCall}>
-              Start session
+          <div className="relative z-50 w-1/2  bg-[#FFFDFA] flex flex-col justify-center items-left gap-3 text-[#37251E]
+          p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl
+          ">
+            <span className="font-bold text-3xl font-peachy">Ready when you are</span>
+            <ul className="text-sm my-2">
+              <li>Freshen up</li>
+              <li>Grab a drink</li>
+              <li>Check the background</li>
+              <li>Mute notifications</li>
+              <li>Give yourself a moment</li>
+              <li> <span className="flex flex-row gap-1 align-middle">Turn on <Video width={"16px"} />Video and <Mic width={"16px"} />Mic below</span></li>
+            </ul>
+            <Button className="w-32 m-auto" onClick={webrtc.startCall}>
+              Join room
             </Button>
           </div>
-        )}
+        )
+        }
         <img className="absolute left-0" src="/session/palm.png" />
         <img className="absolute top-1/4 right-0" src="/session/fred.png" />
         <img className="absolute top-1/4 right-1/4" src="/session/heart.svg" />
-        <div className="controls flex gap-x-4 absolute p-5 right-0 bottom-0 bg-green-200 rounded-tl-xl border flex flex-row items-center justify-center gap-2">
+        <div className="controls flex gap-x-4 absolute p-5 right-0 bottom-0 border-t border-t-black/20 w-full border flex-row items-center justify-center gap-2">
           <div
-            className="cursor-pointer p-2 rounded-full bg-white"
+            className={`cursor-pointer p-2 text-center items-center flex  transition-all h-12 justify-center`}
             onClick={() => {
               setVideoEnabled(!isVideoEnabled);
               webrtc.setVideoEnabled(!isVideoEnabled);
             }}
+            style={isVideoEnabled ? { backgroundColor: "#FDBE7C", borderRadius: "10%", width: "auto", border: "2px solid #373737" } : { backgroundColor: "transparent", borderRadius: "100%", width: "46px", border: "2px solid #373737" }}
           >
-            {isVideoEnabled ? <Video /> : <VideoOff />}
+            {isVideoEnabled ?
+              (<><Video /> &nbsp;<p className="font-bold">Video On</p></>) : <VideoOff />}
           </div>
 
           <div
-            className="cursor-pointer p-2 rounded-full bg-white"
+            className={`cursor-pointer p-2 text-center items-center flex  transition-all h-12 justify-center`}
             onClick={() => {
               setAudioEnabled(!isAudioEnabled);
               webrtc.setAudioEnabled(!isAudioEnabled);
             }}
+            style={isAudioEnabled ? { backgroundColor: "#FF7D7F", borderRadius: "10%", width: "auto", border: "2px solid #373737" } : { backgroundColor: "transparent", borderRadius: "100%", width: "46px", border: "2px solid #373737" }}
           >
-            {isAudioEnabled ? <Mic /> : <MicOff />}
+            {isAudioEnabled ? (
+              <>
+                <Mic />
+                <p className="font-bold">Mic On</p>
+              </>
+            )
+              :
+              (
+                <MicOff />)
+            }
           </div>
           <div
-            className={cn("cursor-pointer p-2 rounded-full bg-white", {
-              "opacity-30": webrtc.connectionState === "disconnected",
+            className={cn("cursor-pointer p-2 rounded-full bg-transparent absolute right-4 w-auto flex flex-row gap-2", {
+              "opacity-1": webrtc.connectionState === "disconnected",
             })}
             onClick={webrtc.endCall}
           >
-            <PhoneOff />
+            <PhoneOff /> Not connected
           </div>
         </div>
-      </MovablePanes>
-    </div>
+      </MovablePanes >
+    </div >
   );
 };
 

@@ -5,82 +5,98 @@ const Questions: Question[] = [
     id: "Q_DINNER_GUEST",
     set: 1,
     text: "Given the choice of anyone in the world, whom would you want as a dinner guest?",
+    // 1
   },
   {
     id: "Q_LIKE_FAME",
     set: 1,
     text: "Would you like to be famous? In what way?",
+    // 2
   },
   {
     id: "Q_REHEARSE_CALL",
     set: 1,
     text: "Before making a telephone call, do you ever rehearse what you are going to say? Why?",
+    // 3
   },
   {
     id: "Q_PERFECT_DAY",
     set: 1,
     text: "What would constitute a “perfect” day for you?",
+    // 4
   },
   {
     id: "Q_LAST_SING",
     set: 1,
     text: "When did you last sing to yourself? To someone else?",
+    // 5
   },
   {
     id: "Q_MIND_OR_BODY",
     set: 1,
     text: "If you were able to live to the age of 90 and retain either the mind or body of a 30-year-old for the last 60 years of your life, which would you want?",
+    // 6
   },
   {
     id: "Q_HUNCH_DEATH",
     set: 1,
     text: "Do you have a secret hunch about how you will die?",
+    // 7
   },
   {
     id: "Q_COMMON_TRAITS",
     set: 1,
     text: "Name three things you and your partner appear to have in common.",
+    // 8 TODO
   },
   {
     id: "Q_GRATEFUL_FOR",
     set: 1,
     text: "For what in your life do you feel most grateful?",
+    // 9
   },
   {
     id: "Q_CHANGE_UPBRINGING",
     set: 1,
     text: "If you could change anything about the way you were raised, what would it be?",
+    // 10 STOPPED HERE
   },
   {
     id: "Q_LIFE_STORY",
     set: 1,
     text: "Take four minutes and tell your partner your life story in as much detail as possible.",
+    // 11
   },
   {
     id: "Q_QUALITY_GAIN",
     set: 1,
     text: "If you could wake up tomorrow having gained any one quality or ability, what would it be?",
+    // 12
   },
 
   {
     id: "Q_CRYSTAL_BALL",
     set: 2,
     text: "If a crystal ball could tell you the truth about yourself, your life, the future or anything else, what would you want to know?",
+    // 13
   },
   {
     id: "Q_DREAM_DELAY",
     set: 2,
     text: "Is there something that you’ve dreamed of doing for a long time? Why haven’t you done it?",
+    // 14
   },
   {
     id: "Q_GREATEST_ACCOMPLISHMENT",
     set: 2,
     text: "What is the greatest accomplishment of your life?",
+    // 15
   },
   {
     id: "Q_VALUE_IN_FRIENDSHIP",
     set: 2,
     text: "What do you value most in a friendship?",
+    // 16
   },
   {
     id: "Q_TREASURED_MEMORY",
