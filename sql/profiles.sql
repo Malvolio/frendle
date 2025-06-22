@@ -1,4 +1,4 @@
-CREATE TYPE membership_status_enum AS ENUM ('unpaid', 'good', 'suspended', 'banned');
+CREATE TYPE membership_status_enum AS ENUM ('unpaid', 'good', 'suspended', 'banned', 'paused');
 
 -- Create main tables with corrected syntax
 CREATE TABLE
@@ -6,6 +6,7 @@ CREATE TABLE
         id uuid NOT NULL REFERENCES auth.users PRIMARY KEY,
         name text,
         membership_status membership_status_enum,
+        last_matched timestamp,
         created_at timestamp DEFAULT now ()
     );
 

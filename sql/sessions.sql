@@ -1,13 +1,23 @@
 drop table sessions;
 
+CREATE TYPE session_status_enum AS ENUM (
+    'scheduled',
+    'cancelled_by_host',
+    'cancelled_by_guest',
+    'rated'
+);
+
 create table
     sessions (
         id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
         room_id UUID NOT NULL DEFAULT gen_random_uuid (),
         created_at timestamp default now (),
         scheduled_for timestamp default now (),
-        host_id uuid NOT NULL references auth.users,
-        guest_id uuid NOT NULL references auth.users
+        host_id uuid NOT NULL references system_profiles,
+        guest_id uuid NOT NULL references system_profiles,
+        host_confirmed timestamp,
+        guest_confirmed timestamp,
+        session_status session_status_enum NOT NULL
     );
 
 -- Add RLS policies
