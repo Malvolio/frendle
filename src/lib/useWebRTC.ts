@@ -401,7 +401,11 @@ export const useWebRTC = ({
       connectionRef.current.localStream =
         await navigator.mediaDevices.getUserMedia({
           audio: true,
-          video: true,
+          video: {
+            width: { max: 640 },
+            height: { max: 480 },
+            frameRate: { max: 20 },
+          },
         });
     };
 
