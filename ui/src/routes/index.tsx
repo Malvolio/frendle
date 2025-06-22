@@ -3,10 +3,9 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { useAuth, useSignInWithGoogle } from "@/providers/auth-provider";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Heart, Shield, Smile, Users, Wrench } from "lucide-react";
+import { ArrowRight, Heart, Users, Wrench } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
-
 
 export const Route = createFileRoute("/")({
   component: () => {
@@ -125,21 +124,33 @@ export const Route = createFileRoute("/")({
                 </h2>
 
                 <p className="text-xl max-w-2xl mx-auto">
-                  We keep things cozy, kind, and troll-free—and that takes work. A small membership fee helps us stay intentional, support the community, and give back.
+                  We keep things cozy, kind, and troll-free—and that takes work.
+                  A small membership fee helps us stay intentional, support the
+                  community, and give back.
                 </p>
-                <img src="index/graph.png" alt="Membership fees go towards supporting the platform and the charity of your choice." className="w-[300px] m-auto" />
+                <img
+                  src="index/graph.png"
+                  alt="Membership fees go towards supporting the platform and the charity of your choice."
+                  className="w-[300px] m-auto"
+                />
               </div>
 
-
               <ol className="grid grid-cols-1 md:grid-cols-3 gap- max-w-4xl m-auto">
-                <li><Wrench className="h-14 w-14 text-primary" /> Keeping Frendle up and running (and getting better)</li>
-                <li><Users className="h-14 w-14 text-primary" /> Funding thoughtful moderation and safety tools</li>
-                <li><Heart className="h-14 w-14 text-primary" /> Giving back—55% of every membership goes to the charity you choose</li>
+                <li>
+                  <Wrench className="h-14 w-14 text-primary" /> Keeping Frendle
+                  up and running (and getting better)
+                </li>
+                <li>
+                  <Users className="h-14 w-14 text-primary" /> Funding
+                  thoughtful moderation and safety tools
+                </li>
+                <li>
+                  <Heart className="h-14 w-14 text-primary" /> Giving back—55%
+                  of every membership goes to the charity you choose
+                </li>
               </ol>
-
             </div>
           </div>
-
 
           {/* CTA section */}
           <div className="bg-muted/30 py-20">
@@ -153,14 +164,14 @@ export const Route = createFileRoute("/")({
                 </p>
                 <Link to="/match">
                   <Button size="lg">
-                    Get started  <ArrowRight className="ml-2 h-4 w-4" />
+                    Get started <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               </div>
             </div>
           </div>
         </section>
-      </PublicLayout >
+      </PublicLayout>
     );
   },
 });
