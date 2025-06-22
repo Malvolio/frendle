@@ -7,7 +7,7 @@ import {
   formatDateForEmail,
   sendEmail,
   validateUser,
-} from "../shared/utils.ts";
+} from "../../shared/utils.ts";
 
 const confirmSession = async (sessionId: string): Promise<Response> => {
   const supabase = createSupabaseClient();
@@ -104,7 +104,7 @@ Your session is now confirmed. We look forward to your language exchange!`;
     });
   } catch (error) {
     console.error("Error in confirmSession:", error);
-    return createErrorResponse(error.message || "Internal server error", 500);
+    return createErrorResponse(String(error), 500);
   }
 };
 

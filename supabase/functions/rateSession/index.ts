@@ -6,7 +6,7 @@ import {
   createSuccessResponse,
   createSupabaseClient,
   validateUser,
-} from "../../shared/utils";
+} from "../../shared/utils.ts";
 
 const rateSession = async (
   sessionId: string,
@@ -56,9 +56,6 @@ const rateSession = async (
     if (new Date(session.scheduled_for) >= new Date()) {
       return createErrorResponse("Cannot rate future sessions");
     }
-
-    const isHost = session.host_id === userId;
-    const otherUserId = isHost ? session.guest_id : session.host_id;
 
     // Get or create relationship record
     let { data: relationship, error: relationshipError } = await supabase
@@ -196,7 +193,7 @@ const rateSession = async (
     });
   } catch (error) {
     console.error("Error in rateSession:", error);
-    return createErrorResponse(error.message || "Internal server error", 500);
+    return createErrorResponse(String(error), 500);
   }
 };
 

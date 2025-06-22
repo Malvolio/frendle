@@ -12,12 +12,12 @@ create table
         id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
         room_id UUID NOT NULL DEFAULT gen_random_uuid (),
         created_at timestamp default now (),
-        scheduled_for timestamp default now (),
+        scheduled_for timestamp NOT NULL default now (),
         host_id uuid NOT NULL references system_profiles,
         guest_id uuid NOT NULL references system_profiles,
         host_confirmed timestamp,
         guest_confirmed timestamp,
-        session_status session_status_enum NOT NULL
+        session_status session_status_enum NOT NULL DEFAULT 'scheduled'
     );
 
 -- Add RLS policies
@@ -47,5 +47,5 @@ values
     (
         '2c56983e-2b91-49db-94a9-e467524cf4e1',
         '9387010b-d213-4f2a-99c7-3b5a33189822',
-        '9387010b-d213-4f2a-99c7-3b5a33189822',
+        '9387010b-d213-4f2a-99c7-3b5a33189822'
     );

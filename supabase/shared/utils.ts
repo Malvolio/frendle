@@ -1,5 +1,8 @@
 // shared/
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import {
+  createClient,
+  SupabaseClient,
+} from "https://esm.sh/@supabase/supabase-js@2";
 import {
   format,
   utcToZonedTime,
@@ -13,13 +16,14 @@ import {
   SUPABASE_ANON_KEY,
   SUPABASE_URL,
 } from "./constants.ts";
+import { Database } from "./supabase.ts";
 import type { PrivateProfile, SystemProfile, TimeSlot } from "./types.ts";
 
 export const createSupabaseClient = () => {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     throw new Error("Missing Supabase configuration");
   }
-  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
 };
 
 export const createErrorResponse = (
@@ -39,7 +43,9 @@ export const createSuccessResponse = <T>(data: T): Response => {
   });
 };
 
-export const validateUser = async (supabase: any): Promise<string> => {
+export const validateUser = async (
+  supabase: SupabaseClient<Database>
+): Promise<string> => {
   const {
     data: { user },
     error,
@@ -53,7 +59,7 @@ export const validateUser = async (supabase: any): Promise<string> => {
 };
 
 export const getUserProfile = async (
-  supabase: any,
+  supabase: SupabaseClient<Database>,
   userId: string
 ): Promise<SystemProfile> => {
   const { data, error } = await supabase
@@ -70,7 +76,7 @@ export const getUserProfile = async (
 };
 
 export const getPrivateProfile = async (
-  supabase: any,
+  supabase: SupabaseClient<Database>,
   userId: string
 ): Promise<PrivateProfile> => {
   const { data, error } = await supabase

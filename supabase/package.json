@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "generate:types": "supabase gen types typescript --project-id wwyqqsunhdevsyxthqtb > shared/supabase.ts"
+    }
+}

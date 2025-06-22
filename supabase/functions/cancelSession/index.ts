@@ -1,5 +1,6 @@
 //
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { matchUser } from "../../shared/match.ts";
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -8,7 +9,7 @@ import {
   generateICSInvite,
   sendEmail,
   validateUser,
-} from "../shared/utils.ts";
+} from "../../shared/utils.ts";
 
 const cancelSession = async (sessionId: string): Promise<Response> => {
   const supabase = createSupabaseClient();
@@ -95,8 +96,8 @@ const cancelSession = async (sessionId: string): Promise<Response> => {
       const icsCancellation = generateICSInvite(
         session.id,
         new Date(session.scheduled_for),
-        session.host.name,
-        session.guest.name,
+        session.host.name ?? "[unknown]",
+        session.guest.name ?? "[unknown]",
         isHost
       ).replace("STATUS:CONFIRMED", "STATUS:CANCELLED\nMETHOD:CANCEL");
 
@@ -144,10 +145,8 @@ Don't worry - we'll help you find another session soon!`;
 
     // Trigger re-matching for both participants
     try {
-      const matchFunction = await import("./matchCurrentUser.ts");
-
-      // Note: In a real implementation, you might want to queue these or call them asynchronously
-      // For now, we'll just reset the last_matched timestamp which allows them to be matched again
+      await matchUser(supabase, session.host_id);
+      await matchUser(supabase, session.guest_id);
       console.log("Both users are now eligible for re-matching");
     } catch (matchError) {
       console.error("Failed to trigger re-matching:", matchError);
@@ -161,7 +160,7 @@ Don't worry - we'll help you find another session soon!`;
     });
   } catch (error) {
     console.error("Error in cancelSession:", error);
-    return createErrorResponse(error.message || "Internal server error", 500);
+    return createErrorResponse(String(error), 500);
   }
 };
 
