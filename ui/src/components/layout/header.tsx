@@ -2,14 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { NAV_ITEMS } from "@/config/navigation";
 import { useAuth } from "@/providers/auth-provider";
-import { useTheme } from "@/providers/theme-provider";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Menu, Moon, Sun, Video } from "lucide-react";
+import { Menu, Video } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Header() {
   const pathname = useRouterState().location.pathname;
-  const { theme, setTheme } = useTheme();
+
   const { user, signOut, loading } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -28,10 +27,11 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-        ? "bg-background/95 backdrop-blur-sm shadow-sm"
-        : "bg-transparent"
-        }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-background/95 backdrop-blur-sm shadow-sm"
+          : "bg-transparent"
+      }`}
     >
       <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-6">
@@ -48,10 +48,11 @@ export function Header() {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${pathname === item.href
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-                  }`}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  pathname === item.href
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
               >
                 {item.title}
               </Link>
@@ -60,25 +61,6 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4 text-[1.2rem]">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? (
-              <Sun className="h-5 w-5" />
-            ) : (
-              <Moon className="h-5 w-5" />
-            )}
-          </Button>
-          {user ? (
-            <Link to="/profile">
-              {/* <Button size="sm" className="1xl"> */}
-              <div className="text-[1.2rem] font-bold">MY PROFILE</div>
-              {/* </Button> */}
-            </Link>
-          ) : null}
           {loading ? null : user ? (
             <Button onClick={signOut} size="sm">
               Sign Out
@@ -100,10 +82,11 @@ export function Header() {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className={`text-base font-medium transition-colors hover:text-primary ${pathname === item.href
-                      ? "text-foreground"
-                      : "text-muted-foreground"
-                      }`}
+                    className={`text-base font-medium transition-colors hover:text-primary ${
+                      pathname === item.href
+                        ? "text-foreground"
+                        : "text-muted-foreground"
+                    }`}
                   >
                     {item.title}
                   </Link>

@@ -102,13 +102,8 @@ export function ProfileForm() {
           </motion.div>
           <CharitySelection />
           <MembershipSection />
-
         </AnimatePresence>
       </CardContent>
-      <p className="font-bold text-red-700">
-        Note: we need next buttons. It's not obvious we are suppose to fill
-        these things about because they are tabs
-      </p>
     </Card>
   );
 }

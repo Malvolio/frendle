@@ -33,6 +33,14 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li key="about-us">
+                <Link
+                  to="/about"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  About Frendle
+                </Link>
+              </li>
             </ul>
           </div>
 

@@ -15,7 +15,7 @@ export const WorkingOnIt = () => (
     <div>
       Sometimes schedules may not line up, if you’re still getting this message
       after a couple of days consider adding more{" "}
-      <Link to="/profile" hash="availability" className="font-bold underline">
+      <Link to="/" hash="availability" className="font-bold underline">
         availability
       </Link>
       .
@@ -40,7 +40,7 @@ const Reasons = ({
       >
         Add your{" "}
         <Link
-          to="/profile"
+          to="/"
           hash="availability"
           className="font-bold underline"
           disabled={!noAvailability}
@@ -55,7 +55,7 @@ const Reasons = ({
       >
         Set your{" "}
         <Link
-          to="/profile"
+          to="/"
           hash="availability"
           className="font-bold underline"
           disabled={!noTimezone}

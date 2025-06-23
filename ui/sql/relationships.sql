@@ -1,3 +1,5 @@
+drop table relationships;
+
 create table
     relationships (
         id UUID DEFAULT gen_random_uuid () PRIMARY KEY,
@@ -6,7 +8,8 @@ create table
         rating integer,
         host_rating integer,
         guest_rating integer,
-        paused timestamp,
-        host_paused timestamp,
-        guest_paused timestamp
+        paused_until timestamp,
+        host_paused_until timestamp,
+        guest_paused_until timestamp,
+        next_match timestamp
     );

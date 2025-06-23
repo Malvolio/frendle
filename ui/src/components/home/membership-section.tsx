@@ -136,11 +136,12 @@ export function MembershipSection() {
         ) : subscription?.status === "active" ? (
           <div>
             <div className="relative bg-[#FFFDFA] pb-4 rotate-2 m-auto flex flex-col border-2 border-black   border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-xl md:max-w-2xl ">
-
-              <div className="text-center bg-[#FDBE7C] font-bold text-sm leading-loose py-1 rounded-t-md mt-1 mx-1 text-[#914D06]">SUPPORTING MEMBER</div>
+              <div className="text-center bg-[#FDBE7C] font-bold text-sm leading-loose py-1 rounded-t-md mt-1 mx-1 text-[#914D06]">
+                SUPPORTING MEMBER
+              </div>
               <div className="gap-6 px-6 space-y-0 ">
                 <img
-                  src="/profile/membership_1.svg"
+                  src="/home/membership_1.svg"
                   alt=""
                   className="m-auto w-[100px] mt-3 mb-0"
                 />
@@ -166,7 +167,9 @@ export function MembershipSection() {
                 <div className="rounded-lg border border-gray-200 gap-0 h-auto flex flex-col justify-normal p-6  ">
                   <div className="p-0 m-0 flex flex-col justify-around gap-2">
                     <div className="flex flex-row gap-4 p-0 m-0 h-auto align-left justify-start items-center ">
-                      <p className="leading-none m-0">Membership: $9.95/month</p>
+                      <p className="leading-none m-0">
+                        Membership: $9.95/month
+                      </p>
 
                       {!subscription.cancelAtPeriodEnd && (
                         <Button
@@ -188,8 +191,6 @@ export function MembershipSection() {
                       </p>
                     </div>
                   </div>
-
-
                 </div>
               </div>
             </div>

@@ -11,7 +11,6 @@ const SignedOut = () => {
   const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
   const [expanded, setExpanded] = useState(false);
   const mainControls = useAnimation();
-  // const scrollY = useScrollPosition();
   useEffect(() => {
     const onScroll = () => {
       setExpanded(window.scrollY > 200);

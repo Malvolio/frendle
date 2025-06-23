@@ -15,7 +15,6 @@ import { Route as UikitImport } from './routes/uikit'
 import { Route as TermsImport } from './routes/terms'
 import { Route as SessionImport } from './routes/session'
 import { Route as ResourcesImport } from './routes/resources'
-import { Route as ProfileImport } from './routes/profile'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as OnboardingImport } from './routes/onboarding'
 import { Route as MatchImport } from './routes/match'
@@ -49,12 +48,6 @@ const SessionRoute = SessionImport.update({
 const ResourcesRoute = ResourcesImport.update({
   id: '/resources',
   path: '/resources',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProfileRoute = ProfileImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -172,13 +165,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyImport
       parentRoute: typeof rootRoute
     }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileImport
-      parentRoute: typeof rootRoute
-    }
     '/resources': {
       id: '/resources'
       path: '/resources'
@@ -228,7 +214,6 @@ export interface FileRoutesByFullPath {
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/session': typeof SessionRoute
   '/terms': typeof TermsRoute
@@ -245,7 +230,6 @@ export interface FileRoutesByTo {
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/session': typeof SessionRoute
   '/terms': typeof TermsRoute
@@ -263,7 +247,6 @@ export interface FileRoutesById {
   '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
-  '/profile': typeof ProfileRoute
   '/resources': typeof ResourcesRoute
   '/session': typeof SessionRoute
   '/terms': typeof TermsRoute
@@ -282,7 +265,6 @@ export interface FileRouteTypes {
     | '/match'
     | '/onboarding'
     | '/privacy'
-    | '/profile'
     | '/resources'
     | '/session'
     | '/terms'
@@ -298,7 +280,6 @@ export interface FileRouteTypes {
     | '/match'
     | '/onboarding'
     | '/privacy'
-    | '/profile'
     | '/resources'
     | '/session'
     | '/terms'
@@ -314,7 +295,6 @@ export interface FileRouteTypes {
     | '/match'
     | '/onboarding'
     | '/privacy'
-    | '/profile'
     | '/resources'
     | '/session'
     | '/terms'
@@ -332,7 +312,6 @@ export interface RootRouteChildren {
   MatchRoute: typeof MatchRoute
   OnboardingRoute: typeof OnboardingRoute
   PrivacyRoute: typeof PrivacyRoute
-  ProfileRoute: typeof ProfileRoute
   ResourcesRoute: typeof ResourcesRoute
   SessionRoute: typeof SessionRoute
   TermsRoute: typeof TermsRoute
@@ -349,7 +328,6 @@ const rootRouteChildren: RootRouteChildren = {
   MatchRoute: MatchRoute,
   OnboardingRoute: OnboardingRoute,
   PrivacyRoute: PrivacyRoute,
-  ProfileRoute: ProfileRoute,
   ResourcesRoute: ResourcesRoute,
   SessionRoute: SessionRoute,
   TermsRoute: TermsRoute,
@@ -375,7 +353,6 @@ export const routeTree = rootRoute
         "/match",
         "/onboarding",
         "/privacy",
-        "/profile",
         "/resources",
         "/session",
         "/terms",
@@ -406,9 +383,6 @@ export const routeTree = rootRoute
     },
     "/privacy": {
       "filePath": "privacy.tsx"
-    },
-    "/profile": {
-      "filePath": "profile.tsx"
     },
     "/resources": {
       "filePath": "resources.tsx"
