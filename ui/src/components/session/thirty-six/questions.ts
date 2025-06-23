@@ -46,8 +46,8 @@ const Questions: Question[] = [
   {
     id: "Q_COMMON_TRAITS",
     set: 1,
-    text: "Name three things you and your partner appear to have in common.",
-    // 8 TODO
+    text: "Name three things you and your frendler appear to have in common.",
+    // 8 
   },
   {
     id: "Q_GRATEFUL_FOR",
@@ -59,12 +59,12 @@ const Questions: Question[] = [
     id: "Q_CHANGE_UPBRINGING",
     set: 1,
     text: "If you could change anything about the way you were raised, what would it be?",
-    // 10 STOPPED HERE
+    // 10 
   },
   {
     id: "Q_LIFE_STORY",
     set: 1,
-    text: "Take four minutes and tell your partner your life story in as much detail as possible.",
+    text: "Take four minutes and tell your frendler your life story in as much detail as possible.",
     // 11
   },
   {
@@ -102,47 +102,55 @@ const Questions: Question[] = [
     id: "Q_TREASURED_MEMORY",
     set: 2,
     text: "What is your most treasured memory?",
+
   },
-  {
-    id: "Q_TERRIBLE_MEMORY",
-    set: 2,
-    text: "What is your most terrible memory?",
-  },
+  // {
+  //   id: "Q_TERRIBLE_MEMORY",
+  //   set: 2,
+  //   text: "What is your most terrible memory?",
+  // },
   {
     id: "Q_ONE_YEAR_LEFT",
     set: 2,
     text: "If you knew that in one year you would die suddenly, would you change anything about the way you are now living? Why?",
+    // TODO: one year calendar
   },
   {
     id: "Q_FRIENDSHIP_MEANING",
     set: 2,
     text: "What does friendship mean to you?",
+    // 
   },
   {
     id: "Q_LOVE_AND_AFFECTION",
     set: 2,
     text: "What roles do love and affection play in your life?",
+    // 
   },
   {
     id: "Q_POSITIVE_CHARACTERISTICS",
     set: 2,
-    text: "Alternate sharing something you consider a positive characteristic of your partner. Share a total of five items.",
+    text: "Alternate sharing something you consider a positive characteristic of your frendler. Share a total of five items.",
+    // 
   },
   {
     id: "Q_FAMILY_CLOSENESS",
     set: 2,
     text: "How close and warm is your family? Do you feel your childhood was happier than most other people’s?",
+    // DONE
   },
   {
     id: "Q_RELATIONSHIP_WITH_MOTHER",
     set: 2,
     text: "How do you feel about your relationship with your mother?",
+    // 
   },
 
   {
     id: "Q_WE_STATEMENTS",
     set: 3,
     text: "Make three true “we” statements each. For instance, “We are both in this room feeling ... “",
+    // DONE
   },
   {
     id: "Q_WISH_SHARE",
@@ -150,54 +158,64 @@ const Questions: Question[] = [
     text: "Complete this sentence: “I wish I had someone with whom I could share ... “",
   },
   {
-    id: "Q_PARTNER_IMPORTANT_INFO",
+    id: "Q_frendler_IMPORTANT_INFO",
     set: 3,
-    text: "If you were going to become a close friend with your partner, please share what would be important for him or her to know.",
+    text: "If you were going to become a close friend with your frendler, please share what would be important for him or her to know.",
+    // 
   },
   {
     id: "Q_HONEST_LIKES",
     set: 3,
-    text: "Tell your partner what you like about them; be very honest this time, saying things that you might not say to someone you’ve just met.",
+    text: "Tell your frendler what you like about them; be very honest this time, saying things that you might not say to someone you’ve just met.",
+    // 
   },
   {
     id: "Q_EMBARRASSING_MOMENT",
     set: 3,
-    text: "Share with your partner an embarrassing moment in your life.",
+    text: "Share with your frendler an embarrassing moment in your life.",
+    // 
   },
   {
     id: "Q_LAST_CRY",
     set: 3,
     text: "When did you last cry in front of another person? By yourself?",
+    // 
+
   },
   {
     id: "Q_ALREADY_LIKES",
     set: 3,
-    text: "Tell your partner something that you like about them already.",
+    text: "Tell your frendler something that you like about them already.",
+    // 
   },
   {
     id: "Q_TOO_SERIOUS",
     set: 3,
     text: "What, if anything, is too serious to be joked about?",
+    // 
   },
   {
     id: "Q_DEATH_REGRET",
     set: 3,
     text: "If you were to die this evening with no opportunity to communicate with anyone, what would you most regret not having told someone? Why haven’t you told them yet?",
+    // 
   },
-  {
-    id: "Q_SAVE_ONE_ITEM",
-    set: 3,
-    text: "Your house, containing everything you own, catches fire. After saving your loved ones and pets, you have time to safely make a final dash to save any one item. What would it be? Why?",
-  },
-  {
-    id: "Q_MOST_DISTURBING_DEATH",
-    set: 3,
-    text: "Of all the people in your family, whose death would you find most disturbing? Why?",
-  },
+  // {
+  //   id: "Q_SAVE_ONE_ITEM",
+  //   set: 3,
+  //   text: "Your house, containing everything you own, catches fire. After saving your loved ones and pets, you have time to safely make a final dash to save any one item. What would it be? Why?",
+
+  // },
+  // {
+  //   id: "Q_MOST_DISTURBING_DEATH",
+  //   set: 3,
+  //   text: "Of all the people in your family, whose death would you find most disturbing? Why?",
+  // },
   {
     id: "Q_SHARE_PROBLEM",
     set: 3,
-    text: "Share a personal problem and ask your partner’s advice on how he or she might handle it. Also, ask your partner to reflect back to you how you seem to be feeling about the problem you have chosen.",
+    text: "Share a personal problem and ask your frendler’s advice on how he or she might handle it. Also, ask your frendler to reflect back to you how you seem to be feeling about the problem you have chosen.",
+    // doing
   },
 ];
 
