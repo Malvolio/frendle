@@ -6,10 +6,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import useAvailability from "@/hooks/useAvailability";
+import useGetTimezone from "@/hooks/useGetTimezone";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { AnimatePresence, motion } from "motion/react";
 import { FC, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const DAYS = [
   { short: "Sun", full: "Sunday" },
@@ -61,6 +69,27 @@ const isTimeSelected = (
   return selectedHours.has(hourNumber);
 };
 
+const SelectTimezone = () => {
+  const { timezone, timezones, updateTimezone } = useGetTimezone();
+  return (
+    <div className="flex justify-center items-center mb-4">
+      <label className="text-lg font-semibold mr-2">Select Timezone:</label>
+      <Select value={timezone} onValueChange={updateTimezone}>
+        <SelectTrigger className="w-48">
+          <SelectValue placeholder="Select timezone" />
+        </SelectTrigger>
+        <SelectContent>
+          {timezones.map((tz) => (
+            <SelectItem key={tz} value={tz}>
+              {tz}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+};
+
 const Availability: FC<{
   userId: string;
 }> = ({ userId }) => {
@@ -103,11 +132,12 @@ const Availability: FC<{
       <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
 
-        <p className="text-xl text-center h-12 mx-12 text-balance">
+        <div className="text-xl text-center h-12 mx-12 text-balance">
           {totalSelections < MAX_SLOTS
             ? "Pick a couple days and times that work for you for quick 15-min connects."
             : `We only need ${MAX_SLOTS} slots to find you a match`}
-        </p>
+        </div>
+        <SelectTimezone />
         <div className="flex ">
           {DAYS.map((day, dayIndex) => (
             <motion.div

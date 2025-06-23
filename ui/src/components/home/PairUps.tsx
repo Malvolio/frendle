@@ -30,10 +30,7 @@ const PairUps: React.FC<{
   sessions: EnrichedSession[];
 }> = ({ sessions }) => (
   <>
-    <h1 className="text-3xl font-bold text-gray-900 mb-2 font-peachy">
-      Pair-ups
-    </h1>
-    <p className="text-gray-600 mb-6">Here’s your upcoming matches:</p>
+    <p className="text-gray-600">Here’s your upcoming matches:</p>
 
     <div className="space-y-4">
       {sessions.map((pairUp, index) => {
@@ -46,12 +43,12 @@ const PairUps: React.FC<{
           >
             <div className="flex items-center space-x-4">
               {/* Date card */}
-              <div className="bg-white border-2 border-black p-2 rounded transform -rotate-2 shadow-sm">
+              <div className="bg-white border-2 border-black rounded transform -rotate-2 shadow-sm">
                 <div className="text-center">
-                  <div className="text-sm font-bold text-gray-900">
+                  <div className="text-sm font-bold text-gray-900 bg-gray-200 px-2 py-1">
                     {dateInfo.day}
                   </div>
-                  <div className="text-xs text-gray-600">
+                  <div className="text-xs text-gray-600 p-2 ">
                     {dateInfo.month} {dateInfo.date}
                   </div>
                 </div>
