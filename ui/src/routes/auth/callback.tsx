@@ -4,11 +4,12 @@ import { useEffect } from "react";
 
 export const Route = createFileRoute("/auth/callback")({
   component: () => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
-      if (user) {
+      console.log("[CallbackPage] User:", user);
+      if (!loading) {
         const redirectPath = localStorage.getItem("auth_redirect") || "/";
         console.log(
           "[CallbackPage] Redirecting to:",
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/auth/callback")({
         localStorage.removeItem("auth_redirect"); // Clean up
         navigate({ to: redirectPath });
       }
-    }, [user, navigate]);
+    }, [loading, navigate]);
 
     return (
       <div className="flex items-center justify-center min-h-screen">

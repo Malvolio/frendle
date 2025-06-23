@@ -26,10 +26,12 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<SignedInUser | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const fetchProfile = async () => {
+      setProfileLoading(true);
       try {
         const auth = await getCurrentUser();
 
@@ -53,27 +55,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
             ...data,
           };
           setUser(user);
-
-          console.error("Error fetching user:", error);
         }
       } catch (error) {
         console.error("Error fetching user:", error);
       } finally {
-        setLoading(false);
+        setProfileLoading(false);
       }
     };
 
-    fetchUser();
+    fetchProfile();
 
     // Set up auth subscription
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log("[Auth] Auth state changed", { event });
         if (event === "SIGNED_IN" && session?.user) {
-          fetchUser();
+          fetchProfile();
         } else if (event === "SIGNED_OUT") {
           console.log("[Auth] User signed out");
           setUser(null);
+        } else if (event === "INITIAL_SESSION") {
+          setAuthLoading(false);
         }
       }
     );
@@ -90,7 +92,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const value = {
     user,
-    loading,
+    loading: profileLoading || authLoading,
     signOut,
   };
 
