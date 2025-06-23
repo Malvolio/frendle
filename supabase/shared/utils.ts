@@ -13,7 +13,7 @@ import {
   SUPABASE_URL,
 } from "./constants.ts";
 import { Database } from "./supabase.ts";
-import type { PrivateProfile, SystemProfile } from "./types.ts";
+import type { PrivateProfile, PublicProfile, SystemProfile } from "./types.ts";
 
 export const createSupabaseClient = () => {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
@@ -87,6 +87,24 @@ export const getPrivateProfile = async (
 
   return data;
 };
+
+export const getPublicProfile = async (
+  supabase: SupabaseClient<Database>,
+  userId: string
+): Promise<PublicProfile> => {
+  const { data, error } = await supabase
+    .from("public_profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Public profile not found");
+  }
+
+  return data;
+};
+
 export const findOverlappingSlots = (
   hostAvailability: number[],
   guestAvailability: number[],

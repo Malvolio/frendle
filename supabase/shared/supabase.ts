@@ -40,19 +40,19 @@ export type Database = {
           created_at: string | null
           id: string
           interests: Json
-          timezone: string | null
+          timezone: string
         }
         Insert: {
           created_at?: string | null
           id: string
           interests?: Json
-          timezone?: string | null
+          timezone: string
         }
         Update: {
           created_at?: string | null
           id?: string
           interests?: Json
-          timezone?: string | null
+          timezone?: string
         }
         Relationships: [
           {
@@ -109,35 +109,38 @@ export type Database = {
       relationships: {
         Row: {
           guest_id: string
-          guest_paused: string | null
+          guest_paused_until: string | null
           guest_rating: number | null
           host_id: string
-          host_paused: string | null
+          host_paused_until: string | null
           host_rating: number | null
           id: string
-          paused: string | null
+          next_match: string | null
+          paused_until: string | null
           rating: number | null
         }
         Insert: {
           guest_id: string
-          guest_paused?: string | null
+          guest_paused_until?: string | null
           guest_rating?: number | null
           host_id: string
-          host_paused?: string | null
+          host_paused_until?: string | null
           host_rating?: number | null
           id?: string
-          paused?: string | null
+          next_match?: string | null
+          paused_until?: string | null
           rating?: number | null
         }
         Update: {
           guest_id?: string
-          guest_paused?: string | null
+          guest_paused_until?: string | null
           guest_rating?: number | null
           host_id?: string
-          host_paused?: string | null
+          host_paused_until?: string | null
           host_rating?: number | null
           id?: string
-          paused?: string | null
+          next_match?: string | null
+          paused_until?: string | null
           rating?: number | null
         }
         Relationships: [
@@ -258,10 +261,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_matching_partners: {
+        Args: { arg_id: string }
+        Returns: {
+          partner_id: string
+          partner_timezone: string
+          name: string
+          email: string
+        }[]
+      }
     }
     Enums: {
-      membership_status_enum: "unpaid" | "good" | "suspended" | "banned"
+      membership_status_enum:
+        | "unpaid"
+        | "good"
+        | "suspended"
+        | "banned"
+        | "paused"
       session_status_enum:
         | "scheduled"
         | "cancelled_by_host"
@@ -382,7 +398,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      membership_status_enum: ["unpaid", "good", "suspended", "banned"],
+      membership_status_enum: [
+        "unpaid",
+        "good",
+        "suspended",
+        "banned",
+        "paused",
+      ],
       session_status_enum: [
         "scheduled",
         "cancelled_by_host",

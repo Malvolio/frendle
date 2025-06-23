@@ -1,8 +1,9 @@
 //
 import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fromPairs, groupBy, mapValues } from "https://esm.sh/lodash@4.17.21";
 import { MAX_SESSIONS } from "./constants.ts";
 import { Database } from "./supabase.ts";
-import type { MatchCandidate, Session, TimeSlot } from "./types.ts";
+import type { Session } from "./types.ts";
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -11,9 +12,162 @@ import {
   generateICSInvite,
   generateSessionLink,
   getPrivateProfile,
+  getPublicProfile,
   getUserProfile,
   sendEmail,
 } from "./utils.ts";
+
+type MatchingPartner =
+  Database["public"]["Functions"]["get_matching_partners"]["Returns"][number];
+
+const getMatchingPartnersRPC = async (
+  supabase: SupabaseClient<Database>,
+  userId: string
+): Promise<MatchingPartner[]> => {
+  const { data, error } = await supabase.rpc("get_matching_partners", {
+    arg_id: userId,
+  });
+
+  if (error) {
+    throw new Error(`RPC call failed: ${error.message}`);
+  }
+
+  return data;
+};
+
+const haveReachedMaxSessions = async (
+  supabase: SupabaseClient<Database>,
+  userIds: string[]
+): Promise<Record<string, boolean>> => {
+  if (userIds.length === 0) {
+    return {};
+  }
+
+  const { data: sessions, error } = await supabase
+    .from("sessions")
+    .select("host_id, guest_id")
+    .or(userIds.map((id) => `host_id.eq.${id},guest_id.eq.${id}`).join(","))
+    .eq("session_status", "scheduled")
+    .gte("scheduled_for", new Date().toISOString());
+
+  if (error) {
+    console.error(`Failed to check users sessions`, error);
+    return fromPairs(userIds.map((id) => [id, false]));
+  }
+
+  const sessionCounts = fromPairs(userIds.map((id) => [id, 0]));
+
+  // Count sessions where user is either host or guest
+  sessions?.forEach((session) => {
+    if (userIds.includes(session.host_id)) {
+      sessionCounts[session.host_id] =
+        (sessionCounts[session.host_id] || 0) + 1;
+    }
+    if (userIds.includes(session.guest_id)) {
+      sessionCounts[session.guest_id] =
+        (sessionCounts[session.guest_id] || 0) + 1;
+    }
+  });
+
+  return mapValues(sessionCounts, (count) => count >= MAX_SESSIONS);
+};
+
+const getUpcomingSessions = async (
+  supabase: SupabaseClient,
+  userId: string
+): Promise<Date[]> => {
+  // Calculate timestamp 2 hours ago
+  const twoHoursAgo = new Date();
+  twoHoursAgo.setHours(twoHoursAgo.getHours() - 2);
+
+  const { data, error } = await supabase
+    .from("sessions")
+    .select("scheduled_for")
+    .or(`guest_id.eq.${userId},host_id.eq.${userId}`)
+    .in("session_status", ["scheduled", "rated"])
+    .gt("scheduled_for", twoHoursAgo.toISOString());
+
+  if (error) {
+    console.error(`Failed to fetch sessions:`, error);
+  }
+
+  return data?.map(({ scheduled_for }) => new Date(scheduled_for)) || [];
+};
+
+const getUsersAvailability = async (
+  supabase: SupabaseClient<Database>,
+  userIds: string[]
+): Promise<Record<string, number[]>> => {
+  if (userIds.length === 0) {
+    return {};
+  }
+
+  const { data: usersAvailability, error } = await supabase
+    .from("availabilities")
+    .select("user_id, hour_of_week")
+    .in("user_id", userIds);
+
+  if (error) {
+    console.error(`Failed to fetch users availability`, error);
+    return {};
+  }
+
+  // Group by user_id and map to hour_of_week values
+  const groupedByUserId = groupBy(usersAvailability, "user_id");
+
+  return mapValues(groupedByUserId, (availabilities) =>
+    availabilities.map(({ hour_of_week }) => hour_of_week)
+  );
+};
+
+const sendNotificationEmail = async (
+  session: Session,
+  name: string,
+  email: string,
+  timezone: string,
+  isHost: boolean,
+  partnerName: string
+) => {
+  try {
+    const link = generateSessionLink(session.id, isHost);
+
+    const text = `You have a new Frendle session scheduled!
+
+Session Details:
+Date: ${formatDateForEmail(new Date(session.scheduled_for), timezone)}
+Partner: ${partnerName}
+
+Your session link: ${link}
+
+Please confirm your attendance by clicking the link above.`;
+
+    const hostICS = generateICSInvite(
+      session.id,
+      new Date(session.scheduled_for),
+      name,
+      partnerName,
+      true
+    );
+
+    await sendEmail(email, "New Frendle Session Scheduled", text, hostICS);
+  } catch (emailError) {
+    console.error("Failed to send emails:", emailError);
+  }
+};
+
+const getUserAvailability = async (
+  supabase: SupabaseClient<Database>,
+  userId: string
+): Promise<number[]> => {
+  const usersAvailability = await getUsersAvailability(supabase, [userId]);
+  return usersAvailability[userId] || [];
+};
+
+const hasOverlap = (times: Date[], time: Date): boolean =>
+  times.find((t) => {
+    const diff = Math.abs(t.getTime() - time.getTime());
+    return diff <= 90 * 60 * 1000; // 90 minutes in milliseconds
+  }) !== undefined;
 
 export const matchUser = async (
   supabase: SupabaseClient<Database>,
@@ -29,16 +183,7 @@ export const matchUser = async (
     }
 
     // 3. Count user's existing future sessions
-    const { data: futureSessions, error: sessionError } = await supabase
-      .from("sessions")
-      .select("id")
-      .or(`host_id.eq.${userId},guest_id.eq.${userId}`)
-      .eq("session_status", "scheduled")
-      .gte("scheduled_for", new Date().toISOString());
-
-    if (sessionError) {
-      throw new Error("Failed to count existing sessions");
-    }
+    const futureSessions = await getUpcomingSessions(supabase, userId);
 
     if (futureSessions.length >= MAX_SESSIONS) {
       return createErrorResponse(
@@ -46,126 +191,93 @@ export const matchUser = async (
       );
     }
 
-    // Get user's private profile and availability
-    const userPrivateProfile = await getPrivateProfile(supabase, userId);
+    const acandidates = await getMatchingPartnersRPC(supabase, userId);
 
-    const { data: userAvailability, error: availError } = await supabase
-      .from("availabilities")
-      .select("hour_of_week")
-      .eq("user_id", userId);
-
-    if (availError || !userAvailability?.length) {
-      return createErrorResponse("User availability not found");
-    }
-
-    // 4. Query potential matches using coarse filtering
-    const { data: candidates, error: candidateError } = await supabase
-      .from("system_profiles")
-      .select(
-        `
-        id,
-        name,
-        private_profiles!inner(timezone),
-        timezones!inner(offset_hours),
-        availabilities(hour_of_week)
-      `
-      )
-      .eq("membership_status", "good")
-      .neq("id", userId)
-      .overlaps(
-        "availabilities.hour_of_week",
-        userAvailability.map((a) => a.hour_of_week)
-      );
-
-    if (candidateError) {
-      throw new Error("Failed to query potential matches");
-    }
-
-    if (!candidates?.length) {
+    if (!acandidates.length) {
       return createErrorResponse("No potential matches found");
     }
+    const maxedOut = await haveReachedMaxSessions(
+      supabase,
+      acandidates.map((c) => c.partner_id)
+    );
+    const candidates = acandidates.filter((c) => !maxedOut[c.partner_id]);
 
-    // Filter out users with active pauses and existing relationships
-    const { data: relationships, error: relError } = await supabase
-      .from("relationships")
-      .select("host_id, guest_id, paused")
-      .or(`host_id.eq.${userId},guest_id.eq.${userId}`)
-      .or("paused.is.null,paused.lt." + new Date().toISOString());
-
-    if (relError) {
-      throw new Error("Failed to check relationships");
+    // Get user's private profile and availability
+    const {
+      data: { user: userAuthProfile },
+      error: authError,
+    } = await supabase.auth.getUser();
+    if (!userAuthProfile || !userAuthProfile.email) {
+      console.error("Failed to create relationship:", authError);
+      return createErrorResponse("User authentication failed");
     }
-
-    const pausedUserIds = new Set(
-      relationships
-        ?.filter((r) => r.paused && new Date(r.paused) > new Date())
-        ?.map((r) => (r.host_id === userId ? r.guest_id : r.host_id)) || []
+    const userPrivateProfile = await getPrivateProfile(supabase, userId);
+    const userPublicProfile = await getPublicProfile(supabase, userId);
+    const userAvailabilityHours = await getUserAvailability(supabase, userId);
+    const candidateAvailabilities = await getUsersAvailability(
+      supabase,
+      candidates.map((c) => c.partner_id)
     );
 
-    // 5. Apply fine filtering with proper timezone conversion
-    const validMatches: Array<{
-      candidate: MatchCandidate;
-      slots: TimeSlot[];
-    }> = [];
-
-    for (const candidate of candidates) {
-      if (pausedUserIds.has(candidate.id)) continue;
-
-      // Check if candidate has too many sessions
-      const { data: candidateSessions } = await supabase
-        .from("sessions")
-        .select("id")
-        .or(`host_id.eq.${candidate.id},guest_id.eq.${candidate.id}`)
-        .eq("session_status", "scheduled")
-        .gte("scheduled_for", new Date().toISOString());
-
-      if (candidateSessions && candidateSessions.length >= MAX_SESSIONS)
-        continue;
-
-      const candidateAvailability =
-        candidate.availabilities?.map((a) => a.hour_of_week) || [];
-      const userAvailabilityHours = userAvailability.map((a) => a.hour_of_week);
+    const times = candidates.map((candidate) => {
+      const candidateAvailabilityHours =
+        candidateAvailabilities[candidate.partner_id] || [];
 
       const overlappingSlots = findOverlappingSlots(
         userAvailabilityHours,
-        candidateAvailability,
-        userPrivateProfile.timezone ?? "UTC",
-        candidate.private_profiles.timezone ?? "UTC"
+        candidateAvailabilityHours,
+        userPrivateProfile.timezone,
+        candidate.partner_timezone,
+        new Date()
       );
 
-      if (overlappingSlots.length > 0) {
-        validMatches.push({
-          candidate: {
-            id: candidate.id,
-            name: candidate.name ?? "[unknown]",
-            timezone: candidate.private_profiles.timezone ?? "UTC",
-            offset_hours: candidate.timezones[0].offset_hours || 0,
-            availabilities: candidateAvailability,
-          },
-          slots: overlappingSlots,
-        });
-      }
-    }
+      return [candidate, overlappingSlots] as const;
+    });
 
-    if (validMatches.length === 0) {
+    const maxNewMatches = MAX_SESSIONS - futureSessions.length;
+    type Match = {
+      guest: MatchingPartner;
+      time: Date;
+    };
+
+    type SoFar = {
+      matches: Match[];
+      usedTimes: Date[];
+    };
+
+    const { matches } = times.reduce(
+      (soFar: SoFar, [candidate, times]) => {
+        if (soFar.matches.length >= maxNewMatches) {
+          return soFar; // Stop if we reached max matches
+        }
+        for (const time of times) {
+          if (!hasOverlap(soFar.usedTimes, time)) {
+            return {
+              matches: [...soFar.matches, { guest: candidate, time }],
+              usedTimes: [...soFar.usedTimes, time],
+            };
+          }
+        }
+        return soFar;
+      },
+      { matches: [] as Match[], usedTimes: futureSessions }
+    );
+
+    if (matches.length === 0) {
       return createErrorResponse("No compatible matches found");
     }
 
     // 6. Create new sessions and relationship records
     const createdSessions: Session[] = [];
 
-    for (const match of validMatches.slice(
-      0,
-      MAX_SESSIONS - futureSessions.length
-    )) {
-      const selectedSlot = match.slots[0]; // Take the first available slot
-
+    for (const match of matches) {
+      const { time, guest } = match;
       const { data: session, error: sessionCreateError } = await supabase
         .from("sessions")
         .insert({
-          scheduled_for: selectedSlot.timestamp.toISOString(),
+          scheduled_for: time.toISOString(),
           host_id: userId,
-          guest_id: match.candidate.id,
+          guest_id: guest.partner_id,
           session_status: "scheduled",
         })
         .select()
@@ -181,7 +293,7 @@ export const matchUser = async (
         .from("relationships")
         .upsert({
           host_id: userId,
-          guest_id: match.candidate.id,
+          guest_id: guest.partner_id,
         });
 
       if (relationshipError) {
@@ -190,69 +302,22 @@ export const matchUser = async (
 
       createdSessions.push(session);
 
-      // 7. Send notification emails
-      try {
-        const hostLink = generateSessionLink(session.id, true);
-        const guestLink = generateSessionLink(session.id, false);
-
-        const hostEmailText = `You have a new Frendle session scheduled!
-
-Session Details:
-Date: ${formatDateForEmail(
-          new Date(session.scheduled_for),
-          userPrivateProfile.timezone ?? "UTC"
-        )}
-Partner: ${match.candidate.name}
-
-Your session link: ${hostLink}
-
-Please confirm your attendance by clicking the link above.`;
-
-        const guestEmailText = `You have a new Frendle session scheduled!
-
-Session Details:  
-Date: ${formatDateForEmail(
-          new Date(session.scheduled_for),
-          match.candidate.timezone
-        )}
-Partner: ${userProfile.name}
-
-Your session link: ${guestLink}
-
-Please confirm your attendance by clicking the link above.`;
-
-        const hostICS = generateICSInvite(
-          session.id,
-          new Date(session.scheduled_for),
-          userProfile.name || "[unknown]",
-          match.candidate.name,
-          true
-        );
-
-        const guestICS = generateICSInvite(
-          session.id,
-          new Date(session.scheduled_for),
-          userProfile.name || "[unknown]",
-          match.candidate.name,
-          false
-        );
-
-        await sendEmail(
-          `${userId}@example.com`, // TODO: Get actual email from profile
-          "New Frendle Session Scheduled",
-          hostEmailText,
-          hostICS
-        );
-
-        await sendEmail(
-          `${match.candidate.id}@example.com`, // TODO: Get actual email from profile
-          "New Frendle Session Scheduled",
-          guestEmailText,
-          guestICS
-        );
-      } catch (emailError) {
-        console.error("Failed to send emails:", emailError);
-      }
+      await sendNotificationEmail(
+        session,
+        name,
+        userAuthProfile.email,
+        userPrivateProfile.timezone,
+        true,
+        guest.name
+      );
+      await sendNotificationEmail(
+        session,
+        guest.name,
+        guest.email,
+        guest.partner_timezone,
+        false,
+        userPublicProfile.name || userProfile.name || "Frendle User"
+      );
     }
 
     // 8. Update user's last_matched timestamp
