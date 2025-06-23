@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      availability: {
+      availabilities: {
         Row: {
           created_at: string | null
           hour_of_week: number
@@ -25,7 +25,15 @@ export type Database = {
           hour_of_week?: number
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "availabilities_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "system_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       private_profiles: {
         Row: {
@@ -98,37 +106,113 @@ export type Database = {
           },
         ]
       }
+      relationships: {
+        Row: {
+          guest_id: string
+          guest_paused: string | null
+          guest_rating: number | null
+          host_id: string
+          host_paused: string | null
+          host_rating: number | null
+          id: string
+          paused: string | null
+          rating: number | null
+        }
+        Insert: {
+          guest_id: string
+          guest_paused?: string | null
+          guest_rating?: number | null
+          host_id: string
+          host_paused?: string | null
+          host_rating?: number | null
+          id?: string
+          paused?: string | null
+          rating?: number | null
+        }
+        Update: {
+          guest_id?: string
+          guest_paused?: string | null
+          guest_rating?: number | null
+          host_id?: string
+          host_paused?: string | null
+          host_rating?: number | null
+          id?: string
+          paused?: string | null
+          rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "relationships_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "system_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "relationships_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "system_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sessions: {
         Row: {
           created_at: string | null
+          guest_confirmed: string | null
           guest_id: string
+          host_confirmed: string | null
           host_id: string
           id: string
           room_id: string
-          scheduled_for: string | null
+          scheduled_for: string
+          session_status: Database["public"]["Enums"]["session_status_enum"]
         }
         Insert: {
           created_at?: string | null
+          guest_confirmed?: string | null
           guest_id: string
+          host_confirmed?: string | null
           host_id: string
           id?: string
           room_id?: string
-          scheduled_for?: string | null
+          scheduled_for?: string
+          session_status?: Database["public"]["Enums"]["session_status_enum"]
         }
         Update: {
           created_at?: string | null
+          guest_confirmed?: string | null
           guest_id?: string
+          host_confirmed?: string | null
           host_id?: string
           id?: string
           room_id?: string
-          scheduled_for?: string | null
+          scheduled_for?: string
+          session_status?: Database["public"]["Enums"]["session_status_enum"]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "sessions_guest_id_fkey"
+            columns: ["guest_id"]
+            isOneToOne: false
+            referencedRelation: "system_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sessions_host_id_fkey"
+            columns: ["host_id"]
+            isOneToOne: false
+            referencedRelation: "system_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       system_profiles: {
         Row: {
           created_at: string | null
           id: string
+          last_matched: string | null
           membership_status:
             | Database["public"]["Enums"]["membership_status_enum"]
             | null
@@ -137,6 +221,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id: string
+          last_matched?: string | null
           membership_status?:
             | Database["public"]["Enums"]["membership_status_enum"]
             | null
@@ -145,6 +230,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           id?: string
+          last_matched?: string | null
           membership_status?:
             | Database["public"]["Enums"]["membership_status_enum"]
             | null
@@ -175,7 +261,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      membership_status_enum: "unpaid" | "good" | "suspended" | "banned"
+      membership_status_enum:
+        | "unpaid"
+        | "good"
+        | "suspended"
+        | "banned"
+        | "paused"
+      session_status_enum:
+        | "scheduled"
+        | "cancelled_by_host"
+        | "cancelled_by_guest"
+        | "rated"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -291,7 +387,19 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      membership_status_enum: ["unpaid", "good", "suspended", "banned"],
+      membership_status_enum: [
+        "unpaid",
+        "good",
+        "suspended",
+        "banned",
+        "paused",
+      ],
+      session_status_enum: [
+        "scheduled",
+        "cancelled_by_host",
+        "cancelled_by_guest",
+        "rated",
+      ],
     },
   },
 } as const

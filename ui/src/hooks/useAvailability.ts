@@ -21,7 +21,7 @@ const useAvailability = (userId: string): AvailabilityReturn => {
       });
 
       const { data: availabilityData, error: fetchError } = await supabase
-        .from("availability")
+        .from("availabilities")
         .select("hour_of_week")
         .eq("user_id", userId);
 
@@ -54,7 +54,7 @@ const useAvailability = (userId: string): AvailabilityReturn => {
         if (available) {
           // Add availability record
           const { error: insertError } = await supabase
-            .from("availability")
+            .from("availabilities")
             .insert({ user_id: userId, hour_of_week: hour });
 
           if (insertError) {
@@ -69,7 +69,7 @@ const useAvailability = (userId: string): AvailabilityReturn => {
         } else {
           // Remove availability record
           const { error: deleteError } = await supabase
-            .from("availability")
+            .from("availabilities")
             .delete()
             .eq("user_id", userId)
             .eq("hour_of_week", hour);

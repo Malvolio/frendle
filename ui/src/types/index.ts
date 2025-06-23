@@ -7,7 +7,7 @@ export type PrivateProfile =
   Database["public"]["Tables"]["private_profiles"]["Row"];
 export type PublicProfile =
   Database["public"]["Tables"]["public_profiles"]["Row"];
-
+export type Session = Database["public"]["Tables"]["sessions"]["Row"];
 export type SignedInUser = {
   auth: User;
   system_profile: SystemProfile;
@@ -22,7 +22,6 @@ export interface Charity {
   website: string;
   logoUrl?: string;
   category: string;
-
 }
 
 export interface Subscription {
