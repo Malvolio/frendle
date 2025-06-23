@@ -1,23 +1,19 @@
 // shared/
+import { TZDate } from "https://esm.sh/@date-fns/tz@1.2.0";
 import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2";
+import { addHours, format } from "https://esm.sh/date-fns@4.1.0";
+import { flatMap } from "https://esm.sh/lodash@4.17.21";
 import {
-  format,
-  utcToZonedTime,
-  zonedTimeToUtc,
-} from "https://esm.sh/date-fns-tz@2";
-import { addDays, addHours } from "https://esm.sh/date-fns@2";
-import {
-  MIN_FUTURE_HOURS,
   RESEND_API_KEY,
   SESSION_LINK_BASE,
   SUPABASE_ANON_KEY,
   SUPABASE_URL,
 } from "./constants.ts";
 import { Database } from "./supabase.ts";
-import type { PrivateProfile, SystemProfile, TimeSlot } from "./types.ts";
+import type { PrivateProfile, SystemProfile } from "./types.ts";
 
 export const createSupabaseClient = () => {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
@@ -91,67 +87,70 @@ export const getPrivateProfile = async (
 
   return data;
 };
-
-export const convertHourOfWeekToTimestamp = (
-  hourOfWeek: number,
-  timezone: string
-): Date[] => {
-  const now = new Date();
-  const nextWeek = addDays(now, 7);
-  const timestamps: Date[] = [];
-
-  // Calculate the next occurrence of this hour in the week
-  const dayOfWeek = Math.floor(hourOfWeek / 24);
-  const hourOfDay = hourOfWeek % 24;
-
-  // Check this week and next week for valid timestamps
-  for (let week = 0; week < 2; week++) {
-    const baseDate = week === 0 ? now : nextWeek;
-    const targetDate = new Date(baseDate);
-    targetDate.setDate(targetDate.getDate() - targetDate.getDay() + dayOfWeek);
-    targetDate.setHours(hourOfDay, 0, 0, 0);
-
-    // Convert from user's timezone to UTC
-    const utcTimestamp = zonedTimeToUtc(targetDate, timezone);
-
-    // Only include if it's at least 24 hours in the future
-    if (utcTimestamp > addHours(now, MIN_FUTURE_HOURS)) {
-      timestamps.push(utcTimestamp);
-    }
-  }
-
-  return timestamps;
-};
-
 export const findOverlappingSlots = (
   hostAvailability: number[],
   guestAvailability: number[],
   hostTimezone: string,
-  guestTimezone: string
-): TimeSlot[] => {
-  const overlaps = hostAvailability.filter((hour) =>
-    guestAvailability.includes(hour)
+  guestTimezone: string,
+  now: Date
+): Date[] => {
+  // Convert availabilities to actual dates
+  const hostDates = hostAvailability.map((hour) =>
+    convertHourOfWeekToDate(hour, hostTimezone, now)
   );
-  const slots: TimeSlot[] = [];
+  const guestDates = guestAvailability.map((hour) =>
+    convertHourOfWeekToDate(hour, guestTimezone, now)
+  );
 
-  for (const hour of overlaps) {
-    const hostTimestamps = convertHourOfWeekToTimestamp(hour, hostTimezone);
-    const guestTimestamps = convertHourOfWeekToTimestamp(hour, guestTimezone);
-
-    // Find matching timestamps (should be the same in UTC)
-    for (const hostTime of hostTimestamps) {
-      for (const guestTime of guestTimestamps) {
-        if (Math.abs(hostTime.getTime() - guestTime.getTime()) < 60000) {
-          // Within 1 minute
-          slots.push({ timestamp: hostTime, hour_of_week: hour });
+  // Find overlapping times (within 30 minutes)
+  return flatMap(hostDates, (hostTime) =>
+    guestDates
+      .map((guestTime) => {
+        const timeDiff = Math.abs(hostTime.getTime() - guestTime.getTime());
+        if (timeDiff <= 30 * 60 * 1000) {
+          // 30 minutes in milliseconds
+          // Use the later of the two times
+          return hostTime.getTime() > guestTime.getTime()
+            ? hostTime
+            : guestTime;
         }
-      }
-    }
-  }
-
-  return slots.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+        return null;
+      })
+      .filter((slot) => slot !== null)
+  );
 };
 
+const convertHourOfWeekToDate = (
+  hourOfWeek: number,
+  timezone: string,
+  now: Date
+): Date => {
+  const dayOfWeek = Math.floor(hourOfWeek / 24); // 0 = Sunday, 1 = Monday, etc.
+  const hourOfDay = hourOfWeek % 24;
+  const nowInTimezone = new TZDate(now, timezone);
+  const currentDay = nowInTimezone.getDay();
+
+  const daysToAdd =
+    dayOfWeek === currentDay
+      ? 7
+      : dayOfWeek > currentDay
+      ? // Target day is later this week
+        dayOfWeek - currentDay
+      : 7 + dayOfWeek - currentDay;
+
+  const targetDate = new Date(nowInTimezone);
+  targetDate.setDate(targetDate.getDate() + daysToAdd);
+
+  return new TZDate(
+    targetDate.getFullYear(),
+    targetDate.getMonth(),
+    targetDate.getDate(),
+    hourOfDay,
+    0, // minutes
+    0, // seconds
+    timezone
+  );
+};
 export const generateSessionLink = (
   sessionId: string,
   isHost: boolean
@@ -160,10 +159,8 @@ export const generateSessionLink = (
 };
 
 export const formatDateForEmail = (date: Date, timezone: string): string => {
-  const zonedDate = utcToZonedTime(date, timezone);
-  return format(zonedDate, "EEEE, MMMM do, yyyy 'at' h:mm a zzz", {
-    timeZone: timezone,
-  });
+  const zonedDate = new TZDate(date, timezone);
+  return format(zonedDate, "EEEE, MMMM do, yyyy 'at' h:mm a zzz");
 };
 
 export const generateICSInvite = (
@@ -202,22 +199,21 @@ export const sendEmail = async (
     throw new Error("Resend API key not configured");
   }
 
-  const emailData: any = {
+  const emailData = {
     from: "noreply@frendle.space",
     to,
     subject,
     text,
+    attachments: icsAttachment
+      ? [
+          {
+            filename: "frendle-pairup.ics",
+            content: btoa(icsAttachment),
+            content_type: "text/calendar",
+          },
+        ]
+      : undefined,
   };
-
-  if (icsAttachment) {
-    emailData.attachments = [
-      {
-        filename: "session.ics",
-        content: btoa(icsAttachment),
-        content_type: "text/calendar",
-      },
-    ];
-  }
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
