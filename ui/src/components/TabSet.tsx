@@ -32,27 +32,20 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
     >
       <TabsList className="w-7/12 mx-auto flex mb-3 gap-4">
         {tabs.map(({ icon: Icon, name, id }) => (
-          <div className="flex-col">
-            <div className="mt-2 text-sm font-bold m-auto flex flex-row justify-center items-center"><img src="lib/arrow.png" alt="" />TODO</div>
-            <RoughNotation
-              type="underline"
-              show={id === currentTab}
-              iterations={2}
-              animate={false}
-              strokeWidth={6}
-              color="#373737"
-            >
-              <TabsTrigger
-                key={id}
-                value={id}
-                className="flex-1 flex items-center gap-2"
-              >
-                <Icon className="w-4 h-4" />
-                {name}
-              </TabsTrigger>
-            </RoughNotation>
-
-          </div>
+          <RoughNotation
+            key={id}
+            type="underline"
+            show={id === currentTab}
+            iterations={2}
+            animate={false}
+            strokeWidth={6}
+            color="#373737"
+          >
+            <TabsTrigger value={id} className="flex-1 flex items-center gap-2">
+              <Icon className="w-4 h-4" />
+              {name}
+            </TabsTrigger>
+          </RoughNotation>
         ))}
       </TabsList>
 

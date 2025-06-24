@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import PauseButton from "./PauseButton";
 
 const DAYS = [
   { short: "Sun", full: "Sunday" },
@@ -136,6 +137,9 @@ const Availability: FC<{
           {totalSelections < MAX_SLOTS
             ? "Pick a couple days and times that work for you for quick 15-min connects."
             : `We only need ${MAX_SLOTS} slots to find you a match`}
+        </div>
+        <div className="flex justify-end mr-6">
+          <PauseButton />
         </div>
         <SelectTimezone />
         <div className="flex ">

@@ -1,5 +1,7 @@
 // functions/confirmSession/index.ts
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Database } from "../../shared/supabase.ts";
 import {
   createErrorResponse,
   createSuccessResponse,
@@ -9,13 +11,12 @@ import {
   validateUser,
 } from "../../shared/utils.ts";
 
-const confirmSession = async (sessionId: string): Promise<Response> => {
-  const supabase = createSupabaseClient();
-
+const confirmSession = async (
+  supabase: SupabaseClient<Database>,
+  userId: string,
+  sessionId: string
+): Promise<Response> => {
   try {
-    // Get authenticated user ID
-    const userId = await validateUser(supabase);
-
     // Get session details
     const { data: session, error: sessionError } = await supabase
       .from("sessions")
@@ -114,14 +115,19 @@ serve(async (req: Request) => {
   }
 
   try {
+    const supabase = createSupabaseClient();
+
     const { sessionId } = await req.json();
 
     if (!sessionId) {
       return createErrorResponse("Session ID is required");
     }
+    // Get authenticated user ID
+    const userId = await validateUser(supabase, req);
 
-    return await confirmSession(sessionId);
+    return await confirmSession(supabase, sessionId, userId);
   } catch (error) {
+    console.error("Error parsing request body:", error);
     return createErrorResponse("Invalid request body");
   }
 });

@@ -1,5 +1,7 @@
+import { ThickBorderShadowDiv } from "./ThickBorderShadowDiv";
+
 const BannedHome = () => (
-  <>
+  <ThickBorderShadowDiv className="w-1/2 mx-auto my-20">
     <div>
       Your account has been <span className="font-bold">banned</span>.
     </div>
@@ -9,6 +11,6 @@ const BannedHome = () => (
       has been closed and if you’re paying for a subscription, that has been
       cancelled.
     </div>
-  </>
+  </ThickBorderShadowDiv>
 );
 export default BannedHome;

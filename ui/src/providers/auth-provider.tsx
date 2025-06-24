@@ -16,12 +16,14 @@ interface AuthContextType {
   user: SignedInUser | null;
   loading: boolean;
   signOut: () => Promise<void>;
+  refetchProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signOut: async () => {},
+  refetchProfile: async () => {},
 });
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -29,40 +31,42 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [profileLoading, setProfileLoading] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      setProfileLoading(true);
-      try {
-        const auth = await getCurrentUser();
+  const refetchProfile = async () => {
+    const auth = await getCurrentUser();
 
-        if (auth) {
-          console.log("[Auth] User found, fetching profile");
-          const { data, error } = await supabase.functions.invoke(
-            "ensure-user-profiles",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (error) {
-            console.error("Error fetching user:", error);
-            return;
-          }
-          const user: SignedInUser = {
-            auth,
-            ...data,
-          };
-          setUser(user);
+    if (auth) {
+      console.log("[Auth] User found, fetching profile");
+      const { data, error } = await supabase.functions.invoke(
+        "ensure-user-profiles",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      } catch (error) {
+      );
+      if (error) {
         console.error("Error fetching user:", error);
-      } finally {
-        setProfileLoading(false);
+        return;
       }
-    };
-
+      const user: SignedInUser = {
+        auth,
+        ...data,
+      };
+      setUser(user);
+    }
+  };
+  const fetchProfile = async () => {
+    setProfileLoading(true);
+    try {
+      await refetchProfile();
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchProfile();
 
     // Set up auth subscription
@@ -70,7 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       async (event, session) => {
         console.log("[Auth] Auth state changed", { event });
         if (event === "SIGNED_IN" && session?.user) {
-          fetchProfile();
+          refetchProfile();
         } else if (event === "SIGNED_OUT") {
           console.log("[Auth] User signed out");
           setUser(null);
@@ -94,6 +98,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     user,
     loading: profileLoading || authLoading,
     signOut,
+    refetchProfile,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

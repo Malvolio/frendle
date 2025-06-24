@@ -9,17 +9,39 @@ import { flatMap } from "https://esm.sh/lodash@4.17.21";
 import {
   RESEND_API_KEY,
   SESSION_LINK_BASE,
-  SUPABASE_ANON_KEY,
+  SUPABASE_SERVICE_ROLE_KEY,
   SUPABASE_URL,
 } from "./constants.ts";
 import { Database } from "./supabase.ts";
 import type { PrivateProfile, PublicProfile, SystemProfile } from "./types.ts";
 
+const CorsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
+const StdHeaders = {
+  "Content-Type": "application/json",
+  ...CorsHeaders,
+};
+
+export const createCorsResponse = () =>
+  new Response("ok", {
+    headers: CorsHeaders,
+  });
+
 export const createSupabaseClient = () => {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("Missing Supabase configuration");
   }
-  return createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
 };
 
 export const createErrorResponse = (
@@ -28,26 +50,33 @@ export const createErrorResponse = (
 ): Response => {
   return new Response(JSON.stringify({ success: false, error: message }), {
     status,
-    headers: { "Content-Type": "application/json" },
+    headers: StdHeaders,
   });
 };
 
 export const createSuccessResponse = <T>(data: T): Response => {
   return new Response(JSON.stringify({ success: true, data }), {
     status: 200,
-    headers: { "Content-Type": "application/json" },
+    headers: StdHeaders,
   });
 };
 
 export const validateUser = async (
-  supabase: SupabaseClient<Database>
+  supabase: SupabaseClient<Database>,
+  req: Request
 ): Promise<string> => {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader) {
+    console.error("User validation failed: No Authorization header");
+    throw new Error("Authentication required");
+  }
   const {
     data: { user },
     error,
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser(authHeader.replace("Bearer ", ""));
 
   if (error || !user) {
+    console.error("User validation failed:", error);
     throw new Error("Authentication required");
   }
 

@@ -1,6 +1,7 @@
 import { EnrichedSession } from "@/hooks/useGetSessions";
 import { X } from "lucide-react";
 import React from "react";
+import PauseButton from "./PauseButton";
 
 const formatDate = (date: Date) => {
   const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -28,11 +29,12 @@ const formatDate = (date: Date) => {
 
 const PairUps: React.FC<{
   sessions: EnrichedSession[];
-}> = ({ sessions }) => (
+  isPaused: boolean;
+}> = ({ sessions, isPaused }) => (
   <>
     <p className="text-gray-600">Here’s your upcoming matches:</p>
 
-    <div className="space-y-4">
+    <div className="space-y-4  w-80">
       {sessions.map((pairUp, index) => {
         const dateInfo = formatDate(new Date(pairUp.scheduled_for));
 
@@ -72,6 +74,12 @@ const PairUps: React.FC<{
           </div>
         );
       })}
+      {isPaused && (
+        <div className="flex text-center text-gray-500 gap-2">
+          <div className="text-left">Pair-ups are currently paused. </div>
+          <PauseButton />
+        </div>
+      )}
     </div>
   </>
 );

@@ -191,7 +191,7 @@ serve(async (req) => {
     });
   } catch (error) {
     console.error("Error in ensure-user-profiles function:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: String(error) }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
