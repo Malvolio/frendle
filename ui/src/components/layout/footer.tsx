@@ -11,12 +11,10 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-3">
             <Link to="/" className="flex items-center gap-2">
-              <Video className="h-5 w-5 text-primary" />
-              <span className="font-bold">Frendle</span>
+              <img src="/lib/logo_small.svg" alt="Logo" width="137px" height="114px" />
             </Link>
-            <p className="text-sm text-muted-foreground">
-              Connect with strangers through brief, guided activities in a safe
-              environment.
+            <p className="text-md">
+              Create connections, make friends
             </p>
           </div>
 
@@ -73,7 +71,7 @@ export function Footer() {
               </li>
             </ul>
           </div>
-
+          {/* 
           <div>
             <h3 className="font-medium mb-4">Connect</h3>
             <p className="text-sm text-muted-foreground mb-4">
@@ -139,7 +137,7 @@ export function Footer() {
                 </svg>
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-8 pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4">

@@ -18,7 +18,7 @@ export const Route = createFileRoute("/terms")({
             <div className="mt-8 text-foreground/60">
               <p>
                 Last updated:{" "}
-                <span className="font-semibold">December 2024</span>
+                <span className="font-semibold">June 2025</span>
               </p>
             </div>
           </div>
@@ -156,10 +156,10 @@ export const Route = createFileRoute("/terms")({
                 don't hesitate to contact us.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-foreground font-semibold py-3 px-8 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                {/* <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-foreground font-semibold py-3 px-8 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   Contact Support
-                </button>
-                <button className="border-2 border-white/30 text-foreground font-semibold py-3 px-8 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                </button> */}
+                <button className="border-2 border-black font-semibold py-3 px-8 rounded-sm hover:bg-[#58B4AE] transition-all duration-300 hover:scale-105">
                   Email Us
                 </button>
               </div>

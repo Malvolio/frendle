@@ -27,11 +27,10 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/95 backdrop-blur-sm shadow-sm"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        ? "bg-background/95 backdrop-blur-sm shadow-sm"
+        : "bg-transparent"
+        }`}
     >
       <div className="container flex h-16 items-center justify-between px-6">
         <div className="flex items-center gap-6">
@@ -39,8 +38,7 @@ export function Header() {
             to="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            <Video className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">Frendle</span>
+            <img src="/lib/logo_small.svg" alt="Logo" width="137px" height="114px" />
           </Link>
 
           <nav className="hidden md:flex gap-6">
@@ -48,11 +46,10 @@ export function Header() {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === item.href
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
+                className={`text-sm font-medium transition-colors hover:text-primary ${pathname === item.href
+                  ? "text-foreground"
+                  : "text-muted-foreground"
+                  }`}
               >
                 {item.title}
               </Link>
@@ -82,11 +79,10 @@ export function Header() {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className={`text-base font-medium transition-colors hover:text-primary ${
-                      pathname === item.href
-                        ? "text-foreground"
-                        : "text-muted-foreground"
-                    }`}
+                    className={`text-base font-medium transition-colors hover:text-primary ${pathname === item.href
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                      }`}
                   >
                     {item.title}
                   </Link>

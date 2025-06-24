@@ -89,7 +89,7 @@ export function QuestionOne() {
                   type="box"
                   show={isSelected}
                   iterations={isSelected ? 2 : 8}
-                  color={isSelected ? "#000000" : "#8F8F8F"}
+                  color={isSelected ? "#373735" : "#8F8F8F"}
                 >
                   <label
                     className="flex flex-col h-full justify-between items-center gap-2 py-2 w-40 cursor-pointer bg-[#EBE3CF] border border-black/30 px-2"
@@ -170,7 +170,7 @@ export function QuestionTwo() {
                   type="box"
                   show={isSelected}
                   iterations={isSelected ? 2 : 8}
-                  color={isSelected ? "#000000" : "#8F8F8F"}
+                  color={isSelected ? "#373735" : "#8F8F8F"}
                 >
                   <motion.label
                     className="flex flex-col h-full justify-between items-center gap-2 py-2 w-40 cursor-pointer bg-[#EBE3CF] border border-black/30 px-2"

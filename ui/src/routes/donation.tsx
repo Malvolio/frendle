@@ -6,15 +6,11 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/donation")({
   component: () => (
     <PublicLayout>
-      <PageTitle title="Why we charge">
-        An explanation for our monthly fee.
+      <PageTitle title="Donation Policy and Why We charge">
+        {/* An explanation for our monthly fee. */}
       </PageTitle>
       <TextBlock>
-        <p>
-          We think it’s a reasonable question to ask: we do we charge a monthly
-          fee to use the Frendle service? We say, and we genuinely believe, that
-          Frendle can and will improve the world — so we don’t we make it free?
-        </p>
+
         <p>
           Frendle charges a modest monthly fee not primarily to make money,
           though of course it helps us keep the lights on, but because we
@@ -24,19 +20,13 @@ export const Route = createFileRoute("/donation")({
           to connect.
         </p>
         <p>
-          We’ve seen too many well-meaning platforms fall apart under a tide of
-          unresolved hurt. When there’s no barrier to entry, people carrying
-          pain, loneliness, or anger can act out, unintentionally or not,
-          imposing their own struggles on other members. We have real sympathy
-          for those struggles — but we also know how quickly that dynamic can
-          spread and sour a space meant for kindness. The membership fee helps
-          create a shared sense of responsibility, and it ensures that
+          The membership fee helps create a shared sense of responsibility, and it ensures that
           consequences like suspensions or expulsions, when they are needed,
           carry real weight.
         </p>
 
         <p>
-          In light of that motivation, we do not keep most of the money we
+          In light of that motivation, we <strong>do not</strong> keep most of the money we
           collect in fees. The majority goes directly to supporting charities
           chosen by the members themselves. We do curate the list of charities.
           For legal reasons, all charities must be registered as 501(c)
