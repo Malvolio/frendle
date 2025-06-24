@@ -75,7 +75,7 @@ const SelectTimezone = () => {
     <div className="flex justify-center items-center mb-4">
       <label className="text-lg font-semibold mr-2">Select Timezone:</label>
       <Select value={timezone} onValueChange={updateTimezone}>
-        <SelectTrigger className="w-48">
+        <SelectTrigger className="w-48 bg-white rounded-none border-black">
           <SelectValue placeholder="Select timezone" />
         </SelectTrigger>
         <SelectContent>
@@ -128,7 +128,7 @@ const Availability: FC<{
   }
 
   return (
-    <div className="w-full flex-col justify-between items-start md:items-center mb-4">
+    <div className="flex-col justify-between items-start md:items-center mb-4 w-11/12 md:w-7/12 m-auto">
       <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
 
@@ -149,7 +149,7 @@ const Availability: FC<{
                 width: openColumn === day.short ? "400px" : "200px",
               }}
               transition={{
-                duration: 0.4,
+                duration: 0.8,
                 ease: [0.4, 0, 0.2, 1],
               }}
             >
@@ -167,7 +167,7 @@ const Availability: FC<{
               >
                 <div
                   className={cn(
-                    "flex items-center justify-center px-2 py-2 h-full w-full",
+                    "flex items-center justify-center px-2 py-2 h-full w-full bg-[#58B4AE]/0 transition-all",
                     {
                       "bg-[#58B4AE]": openColumn === day.short,
                     }
@@ -206,13 +206,12 @@ const Availability: FC<{
                           return (
                             <button
                               key={hour}
-                              className={`mb-1 px-2 py-1 text-sm border ${
-                                isSelected
-                                  ? "bg-primary text-white"
-                                  : isDisabled
-                                    ? "text-gray-500 cursor-not-allowed  text-italic"
-                                    : "hover:bg-[#F0D8A0]/60 border-transparent"
-                              }`}
+                              className={`mb-1 px-2 py-1 text-sm border ${isSelected
+                                ? "bg-primary text-white"
+                                : isDisabled
+                                  ? "text-gray-500 cursor-not-allowed  text-italic"
+                                  : "hover:bg-[#F0D8A0]/60 border-transparent"
+                                }`}
                               onClick={() => handleTimeClick(day.short, hour)}
                               disabled={isDisabled || loading}
                             >
@@ -242,9 +241,9 @@ const Availability: FC<{
                       return hours.length === thours.length
                         ? thours
                         : [
-                            ...thours,
-                            <div className="font-bold">&hellip;</div>,
-                          ];
+                          ...thours,
+                          <div className="font-bold">&hellip;</div>,
+                        ];
                     })()}
                   </div>
                 )}

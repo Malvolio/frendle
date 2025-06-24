@@ -6,7 +6,7 @@ import TabSet from "@/components/TabSet";
 import { Calendar1, ListChecks, User, Users } from "lucide-react";
 import { PublicLayout } from "../layout/public-layout";
 const ProfileTabs = [
-  { id: "pairups", name: "Pair-Ups", icon: Users, body: PairUpTab },
+  { id: "pairups", name: "Pair-ups", icon: Users, body: PairUpTab },
   { id: "profile", name: "About you", icon: User, body: ProfileForm },
   {
     id: "availability",

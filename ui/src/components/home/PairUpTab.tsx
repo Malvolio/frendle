@@ -5,8 +5,8 @@ import UnpaidHome from "./UnpaidHome";
 
 const ThickBorderShadowDiv: FC<PropsWithChildren> = ({ children }) => (
   <div
-    className="border-4 border-black rounded-lg p-6 bg-white"
-    style={{ boxShadow: "8px 8px 0px 0px black" }}
+    className="border-2 border-b-8 border-r-8 border-black/70 p-6 bg-[#fffdfa] rounded-2xl"
+
   >
     {children}
   </div>
@@ -17,13 +17,15 @@ const PairUpTab = () => {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <h1 className="w-3/4 mx-auto font-bold text-3xl font-peachy my-10">
-        Hey, {user?.public_profile.name}!
+      <h1 className="font-peachy m-auto leading-none tracking-tight text-5xl text-[#373737]  mx-auto my-10">
+        {/* Hey, {user?.public_profile.name}!  */}
+        Your upcoming pair-ups
+
       </h1>
       <div className="flex flex-col items-center justify-center">
         <ThickBorderShadowDiv>
           <h1 className="text-3xl font-bold text-gray-900 font-peachy">
-            Pair-ups
+            Your pair-ups await
           </h1>
           {user?.system_profile.membership_status === "good" ? (
             <GoodHome />

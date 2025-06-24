@@ -11,11 +11,11 @@ import Questionnaire from "./questionnaire";
 const Inventory = () => {
   const { user } = useAuth();
   return (
-    <Card>
+    <Card className="w-11/12 md:w-7/12 m-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 mb-2">
           {/* <ListChecks className="w-5 h-5 text-green-600" /> */}
-          Pair up with people who just get you
+          Pair-up with people who just get you
         </CardTitle>
 
         <CardDescription>
@@ -25,7 +25,7 @@ const Inventory = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4 h-96 mt-6">
+        <div className="space-y-4 h-96 mt-6 m-auto justify-center flex">
           {user && <Questionnaire userId={user.auth.id} />}
         </div>
       </CardContent>

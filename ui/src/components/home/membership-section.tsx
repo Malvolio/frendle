@@ -11,6 +11,7 @@ import { useAuth } from "@/providers/auth-provider";
 import { Subscription } from "@/types";
 import { CheckCircle2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { RoughNotation } from "react-rough-notation";
 
 export function MembershipSection() {
   const { user } = useAuth();
@@ -167,9 +168,9 @@ export function MembershipSection() {
                 <div className="rounded-lg border border-gray-200 gap-0 h-auto flex flex-col justify-normal p-6  ">
                   <div className="p-0 m-0 flex flex-col justify-around gap-2">
                     <div className="flex flex-row gap-4 p-0 m-0 h-auto align-left justify-start items-center ">
-                      <p className="leading-none m-0">
-                        Membership: $9.95/month
-                      </p>
+                      <p className="leading-relaxed m-0">
+                        Membership: <RoughNotation type="crossed-off" iterations={2} color="red" animate show>$9.95/month</RoughNotation> <span className="font-bold">FREE for a limited time
+                        </span></p>
 
                       {!subscription.cancelAtPeriodEnd && (
                         <Button
@@ -263,6 +264,6 @@ export function MembershipSection() {
           join us. 💛
         </li>
       </ul> */}
-    </Card>
+    </Card >
   );
 }

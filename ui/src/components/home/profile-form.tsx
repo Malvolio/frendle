@@ -37,17 +37,17 @@ export function ProfileForm() {
   });
 
   return (
-    <Card>
+    <Card className="m-auto ">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 mb-4">
           {/* <User className="w-5 h-5 text-green-600" /> */}
           All about you, yes, you!
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col md:flex-row justify-between md:max-w-6xl md:min-w-fit items-center">
+      <CardContent className="flex flex-col md:flex-row md:min-w-fit items-center m-auto justify-center">
         <AnimatePresence>
           {/* TODO: Make each one animate in seperately */}
-          <motion.div className="bg-[#FFFDFA] gap-4  max-w-2xl min-w-xs m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+          <motion.div className="bg-[#FFFDFA] gap-4  max-w-2xl min-w-[360px] flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -62,8 +62,8 @@ export function ProfileForm() {
                       <FormControl>
                         <Input placeholder="John Doe" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        (Displays on your profile and in the app)
+                      <FormDescription className="text-sm text-gray-700">
+                        Displays on your profile and in the app
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -85,7 +85,7 @@ export function ProfileForm() {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="">
+                      <FormDescription className="text-sm text-gray-700">
                         Tell folks a bit aobut yourself. What you're interested
                         in at the moment and what they should ask you about.
                       </FormDescription>
