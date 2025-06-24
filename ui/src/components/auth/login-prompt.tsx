@@ -14,24 +14,28 @@ export function LoginPrompt() {
   const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-muted/20">
+    <div className="max-w-6xl mx-auto border text-[#37251E]  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible justify-center mt-12">
       <div className="w-full max-w-md p-4">
-        <Card className="overflow-hidden border-none shadow-lg animate-fade-in">
+        <Card className="overflow-hidden border-none animate-fade-in">
           <CardHeader className="space-y-1 text-center">
-            <div className="flex justify-center mb-4">
-              <Video className="h-12 w-12 text-primary" />
+            <div className="flex justify-center">
+              {/* <Video className="h-12 w-12 text-primary" /> */}
+              <img src="login/hero_image.png" alt="video, promps, light co-op games" width={"125px"} height={"88px"} className="inline-block mr-2" />
             </div>
-            <CardTitle className="text-2xl">Welcome to Frendle</CardTitle>
+            <CardTitle className="text-2xl text-[#37251E]">
+              <p className="m-0 font-normal">Welcome to</p>
+              <img src="/lib/logo.png" alt="Logo" width={"200px"} className="inline-block mr-2" />
+            </CardTitle>
             <CardDescription>
-              Connect with others through brief, guided activities
+              Create connections, make friends through guided, shared activities
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-4">
-            <div className="space-y-2 text-center">
-              <p className="text-sm text-muted-foreground">
-                Sign in to access your profile and start connecting
-              </p>
-            </div>
+
+            <p className="font-bold space-y-2 text-center text-[#37251E] ">
+              Sign in to access your profile and start connecting
+            </p>
+
             <Button
               variant="default"
               className="w-full"
@@ -87,7 +91,7 @@ export function LoginPrompt() {
             >
               Terms of Service
             </a>{" "}
-            and{" "}
+            &nbsp; and &nbsp;
             <a
               href="/privacy"
               className="underline underline-offset-2 hover:text-foreground"
