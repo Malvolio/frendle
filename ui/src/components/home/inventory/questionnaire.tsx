@@ -81,7 +81,7 @@ const Questionnaire = () => {
 
   const { loading, error, data: answers, updateAnswer } = useProfileInterests();
   useEffect(() => {
-    if (answers && questionIndex < 1) {
+    if (answers && questionIndex < 0) {
       const unansweredQuestions = Questions.findIndex(({ id }) => !answers[id]);
       setTimeout(() => {
         if (unansweredQuestions < 0) {
@@ -91,7 +91,7 @@ const Questionnaire = () => {
         }
       }, 400);
     }
-  }, [answers]);
+  }, [loading]);
   if (error) {
     return <div>{error}</div>;
   }

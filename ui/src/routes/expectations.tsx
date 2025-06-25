@@ -1,24 +1,14 @@
-import PageTitle from "@/components/layout/PageTitle";
 import { PublicLayout } from "@/components/layout/public-layout";
 import TextBlock from "@/components/layout/text-block";
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, CheckCircle, Heart } from "lucide-react";
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 
 export const Route = createFileRoute("/expectations")({
   component: () => (
     <PublicLayout>
-      {/* <PageTitle title="House Rules"> */}
-      {/* Welcome to Frendle! Our community thrives when everyone feels valued,
-        respected, and safe to be themselves. Read this to learn what we, all of
-        us, Frendle team and your fellow Frendle members expect of you. */}
-      {/* </PageTitle> */}
-
       <TextBlock>
         {/* Introduction */}
         <div className="mb-10 leading-relaxed text-[#37251e] ">
-
-
           <h1 className="md:text-6xl font-peachy mb-4">
             <RoughNotationGroup show={true}>
               Frendle's &nbsp;
@@ -31,7 +21,8 @@ export const Route = createFileRoute("/expectations")({
                 strokeWidth={6}
                 animationDelay={200}
                 color="black"
-              >House
+              >
+                House
                 <RoughNotation
                   type="highlight"
                   show={true}
@@ -41,22 +32,24 @@ export const Route = createFileRoute("/expectations")({
                   animate={true}
                   animationDelay={700}
                   color="#CAD8CE"
-                >Rules</RoughNotation>
+                >
+                  Rules
+                </RoughNotation>
               </RoughNotation>
             </RoughNotationGroup>
           </h1>
 
-
           <p className="leading-relaxed mb-4">
-            Welcome to Frendle! Our community thrives when everyone feels valued,
-            respected, and safe to be themselves. We believe that the best friendships emerge when people
-            feel free to share authentically while treating others with care and
-            consideration.
-
-
+            Welcome to Frendle! Our community thrives when everyone feels
+            valued, respected, and safe to be themselves. We believe that the
+            best friendships emerge when people feel free to share authentically
+            while treating others with care and consideration.
           </p>
           <p className="leading-relaxed">
-            We also understand that some folks may need reminding, especially online, on how to interact with others. So we've put these house rules together to keep all of us accountable to each other and make sure that Frendle stays a welcoming space.
+            We also understand that some folks may need reminding, especially
+            online, on how to interact with others. So we've put these house
+            rules together to keep all of us accountable to each other and make
+            sure that Frendle stays a welcoming space.
           </p>
         </div>
 
@@ -73,7 +66,8 @@ export const Route = createFileRoute("/expectations")({
             >
               <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
                 Embrace Open-Mindedness
-              </h3></RoughNotation>
+              </h3>
+            </RoughNotation>
             <p className="leading-relaxed mb-4">
               Every person you meet on Frendle brings unique experiences,
               perspectives, and stories. Approach conversations with genuine
@@ -81,11 +75,10 @@ export const Route = createFileRoute("/expectations")({
               who seems different from you shares unexpected common ground, or
               that their different viewpoint enriches your own understanding.
             </p>
-
           </div>
 
           {/* Kindness and Decency */}
-          <div >
+          <div>
             <RoughNotation
               type="highlight"
               show={true}
@@ -94,9 +87,9 @@ export const Route = createFileRoute("/expectations")({
               color="#CAD8CE"
             >
               <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
-
                 Treat Everyone with Decency and Kindness
-              </h3></RoughNotation>
+              </h3>
+            </RoughNotation>
             <p className="leading-relaxed mb-4">
               Kindness is the foundation of every meaningful connection. Even
               when you don't click with someone or find yourself in
@@ -125,9 +118,9 @@ export const Route = createFileRoute("/expectations")({
               color="#CAD8CE"
             >
               <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
-
                 Honestly Report Problem Behavior
-              </h3></RoughNotation>
+              </h3>
+            </RoughNotation>
             <p className="frendlerleading-relaxed mb-6">
               We rely on our community to help maintain a safe and welcoming
               environment for everyone. If someone makes you uncomfortable,
@@ -143,14 +136,13 @@ export const Route = createFileRoute("/expectations")({
               animate={false}
               color="black"
             >
-
               <p className="leading-relaxed mb-4 p-2 ml-6">
-                <strong className="font-peachy">Please report:</strong> Harassment, inappropriate
-                messages, discriminatory language, spam, fake profiles, or any
-                behavior that makes you feel unsafe or unwelcome. You're not
-                overreacting by reporting something that doesn't feel right.
+                <strong className="font-peachy">Please report:</strong>{" "}
+                Harassment, inappropriate messages, discriminatory language,
+                spam, fake profiles, or any behavior that makes you feel unsafe
+                or unwelcome. You're not overreacting by reporting something
+                that doesn't feel right.
               </p>
-
             </RoughNotation>
           </div>
         </div>
@@ -170,9 +162,9 @@ export const Route = createFileRoute("/expectations")({
             <p className="leading-relaxed mb-4 ">
               While we approach moderation with understanding and context, some
               behaviors are incompatible with our community values: harassment,
-              hate speech, discrimination, threats, sharing inappropriate content,
-              or persistent disrespect after being asked to stop. These actions
-              may result in account suspension or removal.
+              hate speech, discrimination, threats, sharing inappropriate
+              content, or persistent disrespect after being asked to stop. These
+              actions may result in account suspension or removal.
             </p>
           </div>
         </RoughNotation>
@@ -189,7 +181,10 @@ export const Route = createFileRoute("/expectations")({
                 strokeWidth={4}
                 animate={true}
                 color="black"
-              >Thank You</RoughNotation> for Being Part of Frendle
+              >
+                Thank You
+              </RoughNotation>{" "}
+              for Being Part of Frendle
             </h2>
             <p className="leading-relaxed mb-6">
               By following these expectations, you're helping create a space
@@ -207,6 +202,6 @@ export const Route = createFileRoute("/expectations")({
           </div>
         </div>
       </div>
-    </PublicLayout >
+    </PublicLayout>
   ),
 });

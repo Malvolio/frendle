@@ -1,7 +1,6 @@
 import React, {
   createContext,
   PropsWithChildren,
-  useCallback,
   useContext,
   useEffect,
   useState,
@@ -24,19 +23,15 @@ const interestsSchema = z.record(
   z.string().min(1, "Answer ID cannot be empty")
 );
 const useProfileInterestsData = (userId: string): ProfileInterestsReturn => {
-  // Initialize state first
-  const [interests, setInterests] = useState<ProfileInterestsReturn>(() => ({
-    loading: true,
-    updateAnswer: async () => {}, // Placeholder
-  }));
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | undefined>(undefined);
 
   // Fetch initial interests data
-  const fetchInterests = useCallback(async () => {
+  const fetchInterests = async () => {
     try {
-      setInterests(({ updateAnswer: updateQuestion }) => ({
-        updateAnswer: updateQuestion,
-        loading: true,
-      }));
+      setLoading(true);
+      setError(undefined);
 
       const { data: profileData, error: fetchError } = await supabase
         .from("private_profiles")
@@ -51,104 +46,63 @@ const useProfileInterestsData = (userId: string): ProfileInterestsReturn => {
       const zdata = interestsSchema.safeParse(profileData?.interests || {});
       if (zdata.success) {
         const { data } = zdata;
-        setInterests(({ updateAnswer: updateQuestion }) => ({
-          updateAnswer: updateQuestion,
-          loading: false,
-          data,
-        }));
+        setData(data);
       } else {
         const { error } = zdata;
         console.error(error);
-        setInterests(({ updateAnswer: updateQuestion }) => ({
-          updateAnswer: updateQuestion,
-          loading: false,
-          data: {},
-        }));
+        setError(error.message);
       }
     } catch (error) {
       console.error(error);
-      setInterests(({ updateAnswer: updateQuestion }) => ({
-        updateAnswer: updateQuestion,
-        loading: false,
-        data: {},
-      }));
+      console.error(error);
+      setError(String(error));
+    } finally {
+      setLoading(false);
     }
-  }, [userId]);
+  };
 
   // Update question function
-  const updateQuestion: UpdateAnswer = useCallback(
-    async (questionId: string, answerId: string) => {
-      try {
-        // Get current interests data
-        const currentData =
-          interests.loading === false && interests.data ? interests.data : {};
+  const updateAnswer: UpdateAnswer = async (
+    questionId: string,
+    answerId: string
+  ) => {
+    try {
+      // Create updated interests object
+      const updatedInterests = {
+        ...data,
+        [questionId]: answerId,
+      };
 
-        // Create updated interests object
-        const updatedInterests = {
-          ...currentData,
-          [questionId]: answerId,
-        };
+      // Update database
+      const { error: updateError } = await supabase
+        .from("private_profiles")
+        .update({ interests: updatedInterests })
+        .eq("id", userId);
 
-        // Update database
-        const { error: updateError } = await supabase
-          .from("private_profiles")
-          .update({ interests: updatedInterests })
-          .eq("id", userId);
-
-        if (updateError) {
-          throw updateError;
-        }
-
-        // Update local state
-        setInterests((prev) => ({
-          ...prev,
-          loading: false,
-          data: updatedInterests,
-          error: undefined,
-        }));
-      } catch (err) {
-        console.error("Error updating interests:", err);
-        // Refresh data to ensure consistency
-        await fetchInterests();
+      if (updateError) {
+        throw updateError;
       }
-    },
-    [userId, fetchInterests, interests]
-  );
 
-  // Update the state with the actual updateQuestion function
-  useEffect(() => {
-    setInterests((prev) => ({
-      ...prev,
-      updateAnswer: updateQuestion,
-    }));
-  }, [updateQuestion]);
+      setData(updatedInterests);
+    } catch (err) {
+      console.error("Error updating interests:", err);
+      // Refresh data to ensure consistency
+      await fetchInterests();
+    }
+  };
 
   // Set up real-time subscription and initial fetch
   useEffect(() => {
     fetchInterests();
+  }, []);
 
-    // Subscribe to real-time changes
-    const subscription = supabase
-      .channel("interests_changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "private_profiles",
-          filter: `id=eq.${userId}`,
-        },
-        fetchInterests
-      )
-      .subscribe();
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [userId, fetchInterests]);
-
-  return interests;
+  return loading
+    ? { loading, updateAnswer }
+    : error
+      ? { loading: false, error, updateAnswer }
+      : { loading: false, updateAnswer, data };
 };
+
 type InterestsContextType = ProfileInterestsReturn | undefined;
 
 const InterestsContext = createContext<InterestsContextType>(undefined);
