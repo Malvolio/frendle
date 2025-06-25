@@ -2,6 +2,7 @@ import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
+import { motion } from "motion/react";
 import { FC, useEffect, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 import { useProfileInterests } from "../InterestsProvider";
@@ -44,9 +45,11 @@ const DisplayQuestion: FC<{
                   color={isSelected ? "#000000" : "#8F8F8F"}
                   animate={false}
                 >
-                  <label
+                  <motion.label
                     className="flex flex-col h-full justify-around items-center gap-1 py-1 max-w-72 cursor-pointer border border-black/30 px-2 w-full"
                     htmlFor={option.id}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
                     <img
                       src={`/inventory/q${id}-opt${option.id}.png`}
@@ -65,7 +68,7 @@ const DisplayQuestion: FC<{
                         {option.text}
                       </span>
                     </div>
-                  </label>
+                  </motion.label>
                 </RoughNotation>
               </RadioGroupItem>
             );

@@ -1,10 +1,8 @@
 import { useLocation, useNavigate } from "@tanstack/react-router";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AnimatePresence, motion } from "motion/react";
 import { FC } from "react";
-// import { RoughNotation } from "react-rough-notation";
-import { AnimatePresence } from "framer-motion";
-import { motion } from "motion/react";
 import { RoughNotation } from "react-rough-notation";
 
 export type TabDescription = {
