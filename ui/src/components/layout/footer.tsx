@@ -1,6 +1,6 @@
 import { NAV_ITEMS } from "@/config/navigation";
 import { Link } from "@tanstack/react-router";
-import { Heart, Video } from "lucide-react";
+import { Heart } from "lucide-react";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -11,11 +11,14 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-3">
             <Link to="/" className="flex items-center gap-2">
-              <img src="/lib/logo_small.svg" alt="Logo" width="137px" height="114px" />
+              <img
+                src="/lib/logo_small.svg"
+                alt="Logo"
+                width="137px"
+                height="114px"
+              />
             </Link>
-            <p className="text-md">
-              Create connections, make friends
-            </p>
+            <p className="text-md">Create connections, make friends</p>
           </div>
 
           <div>

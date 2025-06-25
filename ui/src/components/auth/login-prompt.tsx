@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useSignInWithGoogle } from "@/providers/auth-provider";
-import { Video } from "lucide-react";
 
 export function LoginPrompt() {
   const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
@@ -20,18 +19,28 @@ export function LoginPrompt() {
           <CardHeader className="space-y-1 text-center">
             <div className="flex justify-center">
               {/* <Video className="h-12 w-12 text-primary" /> */}
-              <img src="login/hero_image.png" alt="video, promps, light co-op games" width={"125px"} height={"88px"} className="inline-block mr-2" />
+              <img
+                src="login/hero_image.png"
+                alt="video, promps, light co-op games"
+                width={"125px"}
+                height={"88px"}
+                className="inline-block mr-2"
+              />
             </div>
             <CardTitle className="text-2xl text-[#37251E]">
               <p className="m-0 font-normal">Welcome to</p>
-              <img src="/lib/logo.png" alt="Logo" width={"200px"} className="inline-block mr-2" />
+              <img
+                src="/lib/logo.png"
+                alt="Logo"
+                width={"200px"}
+                className="inline-block mr-2"
+              />
             </CardTitle>
             <CardDescription>
               Create connections, make friends through guided, shared activities
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-4">
-
             <p className="font-bold space-y-2 text-center text-[#37251E] ">
               Sign in to access your profile and start connecting
             </p>
