@@ -13,3 +13,5 @@ create table
         guest_paused_until timestamp,
         next_match timestamp
     );
+
+ALTER TABLE public.relationships ENABLE ROW LEVEL SECURITY;
