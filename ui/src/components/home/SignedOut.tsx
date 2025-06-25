@@ -157,9 +157,9 @@ const SignedOut = () => {
                 Join to start connecting with new friends today!
               </p>
               <Link to="/match">
-                <Button size="lg">
-                  Get started <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to="/login">
+                  <Button size="lg">Sign In</Button>
+                </Link>
               </Link>
             </div>
           </div>
