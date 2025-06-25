@@ -12,6 +12,8 @@ type UseGetTimezoneReturn = DataHook<
   }
 >;
 
+let KnownTimezones: string[] | null = null;
+
 const useGetTimezone = (): UseGetTimezoneReturn => {
   const { user } = useAuth();
   const updateTimezone = async (timezone: string) => {
@@ -52,6 +54,7 @@ const useGetTimezone = (): UseGetTimezoneReturn => {
       }
 
       const timezones = data?.map(({ zone_name }) => zone_name) || [];
+      KnownTimezones = timezones;
       setState({
         updateTimezone,
         timezone: user?.private_profile.timezone || "",
@@ -60,8 +63,12 @@ const useGetTimezone = (): UseGetTimezoneReturn => {
         loading: false,
       });
     };
-
-    fetchTimezone();
+    if (KnownTimezones) {
+      const timezones = KnownTimezones;
+      setState((prev) => ({ ...prev, timezones }));
+    } else {
+      fetchTimezone();
+    }
   }, [user]);
 
   return state;
