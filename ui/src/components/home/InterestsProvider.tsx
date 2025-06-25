@@ -1,7 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import z from "zod";
-import { supabase } from "../lib/supabase";
-import { DataHook } from "./DataHook";
+import { DataHook } from "../../hooks/DataHook";
+import { supabase } from "../../lib/supabase";
 
 type UpdateAnswer = (questionId: string, answerId: string) => Promise<void>;
 
@@ -16,7 +23,7 @@ const interestsSchema = z.record(
   z.string().min(1, "Question ID cannot be empty"),
   z.string().min(1, "Answer ID cannot be empty")
 );
-const useProfileInterests = (userId: string): ProfileInterestsReturn => {
+const useProfileInterestsData = (userId: string): ProfileInterestsReturn => {
   // Initialize state first
   const [interests, setInterests] = useState<ProfileInterestsReturn>(() => ({
     loading: true,
@@ -142,5 +149,27 @@ const useProfileInterests = (userId: string): ProfileInterestsReturn => {
 
   return interests;
 };
+type InterestsContextType = ProfileInterestsReturn | undefined;
 
-export default useProfileInterests;
+const InterestsContext = createContext<InterestsContextType>(undefined);
+export const useProfileInterests = (): ProfileInterestsReturn => {
+  const context = useContext(InterestsContext);
+
+  if (context === undefined) {
+    throw new Error("useInterests must be used within an InterestsProvider");
+  }
+
+  return context;
+};
+
+export const InterestsProvider: React.FC<
+  PropsWithChildren<{ userId: string }>
+> = ({ userId, children }) => {
+  const interestsData = useProfileInterestsData(userId);
+
+  return (
+    <InterestsContext.Provider value={interestsData}>
+      {children}
+    </InterestsContext.Provider>
+  );
+};

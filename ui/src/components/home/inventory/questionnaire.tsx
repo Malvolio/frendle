@@ -1,10 +1,10 @@
 import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
-import useProfileInterests from "@/hooks/useProfileInterests";
 import { cn } from "@/lib/utils";
 import { RadioGroup, RadioGroupItem } from "@radix-ui/react-radio-group";
 import { FC, useEffect, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
+import { useProfileInterests } from "../InterestsProvider";
 import { Questions } from "./Questions";
 
 type Answer = {
@@ -76,15 +76,10 @@ const DisplayQuestion: FC<{
   </>
 );
 
-const Questionnaire: FC<{ userId: string }> = ({ userId }) => {
+const Questionnaire = () => {
   const [questionIndex, setQuestionIndex] = useState(-1);
 
-  const {
-    loading,
-    error,
-    data: answers,
-    updateAnswer,
-  } = useProfileInterests(userId);
+  const { loading, error, data: answers, updateAnswer } = useProfileInterests();
   useEffect(() => {
     if (answers && questionIndex < 1) {
       const unansweredQuestions = Questions.findIndex(({ id }) => !answers[id]);

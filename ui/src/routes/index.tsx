@@ -1,5 +1,5 @@
 import { SignedIn, SignedOut } from "@/components/home";
-import Spinner from "@/components/Spinner";
+import Unready from "@/components/Unready";
 import { useAuth } from "@/providers/auth-provider";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
   component: () => {
     const { loading, user } = useAuth();
     if (loading) {
-      return <Spinner />;
+      return <Unready />;
     }
     return user ? <SignedIn /> : <SignedOut />;
   },

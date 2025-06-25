@@ -26,7 +26,7 @@ const Inventory = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4 h-96 mt-6 m-auto justify-center flex">
-          {user && <Questionnaire userId={user.auth.id} />}
+          {user && <Questionnaire />}
         </div>
       </CardContent>
     </Card>

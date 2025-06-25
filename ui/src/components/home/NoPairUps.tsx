@@ -1,8 +1,8 @@
-import useAvailability from "@/hooks/useAvailability";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/providers/auth-provider";
 import { Link } from "@tanstack/react-router";
 import Spinner from "../Spinner";
+import { useAvailability } from "./AvailabilityProvider";
 
 export const WorkingOnIt = () => (
   <div className="text-center text-gray-500 w-60">
@@ -73,7 +73,7 @@ const Reasons = ({
 ▢ Update your payment info`;
 export const NoPairUps = () => {
   const { user } = useAuth();
-  const { data, loading } = useAvailability(user?.auth.id || "");
+  const { data, loading } = useAvailability();
 
   if (loading) {
     return <Spinner />;

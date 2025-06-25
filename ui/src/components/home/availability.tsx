@@ -5,12 +5,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import useAvailability from "@/hooks/useAvailability";
 import useGetTimezone from "@/hooks/useGetTimezone";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/providers/auth-provider";
 import { AnimatePresence, motion } from "motion/react";
-import { FC, useState } from "react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -18,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useAvailability } from "./AvailabilityProvider";
 import PauseButton from "./PauseButton";
 
 const DAYS = [
@@ -91,11 +90,9 @@ const SelectTimezone = () => {
   );
 };
 
-const Availability: FC<{
-  userId: string;
-}> = ({ userId }) => {
+const Availability = () => {
   const [openColumn, setOpenColumn] = useState("Mon");
-  const { updateAvailability, loading, data, error } = useAvailability(userId);
+  const { updateAvailability, loading, data, error } = useAvailability();
 
   const selectedHours = data || new Set<number>();
   const totalSelections = selectedHours.size;
@@ -210,12 +207,13 @@ const Availability: FC<{
                           return (
                             <button
                               key={hour}
-                              className={`mb-1 px-2 py-1 text-sm border ${isSelected
-                                ? "bg-primary text-white"
-                                : isDisabled
-                                  ? "text-gray-500 cursor-not-allowed  text-italic"
-                                  : "hover:bg-[#F0D8A0]/60 border-transparent"
-                                }`}
+                              className={`mb-1 px-2 py-1 text-sm border ${
+                                isSelected
+                                  ? "bg-primary text-white"
+                                  : isDisabled
+                                    ? "text-gray-500 cursor-not-allowed  text-italic"
+                                    : "hover:bg-[#F0D8A0]/60 border-transparent"
+                              }`}
                               onClick={() => handleTimeClick(day.short, hour)}
                               disabled={isDisabled || loading}
                             >
@@ -245,9 +243,9 @@ const Availability: FC<{
                       return hours.length === thours.length
                         ? thours
                         : [
-                          ...thours,
-                          <div className="font-bold">&hellip;</div>,
-                        ];
+                            ...thours,
+                            <div className="font-bold">&hellip;</div>,
+                          ];
                     })()}
                   </div>
                 )}
@@ -260,26 +258,22 @@ const Availability: FC<{
   );
 };
 
-const AvailabilityPage = () => {
-  const { user } = useAuth();
+const AvailabilityPage = () => (
+  <Card>
+    <CardHeader>
+      <CardTitle className="flex items-center gap-2">
+        {/* <Calendar1 className="w-5 h-5 text-green-600" /> */}
+        Set aside some time
+      </CardTitle>
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          {/* <Calendar1 className="w-5 h-5 text-green-600" /> */}
-          Set aside some time
-        </CardTitle>
-
-        <CardDescription></CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4 h-96">
-          {user && <Availability userId={user.auth.id} />}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+      <CardDescription></CardDescription>
+    </CardHeader>
+    <CardContent>
+      <div className="space-y-4 h-96">
+        <Availability />
+      </div>
+    </CardContent>
+  </Card>
+);
 
 export default AvailabilityPage;
