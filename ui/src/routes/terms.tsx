@@ -159,9 +159,14 @@ export const Route = createFileRoute("/terms")({
                 {/* <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-foreground font-semibold py-3 px-8 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   Contact Support
                 </button> */}
-                <button className="border-2 border-black font-semibold py-3 px-8 rounded-sm hover:bg-[#58B4AE] transition-all duration-300 hover:scale-105">
+                <a
+                  href="mailto:admin@frendle.space"
+                  className="border-2 border-black font-semibold py-3 px-8 rounded-sm hover:bg-[#58B4AE] transition-all duration-300 hover:scale-105 inline-flex items-center justify-center"
+                  role="button"
+                  tabIndex={0}
+                >
                   Email Us
-                </button>
+                </a>
               </div>
             </section>
           </div>

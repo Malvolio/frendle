@@ -29,7 +29,7 @@ const defaultPaneStyles: Record<string, PaneStyle> = {
   gamePlay: {
     x: 800,
     y: 250,
-    width: 200,
+    width: 390,
     height: 350,
     zIndex: 3,
   },

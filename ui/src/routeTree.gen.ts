@@ -17,7 +17,6 @@ import { Route as SessionImport } from './routes/session'
 import { Route as ResourcesImport } from './routes/resources'
 import { Route as PrivacyImport } from './routes/privacy'
 import { Route as OnboardingImport } from './routes/onboarding'
-import { Route as MatchImport } from './routes/match'
 import { Route as LoginImport } from './routes/login'
 import { Route as ExpectationsImport } from './routes/expectations'
 import { Route as DonationImport } from './routes/donation'
@@ -60,12 +59,6 @@ const PrivacyRoute = PrivacyImport.update({
 const OnboardingRoute = OnboardingImport.update({
   id: '/onboarding',
   path: '/onboarding',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const MatchRoute = MatchImport.update({
-  id: '/match',
-  path: '/match',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -144,13 +137,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/match': {
-      id: '/match'
-      path: '/match'
-      fullPath: '/match'
-      preLoaderRoute: typeof MatchImport
-      parentRoute: typeof rootRoute
-    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -211,7 +197,6 @@ export interface FileRoutesByFullPath {
   '/donation': typeof DonationRoute
   '/expectations': typeof ExpectationsRoute
   '/login': typeof LoginRoute
-  '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
@@ -227,7 +212,6 @@ export interface FileRoutesByTo {
   '/donation': typeof DonationRoute
   '/expectations': typeof ExpectationsRoute
   '/login': typeof LoginRoute
-  '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
@@ -244,7 +228,6 @@ export interface FileRoutesById {
   '/donation': typeof DonationRoute
   '/expectations': typeof ExpectationsRoute
   '/login': typeof LoginRoute
-  '/match': typeof MatchRoute
   '/onboarding': typeof OnboardingRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
@@ -262,7 +245,6 @@ export interface FileRouteTypes {
     | '/donation'
     | '/expectations'
     | '/login'
-    | '/match'
     | '/onboarding'
     | '/privacy'
     | '/resources'
@@ -277,7 +259,6 @@ export interface FileRouteTypes {
     | '/donation'
     | '/expectations'
     | '/login'
-    | '/match'
     | '/onboarding'
     | '/privacy'
     | '/resources'
@@ -292,7 +273,6 @@ export interface FileRouteTypes {
     | '/donation'
     | '/expectations'
     | '/login'
-    | '/match'
     | '/onboarding'
     | '/privacy'
     | '/resources'
@@ -309,7 +289,6 @@ export interface RootRouteChildren {
   DonationRoute: typeof DonationRoute
   ExpectationsRoute: typeof ExpectationsRoute
   LoginRoute: typeof LoginRoute
-  MatchRoute: typeof MatchRoute
   OnboardingRoute: typeof OnboardingRoute
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
@@ -325,7 +304,6 @@ const rootRouteChildren: RootRouteChildren = {
   DonationRoute: DonationRoute,
   ExpectationsRoute: ExpectationsRoute,
   LoginRoute: LoginRoute,
-  MatchRoute: MatchRoute,
   OnboardingRoute: OnboardingRoute,
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
@@ -350,7 +328,6 @@ export const routeTree = rootRoute
         "/donation",
         "/expectations",
         "/login",
-        "/match",
         "/onboarding",
         "/privacy",
         "/resources",
@@ -374,9 +351,6 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
-    },
-    "/match": {
-      "filePath": "match.tsx"
     },
     "/onboarding": {
       "filePath": "onboarding.tsx"

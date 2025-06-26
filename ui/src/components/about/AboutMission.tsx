@@ -18,7 +18,7 @@ const AboutMission = () => (
           color="black"
         >
           <div className="p-6 rounded-lg text-xl border-[14px] border-[#82755514] h-auto relative  ">
-            <img src="michael.png" alt="Michael's profile picture" className="w-40 mb-4 md:absolute -left-36 -rotate-6 bg-neutral-200bg-neutral-200 md:z-50" />
+            <img src="michael.png" alt="Michael's profile picture" className="w-40 mb-4 md:absolute -left-36 -rotate-6 bg-neutral-200bg-neutral-200 md:z-40" />
             <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
               Hey, Michael here
             </h3>
@@ -50,7 +50,7 @@ const AboutMission = () => (
           color="black"
         >
           <div className="p-6 rounded-lg text-xl border-[14px] border-[#82755514] h-auto relative">
-            <img src="venessa.png" alt="Venessa's profile picture" className="w-40 mb-4 md:absolute -right-28 rotate-6 bg-neutral-200bg-neutral-200 md:z-50" />
+            <img src="venessa.png" alt="Venessa's profile picture" className="w-40 mb-4 md:absolute -right-28 rotate-6 bg-neutral-200bg-neutral-200 md:z-40" />
             <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
               Hi, I'm Venessa
             </h3>
@@ -79,7 +79,7 @@ const AboutMission = () => (
         color="black"
       >
         <div className="p-6 rounded-lg text-xl border-[14px] border-[#82755514] h-auto relative w-full mt-6">
-          <img src="fred.png" alt="Fred's profile picture" className="w-40 mb-4 md:absolute -left-36 -rotate-6 bg-neutral-200bg-neutral-200 md:z-50" />
+          <img src="fred.png" alt="Fred's profile picture" className="w-40 mb-4 md:absolute -left-36 -rotate-6 bg-neutral-200bg-neutral-200 md:z-40" />
           <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
             It's Fred!
           </h3>

@@ -31,7 +31,7 @@ export const Route = createFileRoute("/expectations")({
                   strokeWidth={10}
                   animate={true}
                   animationDelay={700}
-                  color="#CAD8CE"
+                  color="rgba(202, 216, 206, 0.5)"
                 >
                   Rules
                 </RoughNotation>
@@ -62,7 +62,7 @@ export const Route = createFileRoute("/expectations")({
               show={true}
               iterations={3}
               animate={false}
-              color="#CAD8CE"
+              color="rgba(202, 216, 206, 0.5)"
             >
               <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
                 Embrace Open-Mindedness
@@ -84,7 +84,7 @@ export const Route = createFileRoute("/expectations")({
               show={true}
               iterations={3}
               animate={false}
-              color="#CAD8CE"
+              color="rgba(202, 216, 206, 0.5)"
             >
               <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
                 Treat Everyone with Decency and Kindness
@@ -115,7 +115,7 @@ export const Route = createFileRoute("/expectations")({
               show={true}
               iterations={3}
               animate={false}
-              color="#CAD8CE"
+              color="rgba(202, 216, 206, 0.5)"
             >
               <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
                 Honestly Report Problem Behavior
@@ -155,7 +155,7 @@ export const Route = createFileRoute("/expectations")({
           animate={false}
           color="red"
         >
-          <div className="mt-10 p-6 bg-red-50 rounded-lg border ">
+          <div className="mt-10 p-6 bg-[#F5E8DF70] rounded-lg border ">
             <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
               Behavior We Cannot Accept
             </h3>

@@ -56,7 +56,7 @@ const Sections: SectionType[] = [
           Services, the choices you make, and the products and features you use.
           The personal information we collect may include the following:
         </Paragraph>
-        <Paragraph>email addresses </Paragraph>
+        <Paragraph>admin@frendle.space</Paragraph>
         <Paragraph>
           Sensitive Information. We do not process sensitive information.
         </Paragraph>
@@ -511,7 +511,7 @@ const Sections: SectionType[] = [
         </Paragraph>
         <Paragraph>
           If you have questions or comments about your privacy rights, you may
-          email us at admin@frendle.space .
+          email us at admin@frendle.space.
         </Paragraph>
       </>
     ),
