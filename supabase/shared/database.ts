@@ -1,8 +1,11 @@
 // shared/database.ts
+import { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { Database } from "./supabase.ts";
+import { SessionStatus } from "./types.ts";
 import { createSupabaseClient } from "./utils.ts";
 
 export const executeInTransaction = async <T>(
-  operation: (client: any) => Promise<T>
+  operation: (client: SupabaseClient<Database>) => Promise<T>
 ): Promise<T> => {
   const client = createSupabaseClient();
 
@@ -17,14 +20,14 @@ export const executeInTransaction = async <T>(
   }
 };
 
-export const getUserSessions = async (
+export const getUserSessions = (
   userId: string,
-  status?: string,
+  status?: SessionStatus,
   timeFilter?: "future" | "past"
 ) => {
   const client = createSupabaseClient();
 
-  let query = client
+  const squery = client
     .from("sessions")
     .select(
       `
@@ -35,32 +38,30 @@ export const getUserSessions = async (
     )
     .or(`host_id.eq.${userId},guest_id.eq.${userId}`);
 
-  if (status) {
-    query = query.eq("session_status", status);
-  }
-
-  if (timeFilter === "future") {
-    query = query.gte("scheduled_for", new Date().toISOString());
-  } else if (timeFilter === "past") {
-    query = query.lt("scheduled_for", new Date().toISOString());
-  }
+  const fquery = status ? squery.eq("session_status", status) : squery;
+  const query =
+    timeFilter === "future"
+      ? fquery.gte("scheduled_for", new Date().toISOString())
+      : timeFilter === "past"
+      ? fquery.lt("scheduled_for", new Date().toISOString())
+      : fquery;
 
   return query.order("scheduled_for", { ascending: false });
 };
 
-export const getUserRelationships = async (
+export const getUserRelationships = (
   userId: string,
   activePausesOnly = false
 ) => {
   const client = createSupabaseClient();
 
-  let query = client
+  const query = client
     .from("relationships")
     .select("*")
     .or(`host_id.eq.${userId},guest_id.eq.${userId}`);
 
   if (activePausesOnly) {
-    query = query
+    return query
       .not("paused", "is", null)
       .gte("paused", new Date().toISOString());
   }
@@ -72,7 +73,7 @@ export const getUserRelationships = async (
 export const logPerformance = (
   operation: string,
   startTime: number,
-  metadata?: any
+  metadata?: unknown
 ) => {
   const duration = performance.now() - startTime;
 
@@ -92,7 +93,11 @@ export const logPerformance = (
   }
 };
 
-export const logError = (operation: string, error: Error, metadata?: any) => {
+export const logError = (
+  operation: string,
+  error: Error,
+  metadata?: unknown
+) => {
   console.error(
     JSON.stringify({
       timestamp: new Date().toISOString(),

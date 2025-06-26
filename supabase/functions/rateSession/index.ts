@@ -11,13 +11,14 @@ import {
 const rateSession = async (
   sessionId: string,
   rating: number,
+  req: Request,
   pauseUntil?: Date
 ): Promise<Response> => {
   const supabase = createSupabaseClient();
 
   try {
     // Get authenticated user ID
-    const userId = await validateUser(supabase);
+    const userId = await validateUser(supabase, req);
 
     // Validate rating
     if (![0, 1, 2].includes(rating)) {
@@ -91,11 +92,15 @@ const rateSession = async (
     // Determine which rating field to update based on relationship structure
     const isRelationshipHost = relationship.host_id === userId;
     const userRatingField = isRelationshipHost ? "host_rating" : "guest_rating";
-    const userPauseField = isRelationshipHost ? "host_paused" : "guest_paused";
+    const userPauseField = isRelationshipHost
+      ? "host_paused_until"
+      : "guest_paused_until";
     const otherRatingField = isRelationshipHost
       ? "guest_rating"
       : "host_rating";
-    const otherPauseField = isRelationshipHost ? "guest_paused" : "host_paused";
+    const otherPauseField = isRelationshipHost
+      ? "guest_paused_until"
+      : "host_paused_until";
 
     // Check if user has already rated this session
     if (relationship[userRatingField] !== null) {
@@ -132,13 +137,10 @@ const rateSession = async (
     }
 
     // Prepare update data
-    const updateData: any = {
+    const updateData = {
       [userRatingField]: rating,
+      [userPauseField]: pauseDate,
     };
-
-    if (pauseDate) {
-      updateData[userPauseField] = pauseDate;
-    }
 
     // Calculate overall relationship rating if both users have now rated
     const otherRating = relationship[otherRatingField];
@@ -215,7 +217,7 @@ serve(async (req: Request) => {
 
     const pauseDate = pauseUntil ? new Date(pauseUntil) : undefined;
 
-    return await rateSession(sessionId, rating, pauseDate);
+    return await rateSession(sessionId, rating, req, pauseDate);
   } catch (error) {
     return createErrorResponse("Invalid request body");
   }

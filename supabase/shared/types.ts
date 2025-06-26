@@ -15,6 +15,11 @@ export type Relationship = Database["public"]["Tables"]["relationships"]["Row"];
 
 export type Timezone = Database["public"]["Tables"]["timezones"]["Row"];
 
+export type MemberStatus =
+  Database["public"]["Enums"]["membership_status_enum"];
+
+export type SessionStatus = Database["public"]["Enums"]["session_status_enum"];
+
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

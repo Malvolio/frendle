@@ -11,12 +11,15 @@ import {
   validateUser,
 } from "../../shared/utils.ts";
 
-const cancelSession = async (sessionId: string): Promise<Response> => {
+const cancelSession = async (
+  req: Request,
+  sessionId: string
+): Promise<Response> => {
   const supabase = createSupabaseClient();
 
   try {
     // Get authenticated user ID
-    const userId = await validateUser(supabase);
+    const userId = await validateUser(supabase, req);
 
     // Get session details with participant information
     const { data: session, error: sessionError } = await supabase
@@ -176,8 +179,11 @@ serve(async (req: Request) => {
       return createErrorResponse("Session ID is required");
     }
 
-    return await cancelSession(sessionId);
+    return await cancelSession(req, sessionId);
   } catch (error) {
-    return createErrorResponse("Invalid request body");
+    return createErrorResponse(
+      `Invalid request body or missing session ID: ${error}`,
+      400
+    );
   }
 });
