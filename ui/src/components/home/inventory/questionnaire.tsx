@@ -43,17 +43,19 @@ const DisplayQuestion: FC<{
                   show={isSelected}
                   iterations={5}
                   color={isSelected ? "#000000" : "#8F8F8F"}
-                  animate={false}
+                  animate={true}
+                  strokeWidth={3}
                 >
                   <motion.label
-                    className="flex flex-col h-full justify-around items-center gap-1 py-1 max-w-72 cursor-pointer border border-black/30 px-2 w-full"
+                    className="group flex flex-col h-full justify-around items-center gap-1 py-1 max-w-72 cursor-pointer border border-black/30 px-2 w-full"
                     htmlFor={option.id}
                     whileHover={{ scale: 1.05 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
                     <img
                       src={`/inventory/q${id}-opt${option.id}.png`}
-                      className={cn("m-auto transition-all max-h-36 w-fit", {
+
+                      className={cn("m-auto transition-all max-h-36 w-fit group-hover:scale-110", {
                         "scale-110 ": isSelected,
                         "scale-100 ": !isSelected,
                       })}
@@ -61,7 +63,7 @@ const DisplayQuestion: FC<{
                     <div>
                       <span
                         className={
-                          "px-2 text-2xl  leading-tight block mt-0 " +
+                          "px-2 text-xl mb-2  leading-tight block mt-0 " +
                           (isSelected ? "font-semibold" : "")
                         }
                       >

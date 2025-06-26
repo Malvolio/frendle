@@ -17,10 +17,10 @@ const useUpdatePublicProfile = (user: SignedInUser | null) => {
       });
 
       if (error) throw error;
-
+      // VP: changed copy because it takes a while to update, this sets the expectation better:
       toast({
-        title: "Profile updated",
-        description: "Your profile has been updated successfully.",
+        title: "Profile updating",
+        description: "Your profile is being updated.",
       });
     } catch (error) {
       console.error("Error updating profile:", error);

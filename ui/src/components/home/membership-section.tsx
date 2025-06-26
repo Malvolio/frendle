@@ -136,7 +136,7 @@ export function MembershipSection() {
           </div>
         ) : subscription?.status === "active" ? (
           <div>
-            <div className="relative bg-[#FFFDFA] pb-4 rotate-2 m-auto flex flex-col border-2 border-black   border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-xl md:max-w-2xl ">
+            <div className="relative bg-[#FFFDFA] pb-4 rotate-2 m-auto flex flex-col border-2 border-black   border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-xl md:max-w-lg ">
               <div className="text-center bg-[#FDBE7C] font-bold text-sm leading-loose py-1 rounded-t-md mt-1 mx-1 text-[#914D06]">
                 SUPPORTING MEMBER
               </div>
@@ -147,7 +147,7 @@ export function MembershipSection() {
                   className="m-auto w-[100px] mt-3 mb-0"
                 />
 
-                <p className="text-5xl font-peachy m-auto -my-4 uppercase">
+                <p className="text-5xl font-peachy m-auto -my-4 uppercase text-center">
                   {user?.public_profile.name || "[Name]"}
                 </p>
                 <Alert className="bg-transparent w-fit m-auto border-none mt-0">

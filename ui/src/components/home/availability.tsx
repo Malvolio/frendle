@@ -75,7 +75,7 @@ const SelectTimezone = () => {
     <div className="flex justify-center items-center mb-4">
       <label className="text-lg font-semibold mr-2">Select Timezone:</label>
       <Select value={timezone} onValueChange={updateTimezone}>
-        <SelectTrigger className="w-48 bg-white rounded-none border-black">
+        <SelectTrigger className="w-48 bg-[#FFFDF4] rounded-none border-[#373737]">
           <SelectValue placeholder="Select timezone" />
         </SelectTrigger>
         <SelectContent>
@@ -143,7 +143,7 @@ const Availability = () => {
           {DAYS.map((day, dayIndex) => (
             <motion.div
               key={day.short}
-              className="border-r border-black last:border-r-0 overflow-hidden cursor-pointer"
+              className="border-r border-[#373737] last:border-r-0 overflow-hidden cursor-pointer"
               onClick={() => setOpenColumn(day.short)}
               initial={false}
               animate={{
@@ -157,7 +157,7 @@ const Availability = () => {
               {/* Column Header */}
               <motion.div
                 className={cn(
-                  `border-black border-t border-b font-semibold w-full text-center`,
+                  `border-[#373737] border-t border-b font-semibold w-full text-center`,
                   {
                     "text-3xl": openColumn === day.short,
                     "hover:border-b": openColumn !== day.short,
@@ -175,7 +175,8 @@ const Availability = () => {
                   )}
                 >
                   <h3 className="font-semibold text-center text-lg whitespace-nowrap">
-                    {openColumn === day.short ? day.full : day.short}
+                    {/* {openColumn === day.short ? day.full : day.short} */}
+                    {day.short}
                   </h3>
                 </div>
               </motion.div>
@@ -188,7 +189,11 @@ const Availability = () => {
                       <motion.div
                         layout
                         key={block.label}
+                        initial={{ opacity: 0 }}
                         exit={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: 'spring', stiffness: 50 }}
+
                         className="flex flex-col items-center"
                       >
                         <img
@@ -207,13 +212,12 @@ const Availability = () => {
                           return (
                             <button
                               key={hour}
-                              className={`mb-1 px-2 py-1 text-sm border ${
-                                isSelected
-                                  ? "bg-primary text-white"
-                                  : isDisabled
-                                    ? "text-gray-500 cursor-not-allowed  text-italic"
-                                    : "hover:bg-[#F0D8A0]/60 border-transparent"
-                              }`}
+                              className={`mb-1 px-2 py-1 text-sm border ${isSelected
+                                ? "bg-[#373737] text-white"
+                                : isDisabled
+                                  ? "text-gray-500 cursor-not-allowed  text-italic"
+                                  : "hover:bg-[#F0D8A0]/60 border-transparent"
+                                }`}
                               onClick={() => handleTimeClick(day.short, hour)}
                               disabled={isDisabled || loading}
                             >
@@ -235,7 +239,7 @@ const Availability = () => {
                       const thours = hours.slice(0, 5).map((hour) => (
                         <div
                           key={`m-${hour}`}
-                          className="mb-1 px-2 py-1 text-sm border bg-primary text-white w-12 text-center"
+                          className="mb-1 px-2 py-1 text-sm border bg-[#373737] text-[#FFFDF4] w-12 text-center"
                         >
                           {hour}
                         </div>
@@ -243,9 +247,9 @@ const Availability = () => {
                       return hours.length === thours.length
                         ? thours
                         : [
-                            ...thours,
-                            <div className="font-bold">&hellip;</div>,
-                          ];
+                          ...thours,
+                          <div className="font-bold">&hellip;</div>,
+                        ];
                     })()}
                   </div>
                 )}

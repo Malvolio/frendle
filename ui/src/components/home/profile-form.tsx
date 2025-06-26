@@ -46,7 +46,7 @@ export function ProfileForm() {
       <CardContent className="flex flex-col md:flex-row md:min-w-fit items-center m-auto justify-center">
         <AnimatePresence>
           {/* TODO: Make each one animate in seperately */}
-          <motion.div className="bg-[#FFFDFA] gap-4  max-w-2xl min-w-[360px] flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+          <motion.div className="bg-[#FFFDFA] gap-4 max-w-lg min-w-[360px] flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -59,7 +59,7 @@ export function ProfileForm() {
                     <FormItem>
                       <FormLabel className="font-bold text-lg">Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="John Doe" {...field} />
+                        <Input placeholder="Your name" {...field} />
                       </FormControl>
                       <FormDescription className="text-sm text-gray-700">
                         Displays on your profile and in the app
