@@ -240,6 +240,7 @@ export const sendEmail = async (
   to: string,
   subject: string,
   text: string,
+  html: string = "",
   icsAttachment?: string
 ): Promise<void> => {
   if (!RESEND_API_KEY) {
@@ -251,6 +252,7 @@ export const sendEmail = async (
     to,
     subject,
     text,
+    html,
     attachments: icsAttachment
       ? [
           {

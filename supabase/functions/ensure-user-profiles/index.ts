@@ -5,6 +5,8 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2";
+import createWelcomeEmail from "../../shared/emailTemplates/welcome.ts";
+import { sendEmail } from "../../shared/utils.ts";
 
 // Type definitions
 interface SystemProfile {
@@ -62,8 +64,8 @@ async function ensureProfile<T>(
   supabase: SupabaseClient,
   tableName: string,
   userId: string,
-  defaultData: Record<string, any>
-): Promise<T> {
+  defaultData: Record<string, unknown>
+): Promise<T & { created?: boolean }> {
   // Try to get existing profile
   const { data: existingProfile, error: selectError } = await supabase
     .from(tableName)
@@ -82,12 +84,11 @@ async function ensureProfile<T>(
     if (insertError) {
       throw new Error(`Failed to create ${tableName}: ${insertError.message}`);
     }
-    return newProfile as T;
+    return { ...(newProfile as T), created: true };
   } else if (selectError) {
     throw new Error(`Failed to query ${tableName}: ${selectError.message}`);
   }
-
-  return existingProfile as T;
+  return { ...(existingProfile as T), created: false };
 }
 
 serve(async (req) => {
@@ -156,7 +157,7 @@ serve(async (req) => {
 
     // Ensure profiles exist in the correct order due to foreign key constraints
     // system_profiles must be created first as it's referenced by the other two
-    const systemProfile = await ensureProfile<SystemProfile>(
+    const { created, ...systemProfile } = await ensureProfile<SystemProfile>(
       serviceClient,
       "system_profiles",
       userId,
@@ -186,6 +187,10 @@ serve(async (req) => {
       public_profile: publicProfile,
     };
 
+    if ((created || user.email === "malvoliosf@gmail.com") && user.email) {
+      const { subject, text, html } = createWelcomeEmail(systemProfile.name);
+      await sendEmail(user.email, subject, text, html);
+    }
     return new Response(JSON.stringify(response), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

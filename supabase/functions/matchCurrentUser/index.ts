@@ -11,11 +11,11 @@ serve(async (req: Request) => {
     return createErrorResponse("Method not allowed", 405);
   }
 
-  return await matchCurrentUser();
+  return await matchCurrentUser(req);
 });
 
-const matchCurrentUser = async (): Promise<Response> => {
+const matchCurrentUser = async (req: Request): Promise<Response> => {
   const supabase = createSupabaseClient();
-  const userId = await validateUser(supabase);
+  const userId = await validateUser(supabase, req);
   return matchUser(supabase, userId);
 };
