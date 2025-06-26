@@ -108,12 +108,12 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
     setMode(isHost ? "listening" : "waiting");
   };
   return (
-    <div className="w-full h-full flex flex-col bg-[#EBE3CF] p-4 gap-y-2 justify-between items-center rounded-sm border-[#37251E] border-2">
+    <div className="w-full h-full flex flex-col bg-[#EBE3CF] p-4 gap-y-2 justify-between items-center rounded-sm border-[#37251E] border-2  ">
       {mode === "waiting" && <Spinner />}
       {mode === "done" && <div className="text-center">Thanks for playing</div>}
-      {/* {(mode === "asking" || mode === "listening") && (
+      {(mode === "asking" || mode === "listening") && (
         <img src={`/session/thirty-six/${questionId}.png`} />
-      )} */}
+      )}
       {mode === "asking" && (
         <div className="text-sm flex flex-col p-2 gap-y-2 justify-between items-center ">
           <div className="text-left">

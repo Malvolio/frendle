@@ -75,7 +75,7 @@ const MovablePaneStyles = ({
           dragConstraints={parentRef}
           onDrag={(_, info) => handleDrag(id, info)}
           className={cn(
-            `absolute rounded-lg shadow-lg border-2 border-white  select-none overflow-hidden`,
+            `absolute rounded-md shadow-lg border border-[#666161] bg-[#ebe3cf] select-none overflow-hidden h-auto p-4`,
             { "cursor-move": !resizing, "cursor-se-resize": resizing }
           )}
           style={{

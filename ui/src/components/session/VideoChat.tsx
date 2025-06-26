@@ -103,13 +103,13 @@ const VideoChat: FC<{
         <div className="text-sm font-semibold uppercase">
           {session.partner.name || "unnamed"}
         </div>
-        <div className="text-xs">
+        {/* <div className="text-xs">
           <span className="font-semibold">mood</span>: silly, quiet
         </div>
         <div className="text-xs">
           Consider {session.partner.name || "Unnamed"} may not be much for
           talking today but hanging out is still welcomed.
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -152,13 +152,13 @@ const VideoChat: FC<{
           p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl
           ">
             <span className="font-bold text-3xl font-peachy">Ready when you are</span>
-            <ul className="text-sm my-2">
-              <li>Freshen up</li>
-              <li>Grab a drink</li>
-              <li>Check the background</li>
-              <li>Mute notifications</li>
-              <li>Give yourself a moment</li>
-              <li> <span className="flex flex-row gap-1 align-middle">Turn on <Video width={"16px"} />Video and <Mic width={"16px"} />Mic below</span></li>
+            <ul className="text-lg my-2">
+              <li>→ Freshen up</li>
+              <li>→ Grab a drink</li>
+              <li>→ Check the background</li>
+              <li>→ Mute notifications</li>
+              <li>→ Give yourself a moment</li>
+              <li><span className="flex flex-row gap-1 align-middle">→ Turn on <Video width={"16px"} />Video and <Mic width={"16px"} />Mic below</span></li>
             </ul>
             <Button className="w-32 m-auto" onClick={webrtc.startCall}>
               Join room
@@ -166,9 +166,18 @@ const VideoChat: FC<{
           </div>
         )
         }
+        {/* Background elements */}
         <img className="absolute left-0" src="/session/palm.png" />
-        <img className="absolute top-1/4 right-0" src="/session/fred.png" />
+        <img className="absolute top-20 right-0" src="/session/fred.png" />
+        <img className="absolute top-1/4 left-20" src="/session/heart.svg" />
         <img className="absolute top-1/4 right-1/4" src="/session/heart.svg" />
+        <img className="absolute top-3/4 left-2/4" src="/session/heart.svg" />
+        <img className="absolute bottom-2/4 right-2/4" src="/session/heart.svg" />
+        <img className="absolute top-10 left-40" src="/session/postcards.png" width={"300px"} />
+        <img className="absolute top-40 right-4/5" src="/session/chihuahua.png" width={"200px"} />
+        <img className="absolute bottom-36 right-52" src="/session/cat.png" width={"200px"} />
+        <img className="absolute bottom-52 left-60" src="/session/coffee_cup.png" width={"200px"} />
+
         <div className="controls flex gap-x-4 absolute p-5 right-0 bottom-0 border-t border-t-black/20 w-full border flex-row items-center justify-center gap-2">
           <div
             className={`cursor-pointer p-2 text-center items-center flex  transition-all h-12 justify-center`}
