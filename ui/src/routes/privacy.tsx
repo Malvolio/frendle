@@ -752,11 +752,8 @@ const Sections: SectionType[] = [
       <>
         <Paragraph>
           If you have questions or comments about this notice, you may email us
-          at admin@frendle.space or contact us by post at:
+          at admin@frendle.space.
         </Paragraph>
-        <Paragraph>__________ </Paragraph>
-        <Paragraph>__________ </Paragraph>
-        <Paragraph>__________ </Paragraph>
       </>
     ),
   },

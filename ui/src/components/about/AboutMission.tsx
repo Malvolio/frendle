@@ -83,7 +83,7 @@ const AboutMission = () => (
           <h3 className="text-[#37251e] text-4xl font-semibold font-peachy mb-3 flex items-center">
             It's Fred!
           </h3>
-          <p className="my-0">Community manager and a very friendly goose</p>
+          <p className="my-0">Community Manager and a very friendly goose</p>
           <p className="leading-relaxed mb-4 ">
             Hiya, I'm Fred. Frendle's our honorary community manager. I will be available to help keep things civil and hope to grow the community around Frendle. I love to hang out with people and make sure they feel welcome. If you have any questions, concerns, or just want to chat, I'm here for you! 🦆
           </p>
