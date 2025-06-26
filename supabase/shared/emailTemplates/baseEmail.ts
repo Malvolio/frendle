@@ -65,7 +65,6 @@ const baseEmail = (subject: string, body: string) => `
         <p>Best regards,<br>Your Frendle Team</p>
     </div>
     <div class="footer">
-        <p style="text-align: center; font-size: 12px; color: #555;">Unsubscribe link</p>
     </div>
 </body>
 
