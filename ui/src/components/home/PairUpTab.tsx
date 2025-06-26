@@ -8,21 +8,33 @@ const PairUpTab = () => {
   const membership_status = user?.system_profile.membership_status;
   return (
     <div className="flex flex-col items-center justify-center  ">
-      <h1 className="font-peachy m-auto leading-none tracking-tight text-5xl text-[#373737]  mx-auto my-10">
-        {/* Hey, {user?.public_profile.name}!  */}
-        Your upcoming pair-ups
-      </h1>
-      <div className="flex flex-col items-center justify-center ">
-        <ThickBorderShadowDiv>
-          <h1 className="text-3xl font-bold text-[#37251E] font-peachy px-6 pt-6">
-            Pair-ups
+      {(membership_status === "good" || membership_status === "paused") && (
+        <>
+          <h1 className="font-peachy m-auto leading-none tracking-tight text-5xl text-[#373737]  mx-auto my-10">
+            Your upcoming pair-ups
           </h1>
-          {(membership_status === "good" || membership_status === "paused") && (
-            <GoodHome />
-          )}
-          {membership_status === "unpaid" && <UnpaidHome />}
-        </ThickBorderShadowDiv>
-      </div>
+          <div className="flex flex-col items-center justify-center ">
+            <ThickBorderShadowDiv>
+              <h1 className="text-3xl font-bold text-[#37251E] font-peachy px-6 pt-6">
+                Pair-ups
+              </h1>
+              <GoodHome />
+            </ThickBorderShadowDiv>
+          </div>
+        </>
+      )}
+      {membership_status === "unpaid" && (
+        <>
+          <h1 className="font-peachy m-auto leading-none tracking-tight text-5xl text-[#373737]  mx-auto my-10">
+            Welcome to Frendle
+          </h1>
+          <div className="flex flex-col items-center justify-center ">
+            <ThickBorderShadowDiv>
+              <UnpaidHome />
+            </ThickBorderShadowDiv>
+          </div>
+        </>
+      )}
     </div>
   );
 };

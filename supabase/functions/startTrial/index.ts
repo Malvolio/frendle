@@ -23,12 +23,6 @@ serve(async (req) => {
       return createErrorResponse("Not signed in", 401);
     }
 
-    const { shouldPause } = await req.json();
-
-    if (typeof shouldPause !== "boolean") {
-      return createErrorResponse("shouldPause must be a boolean", 401);
-    }
-
     // Get current membership status
     const { data: profile, error: fetchError } = await supabase
       .from("system_profiles")
@@ -40,22 +34,17 @@ serve(async (req) => {
       return createErrorResponse("User profile not found", 404);
     }
 
-    const newStatus = shouldPause ? "paused" : "good";
-    const validCurrentStatus = !shouldPause ? "paused" : "good";
-
     // Check if current status allows the transition
-    if (profile.membership_status !== validCurrentStatus) {
-      const action = shouldPause ? "pause" : "unpause";
-
+    if (profile.membership_status !== "unpaid") {
       return createErrorResponse(
-        `Cannot ${action}: membership status is '${profile.membership_status}', expected '${validCurrentStatus}'`,
+        `Cannot start free trial: membership status is '${profile.membership_status}', expected 'unpaid'`,
         400
       );
     }
 
     const { error: updateError } = await supabase
       .from("system_profiles")
-      .update({ membership_status: newStatus })
+      .update({ membership_status: "good" })
       .eq("id", userId);
     if (updateError) {
       return createErrorResponse("Failed to update membership status", 500);
@@ -63,9 +52,9 @@ serve(async (req) => {
 
     return createSuccessResponse({
       success: true,
-      message: `Membership ${shouldPause ? "paused" : "unpaused"} successfully`,
-      previousStatus: validCurrentStatus,
-      newStatus: newStatus,
+      message: `free trial started successfully`,
+      previousStatus: "unpaid",
+      newStatus: "good",
     });
   } catch (error) {
     console.error(error);
