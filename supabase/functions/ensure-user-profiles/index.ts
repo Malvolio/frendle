@@ -187,7 +187,7 @@ serve(async (req) => {
       public_profile: publicProfile,
     };
 
-    if ((created || user.email === "malvoliosf@gmail.com") && user.email) {
+    if (created && user.email) {
       const { subject, text, html } = createWelcomeEmail(systemProfile.name);
       await sendEmail(user.email, subject, text, html);
     }
