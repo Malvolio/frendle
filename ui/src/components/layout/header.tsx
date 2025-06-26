@@ -3,6 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { NAV_ITEMS } from "@/config/navigation";
 import { useAuth } from "@/providers/auth-provider";
 import { Link, useRouterState } from "@tanstack/react-router";
+import { scale } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -27,13 +28,12 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/95 backdrop-blur-sm shadow-sm"
-          : "bg-transparent"
-      }`}
+      className={`fixed top-0 border-b z-50 transition-all duration-300 w-screen ${isScrolled
+        ? "bg-[#EFE7D5]  border-black/30"
+        : "bg-[#EFE7D5]/0 border-black/0"
+        }`}
     >
-      <div className="container flex h-16 items-center justify-between px-6">
+      <div className="container flex h-16 items-center justify-between px-6 w-screen m-auto">
         <div className="flex items-center gap-6">
           <Link
             to="/"
@@ -44,19 +44,19 @@ export function Header() {
               alt="Logo"
               width="137px"
               height="114px"
+              className={`${isScrolled ? "scale-75" : "scale-100"} transition-transform duration-300`}
             />
           </Link>
 
-          <nav className="hidden md:flex gap-6">
+          <nav className="hidden md:flex gap-8 ml-6 h-full md:justify-end">
             {filteredNavItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === item.href
-                    ? "text-foreground"
-                    : "text-muted-foreground"
-                }`}
+                className={` font-medium transition-colors hover:text-primary ${pathname === item.href
+                  ? "font-bold"
+                  : ""
+                  }`}
               >
                 {item.title}
               </Link>
@@ -74,6 +74,13 @@ export function Header() {
               <Button size="sm">Sign In</Button>
             </Link>
           )}
+          <a href=" https://bolt.new/" target="_blank" className={`w-20 ml-4 transition-all delay-200 duration-300 ${isScrolled ? "mt-16" : "mt-10"}`}>
+            <img
+              src="bolt_logo.png"
+              alt="Frendle Logo"
+              className="w-20"
+            />
+          </a>
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
               <Button variant="ghost" size="icon">
@@ -86,11 +93,10 @@ export function Header() {
                   <Link
                     key={item.href}
                     to={item.href}
-                    className={`text-base font-medium transition-colors hover:text-primary ${
-                      pathname === item.href
-                        ? "text-foreground"
-                        : "text-muted-foreground"
-                    }`}
+                    className={`text-base font-medium transition-colors hover:text-primary ${pathname === item.href
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                      }`}
                   >
                     {item.title}
                   </Link>

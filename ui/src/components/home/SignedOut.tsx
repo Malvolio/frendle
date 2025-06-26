@@ -6,6 +6,7 @@ import { Link } from "@tanstack/react-router";
 import { Heart, Users, Wrench } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { RoughNotation } from "react-rough-notation";
 
 const SignedOut = () => {
   const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
@@ -29,7 +30,7 @@ const SignedOut = () => {
 
   return (
     <PublicLayout>
-      <section className="relative bg-[url('/background.jpg')] bg-cover bg-center bg-fixed min-h-screen">
+      <section className="relative min-h-screen">
         {/* Hero section */}
         <div className="relative h-[70vh] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-40"></div>
@@ -43,13 +44,7 @@ const SignedOut = () => {
                   alt="Questions, videos, games for friendly connections."
                   className="m-auto"
                 />
-                <a href=" https://bolt.new/" target="_blank" className="w-20">
-                  <img
-                    src="bolt_logo.png"
-                    alt="Frendle Logo"
-                    className="w-20"
-                  />
-                </a>
+
               </div>
               <h1 className="text-6xl md:text-7xl font-bold leading-tight animate-fade-in text-[#373737] font-peachy ">
                 Create connections, make friends
@@ -95,7 +90,7 @@ const SignedOut = () => {
           initial={{ width: "90%" }}
           animate={expanded ? { width: "100%" } : {}}
           transition={{ ease: "easeOut", stiffness: 80, damping: 20 }}
-          className="bg-[#FFFDFA] h-auto"
+          className="h-auto  bg-[#FFFDFA]/70 bg-[url(background.jpg)] bg-fixed bg-no-repeat"
           style={{
             margin: "0 auto",
             padding: "0",
@@ -106,16 +101,28 @@ const SignedOut = () => {
           }}
         >
           {/*  */}
-          <div className="w-[auto]  m-auto text-center bg-[#FFFDFA] h-auto sticky top-[60px] z-50 pt-12">
-            <h2 className="text-4xl md:text-5xl font-peachy text-[#37251E] m-auto text-center">
-              Built for real, human connection
-            </h2>
-            <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center w-6/12 mx-auto my-4">
-              No feeds. No followers. Just honest, one-on-one conversations that
-              bring people closer together. Frendle is about matching you with
-              kind, curious humans for meaningful, platonic chats.
-            </p>
+
+          <div className={` m-auto text-center  h-auto sticky top-[20px] z-50 pt-12 max-w-6xl `}>
+            <>          <RoughNotation
+              type="highlight"
+              show={expanded}
+              iterations={3}
+              animate={true}
+              color="rgba(255, 253, 250, 0.50)"
+              animationDelay={500}>
+              <h2 className="text-4xl md:text-5xl font-peachy text-[#37251E] m-auto text-center pt-4">
+                Built for real, human connection
+              </h2>
+              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center mx-auto my-4">
+                No feeds. No followers. Just honest, one-on-one conversations that
+                bring people closer together. Frendle is about matching you with
+                kind, curious humans for meaningful, platonic chats.
+              </p>
+
+            </RoughNotation>
+            </>
           </div>
+
           <ScrollTriggeredImages />
         </motion.section>
         {/* /////// */}

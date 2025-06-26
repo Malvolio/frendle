@@ -1,14 +1,14 @@
 import { NavItem } from "@/types";
 
 export const NAV_ITEMS: NavItem[] = [
-  {
-    title: "Home",
-    href: "/",
-  },
   // {
-  //   title: "About",
-  //   href: "/about",
+  //   title: "Home",
+  //   href: "/",
   // },
+  {
+    title: "About",
+    href: "/about",
+  },
   // {
   //   title: "Resources",
   //   href: "/resources",

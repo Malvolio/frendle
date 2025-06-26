@@ -10,7 +10,7 @@ export const Route = createFileRoute("/onboarding")({
     const [nextQuestion, setNextQuestion] = React.useState(false);
 
     return (
-      <div className="bg-[url('background.jpg')] bg-cover bg-center min-h-screen">
+      <div className="min-h-screen">
         <nav>NAV HERE</nav>
         <div className="flex flex-col gap-8 mx-auto h-screen mt-20 justify-start text-center">
           <h1 className="text-4xl font-normal mb-4">
