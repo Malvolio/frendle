@@ -21,6 +21,7 @@ const useUpdatePublicProfile = (user: SignedInUser | null) => {
       toast({
         title: "Profile updating",
         description: "Your profile is being updated.",
+        className: "bg-green-100 text-yellow-800",
       });
     } catch (error) {
       console.error("Error updating profile:", error);

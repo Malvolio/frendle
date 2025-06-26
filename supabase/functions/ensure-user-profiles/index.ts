@@ -165,7 +165,10 @@ serve(async (req) => {
     );
 
     // private_profiles and public_profiles can be created concurrently since they both reference system_profiles
-    const [privateProfile, publicProfile] = await Promise.all([
+    const [
+      { created: _, ...privateProfile },
+      { created: __, ...publicProfile },
+    ] = await Promise.all([
       ensureProfile<PrivateProfile>(
         serviceClient,
         "private_profiles",
