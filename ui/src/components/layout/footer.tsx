@@ -19,7 +19,6 @@ export function Footer() {
               />
             </Link>
             <p className="text-md">Create connections, make friends</p>
-
           </div>
 
           <div>
@@ -76,9 +75,16 @@ export function Footer() {
             </ul>
           </div>
           <div className="text-lg">
-            <p className="my-0"><strong>Got thoughts?</strong> </p>
+            <p className="my-0">
+              <strong>Got thoughts?</strong>{" "}
+            </p>
             <p className="my-0">We'd love to hear your feedback!</p>
-            <p className="my-0">Email us at hello@frendle.space </p>
+            <p className="my-0">
+              Email us at{" "}
+              <a href="mailto:hello@frendle.space" className="underline">
+                hello@frendle.space
+              </a>
+            </p>
           </div>
           {/* 
           <div>
