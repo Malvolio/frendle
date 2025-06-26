@@ -3,7 +3,7 @@ import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
 import { useSignInWithGoogle } from "@/providers/auth-provider";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Heart, Users, Wrench } from "lucide-react";
+import { Heart, Users, Wrench } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -34,13 +34,23 @@ const SignedOut = () => {
         <div className="relative h-[70vh] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0 opacity-40"></div>
 
-          <div className="container relative z-10 pt-20 md:pt-0 mx-auto">
+          <div className="container relative z-10 md:pt-0 mx-auto">
             <div className="max-w-3xl mx-auto text-center  items-center">
-              <img
-                src="index/hero_image.png"
-                alt="Questions, videos, games for friendly connections."
-                className="m-auto"
-              />
+              <div className="flex flex-row items-start justify-between">
+                <div className="w-20"></div>
+                <img
+                  src="index/hero_image.png"
+                  alt="Questions, videos, games for friendly connections."
+                  className="m-auto"
+                />
+                <a href=" https://bolt.new/" target="_blank" className="w-20">
+                  <img
+                    src="bolt_logo.png"
+                    alt="Frendle Logo"
+                    className="w-20"
+                  />
+                </a>
+              </div>
               <h1 className="text-6xl md:text-7xl font-bold leading-tight animate-fade-in text-[#373737] font-peachy ">
                 Create connections, make friends
               </h1>
