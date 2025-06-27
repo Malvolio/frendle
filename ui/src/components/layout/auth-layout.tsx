@@ -1,7 +1,7 @@
 import { LoginPrompt } from "@/components/auth/login-prompt";
 import { useAuth } from "@/providers/auth-provider";
 import { ReactNode } from "react";
-import Spinner from "../Spinner";
+import Unready from "../Unready";
 import { PublicLayout } from "./public-layout";
 
 interface AuthLayoutProps {
@@ -15,7 +15,7 @@ export function AuthLayout({ children, clean }: AuthLayoutProps) {
 
   if (loading) {
     console.log("[AuthLayout] Waiting for auth initialization");
-    return <Spinner />;
+    return <Unready />;
   }
 
   if (!user) {
