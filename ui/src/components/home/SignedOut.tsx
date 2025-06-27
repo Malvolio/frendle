@@ -1,7 +1,6 @@
 import ScrollTriggeredImages from "@/components/index/ScrollTriggeredImages";
 import { PublicLayout } from "@/components/layout/public-layout";
 import { Button } from "@/components/ui/button";
-import { useSignInWithGoogle } from "@/providers/auth-provider";
 import { Link } from "@tanstack/react-router";
 import { Heart, Users, Wrench } from "lucide-react";
 import { motion, useAnimation, useInView } from "motion/react";
@@ -9,7 +8,6 @@ import { useEffect, useRef, useState } from "react";
 import { RoughNotation } from "react-rough-notation";
 
 const SignedOut = () => {
-  const { handleGoogleSignIn, isLoading } = useSignInWithGoogle();
   const [expanded, setExpanded] = useState(false);
   const mainControls = useAnimation();
   useEffect(() => {
@@ -57,25 +55,20 @@ const SignedOut = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in">
                 <div className="flex flex-col gap-8 cursor-pointer">
-                  <wired-button
-                    elevation="3"
-                    onClick={handleGoogleSignIn}
-                    disabled={isLoading}
-                  >
-                    <span className="flex items-center gap-2">
+              <Link to="/login">
+              <Button size="lg" >
                       <svg
-                        className="h-5 w-5"
+                        className="h-5 w-5  fill-white hover:fill-black"
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 488 512"
+                        
                       >
                         <path
-                          fill="currentColor"
                           d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
                         />
                       </svg>
-                      Sign in with Google to start chatting
-                    </span>
-                  </wired-button>
+                Sign in with Google to start chatting</Button>
+            </Link>
                   <Link to="/about">Learn More</Link>
                 </div>
               </div>
@@ -102,18 +95,19 @@ const SignedOut = () => {
         >
           {/*  */}
 
-          <div className={` m-auto text-center  h-auto sticky top-[20px] z-50 pt-12 max-w-6xl `}>
-            <>          <RoughNotation
+          <div className={` m-auto text-center  h-auto sticky top-[13px] z-50 pt-16 max-w-6xl `}>
+            <>         
+            <RoughNotation
               type="highlight"
               show={expanded}
               iterations={3}
               animate={true}
-              color="rgba(255, 253, 250, 0.50)"
+              color="#eae3d3"
               animationDelay={500}>
               <h2 className="text-4xl md:text-5xl font-peachy text-[#37251E] m-auto text-center pt-4">
-                Built for real, human connection
+                Built for real, human connections
               </h2>
-              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center mx-auto my-4">
+              <p className="text-lg md:text-1xl mb-8 animate-fade-in font-normal text-[#37251E] text-center mx-auto pb-4 mt-2 max-w-5xl">
                 No feeds. No followers. Just honest, one-on-one conversations that
                 bring people closer together. Frendle is about matching you with
                 kind, curious humans for meaningful, platonic chats.
@@ -173,11 +167,20 @@ const SignedOut = () => {
               <p className="text-xl text-muted-foreground mb-8">
                 Join to start connecting with new friends today!
               </p>
-              <Link to="/match">
-                <Link to="/login">
-                  <Button size="lg">Sign In</Button>
-                </Link>
-              </Link>
+          <Link to="/login">
+              <Button size="lg" >
+                      <svg
+                        className="h-5 w-5  fill-white hover:fill-black"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 488 512"
+                        
+                      >
+                        <path
+                          d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+                        />
+                      </svg>
+                Sign in with Google to start chatting</Button>
+            </Link>
             </div>
           </div>
         </div>
