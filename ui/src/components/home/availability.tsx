@@ -126,8 +126,9 @@ const Availability = () => {
   }
 
   return (
-    <div className="flex-col justify-between items-start md:items-center mb-4 w-11/12 md:w-7/12 m-auto">
-      <div className="max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
+    <div className="md:w-fit md:m-auto w-full">
+      {/* <div className="flex-col justify-between items-start md:items-center mb-4 w-screen md:w-7/12 m-auto"> */}
+      <div className="w-screen md:max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
 
         <div className="text-xl text-center h-12 mx-12 text-balance">
@@ -147,7 +148,7 @@ const Availability = () => {
               onClick={() => setOpenColumn(day.short)}
               initial={false}
               animate={{
-                width: openColumn === day.short ? "400px" : "200px",
+                width: openColumn === day.short ? "360px" : "200px",
               }}
               transition={{
                 duration: 0.8,

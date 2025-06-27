@@ -60,7 +60,7 @@ const Expander: React.FC<ExpanderProps> = ({
       {/* Visible content */}
       <motion.div
         ref={contentRef}
-        className="text-gray-700 leading-relaxed overflow-hidden"
+        className="text-gray-700 leading-relaxed overflow-hidden "
         initial={false}
         animate={{
           height: isExpanded
@@ -72,7 +72,7 @@ const Expander: React.FC<ExpanderProps> = ({
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
         <div
-          className={!isExpanded && shouldShowButton ? "line-clamp-none" : ""}
+          className={!isExpanded && shouldShowButton ? "line-clamp-none " : ""}
         >
           {children}
         </div>
@@ -86,7 +86,7 @@ const Expander: React.FC<ExpanderProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="absolute bottom-0 left-0 right-0 h-8 pointer-events-none"
+            className="absolute bottom-0 left-0 right-0 h-8 pointer-events-none "
           />
         )}
       </AnimatePresence>

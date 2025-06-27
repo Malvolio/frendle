@@ -158,7 +158,7 @@ const Questions: Question[] = [
     text: "Complete this sentence: “I wish I had someone with whom I could share ... “",
   },
   {
-    id: "Q_frendler_IMPORTANT_INFO",
+    id: "Q_FRENDLER_IMPORTANT_INFO",
     set: 3,
     text: "If you were going to become a close friend with your frendler, please share what would be important for him or her to know.",
     // 
