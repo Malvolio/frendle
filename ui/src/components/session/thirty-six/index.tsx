@@ -5,10 +5,10 @@ import { Button } from "../../ui/button";
 import { GameComponent } from "../GamePlayTypes";
 import Questions from "./questions";
 
-type Modes = "waiting" | "asking" | "listening" | "done";
+type Modes = "waiting" | "asking" | "answering" | "done";
 const ThirtySixMessageSchema = z.discriminatedUnion("type", [
   z.object({
-    type: z.literal("done-asking"),
+    type: z.literal("done-answering"),
   }),
   z.object({
     type: z.literal("im-asking"),
@@ -40,6 +40,10 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
       type: "game",
       payload,
     });
+  // DEBUG
+  const [gameEvent, setGameEvent] = useState<ThirtySixMessage["type"] | null>(
+    null
+  );
 
   const goToNextQuestion = useCallback(() => {
     const q = Questions.find(({ id }) => !usedQuestions.has(id));
@@ -62,20 +66,23 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
       const message = ThirtySixMessageSchema.safeParse(event.payload);
       if (message.success) {
         const { data } = message;
+        setGameEvent(data.type); // DEBUG
         switch (data.type) {
           case "ask":
             setMode("asking");
             setQuestionId(data.questionId);
             break;
-          case "done-asking":
-            setMode("waiting");
+          case "done-answering":
+            setMode(isHost ? "answering" : "waiting");
             if (isHost) {
-              setUsedQuestions((allQ) => allQ.add(questionId));
-              goToNextQuestion();
+              sendGameMessage({
+                type: "ask",
+                questionId,
+              });
             }
             break;
           case "im-asking":
-            setMode("listening");
+            setMode("answering");
             setQuestionId(data.questionId);
             break;
           case "were-done":
@@ -96,40 +103,52 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
     }
   }, [mode, isHost, goToNextQuestion]);
 
-  const doneAsking = () => {
-    sendGameMessage(
-      isHost
-        ? {
-          type: "ask",
-          questionId,
-        }
-        : { type: "done-asking" }
-    );
-    setMode(isHost ? "listening" : "waiting");
+  const doneAnswering = () => {
+    if (isHost) {
+      setUsedQuestions((allQ) => allQ.add(questionId));
+      goToNextQuestion();
+    } else {
+      sendGameMessage({ type: "done-answering" });
+      setMode("waiting");
+    }
   };
   return (
-    <div className="w-full h-full flex flex-col bg-[#EBE3CF] p-4 gap-y-2 justify-between items-center rounded-sm border-[#37251E] border-2  ">
+    <div className="w-full h-full  bg-[#EBE3CF] rounded-sm border-[#37251E] border-2 flex flex-col p-2 gap-y-2 items-center ">
       {mode === "waiting" && <Spinner />}
       {mode === "done" && <div className="text-center">Thanks for playing</div>}
-      {(mode === "asking" || mode === "listening") && (
-        <img src={`/session/thirty-six/${questionId}.png`} />
-      )}
-      {mode === "asking" && (
-        <div className="text-sm flex flex-col p-2 gap-y-2 justify-between items-center ">
-          <div className="text-left">
-            <div className="mr-1">
-              Ask:
-            </div>
-            <div className=" font-peachy text-[1.25rem] leading-6 text-[#37251E]">{question?.text}</div>
-          </div>
-          <Button className="flex-0 mx-3" onClick={doneAsking}>
-            Asked
-          </Button>
+      {(mode === "asking" || mode === "answering") && (
+        <div className="flex-grow overflow-auto">
+          <img
+            className="h-full pointer-events-none"
+            src={`/session/thirty-six/${questionId}.png`}
+          />
         </div>
       )}
-      {mode === "listening" && (
-        <div className="mr-1 text-left mb-5 italic">
-          [Name] is answering. <span className="font-bold">TIP:</span> Listen intently, ask follow-up questions. Then, take your turn.
+      {mode === "asking" && (
+        <div className="flex-0 border text-sm flex flex-col gap-y-2 justify-between items-center ">
+          <div className="text-left">
+            <div className="mr-1">
+              Ask {session.partner.name} the following:
+            </div>
+            <div className=" font-peachy text-[1.25rem] leading-6 text-[#37251E]">
+              {question?.text}
+            </div>
+            <div>
+              <span className="font-bold">TIP:</span> Listen intently, ask
+              follow-up questions.
+            </div>
+          </div>
+        </div>
+      )}
+      {mode === "answering" && (
+        <div className="text-left italic">
+          {session.partner.name} is asking you a question.
+          <span className="font-bold ml-1">TIP:</span> Be as candid and open as
+          possible. This is a safe space to share. Click the button when you are
+          done.
+          <div className="flex w-full justify-center">
+            <Button onClick={doneAnswering}>Done Answering</Button>
+          </div>
         </div>
       )}
     </div>
