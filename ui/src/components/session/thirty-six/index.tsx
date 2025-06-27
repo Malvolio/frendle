@@ -120,27 +120,27 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
         </div>
       )}
       {mode === "asking" && (
-        <div className="flex-0 border text-sm flex flex-col gap-y-2 justify-between items-center ">
-          <div className="text-left">
-            <div className="mr-1">
+        <div className="text-left flex flex-col gap-y-2 around">
+          
+            <p className="m-0">
               Ask {session.partner.name} the following:
-            </div>
-            <div className=" font-peachy text-[1.25rem] leading-6 text-[#37251E]">
+            </p>
+            <p className=" font-peachy text-[1.25rem] leading-6 text-[#37251E] m-0">
               {question?.text}
-            </div>
-            <div>
+            </p>
+            <p className="m-0">
               <span className="font-bold">TIP:</span> Listen intently, ask
               follow-up questions.
-            </div>
+            </p>
           </div>
-        </div>
+        
       )}
       {mode === "answering" && (
-        <div className="text-left italic">
-          {session.partner.name} is asking you a question.
-          <span className="font-bold ml-1">TIP:</span> Be as candid and open as
-          possible. This is a safe space to share. Click the button when you are
-          done.
+        <div className="text-left italic flex flex-col gap-y-2 justify-between ">
+          <p className="m-0">
+          {session.partner.name} is asking you a question.</p>
+          <p className="m-0"><span className="font-bold ml-1">TIP:</span> Be as candid as you feel comfortable.Click the button when you are
+          done.</p>
           <div className="flex w-full justify-center">
             <Button onClick={doneAnswering}>Done Answering</Button>
           </div>

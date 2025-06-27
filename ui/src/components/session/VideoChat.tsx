@@ -14,26 +14,27 @@ import ThirtySix from "./thirty-six";
 const defaultPaneStyles: Record<string, PaneStyle> = {
   localVideo: {
     x: 50,
-    y: 200,
+    y: 150,
     width: 200,
     height: 150,
     zIndex: 1,
   },
   remoteVideo: {
-    x: 450,
-    y: 100,
+    x: 500,
+    y: 170,
     width: 400,
     height: 350,
     zIndex: 2,
   },
   gamePlay: {
-    x: 800,
-    y: 250,
+    x: 180,
+    y: 100,
     width: 390,
-    height: 350,
+    height: 450,
     zIndex: 3,
   },
 };
+
 
 const Games = {
   thirtySix: ThirtySix,
@@ -225,7 +226,7 @@ const VideoChat: FC<{
           >
             {isVideoEnabled ? (
               <>
-                <Video /> &nbsp;<p className="font-bold">Video On</p>
+                <Video /> &nbsp;<p className="font-bold">Video is On</p>
               </>
             ) : (
               <VideoOff />
@@ -257,7 +258,7 @@ const VideoChat: FC<{
             {isAudioEnabled ? (
               <>
                 <Mic />
-                <p className="font-bold">Mic On</p>
+                <p className="font-bold">Mic is On</p>
               </>
             ) : (
               <MicOff />
