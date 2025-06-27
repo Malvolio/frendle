@@ -9,7 +9,7 @@ export function RootComponent() {
   return (
     <ThemeProvider defaultTheme="light">
       <AuthProvider>
-        <div className="min-h-screen flex flex-col font-marigny text-foreground bg-background">
+        <div className="min-h-screen flex flex-col font-marigny text-foreground bg-[url('/background.jpg')] bg-repeat bg-contain">
           <Outlet />
           <Toaster />
         </div>

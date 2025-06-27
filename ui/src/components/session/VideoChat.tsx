@@ -72,13 +72,7 @@ const VideoChat: FC<{
     },
   });
   const localVideo = (
-    <video
-      ref={localRef}
-      autoPlay
-      muted
-      playsInline
-      className="h-full"
-    />
+    <video ref={localRef} autoPlay muted playsInline className="h-full" />
   );
   const remoteVideo = (
     <div className="bg-transparent h-full p-1 flex flex-col justify-between gap-3">
@@ -92,8 +86,8 @@ const VideoChat: FC<{
       )}
       {(webrtc.connectionState === "connecting" ||
         (webrtc.connectionState === "connected" && !webrtc.mediaConnected)) && (
-          <Spinner />
-        )}
+        <Spinner />
+      )}
       {webrtc.connectionState === "disconnected" && (
         <div className="w-full h-full bg-gray-100 flex justify-center items-center">
           <VideoOff />
@@ -141,42 +135,70 @@ const VideoChat: FC<{
     />
   );
   return (
-    <div className="video-chat min-h-screen flex flex-col gap-5 h-full w-full items-center bg-[url('/bg-paper.png')] bg-repeat bg-auto">
+    <div className="video-chat min-h-screen flex flex-col gap-5 h-full w-full items-center">
       <MovablePanes
         paneStyles={paneStyles}
         setPaneStyles={setPaneStyles}
         panes={{ localVideo, remoteVideo, gamePlay }}
       >
         {webrtc.connectionState === "disconnected" && (
-          <div className="relative z-50 w-1/2  bg-[#FFFDFA] flex flex-col justify-center items-left gap-3 text-[#37251E]
+          <div
+            className="relative z-50 w-1/2  bg-[#FFFDFA] flex flex-col justify-center items-left gap-3 text-[#37251E]
           p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl
-          ">
-            <span className="font-bold text-3xl font-peachy">Ready when you are</span>
+          "
+          >
+            <span className="font-bold text-3xl font-peachy">
+              Ready when you are
+            </span>
             <ul className="text-lg my-2">
               <li>→ Freshen up</li>
               <li>→ Grab a drink</li>
               <li>→ Check the background</li>
               <li>→ Mute notifications</li>
               <li>→ Give yourself a moment</li>
-              <li><span className="flex flex-row gap-1 align-middle">→ Turn on <Video width={"16px"} />Video and <Mic width={"16px"} />Mic below</span></li>
+              <li>
+                <span className="flex flex-row gap-1 align-middle">
+                  → Turn on <Video width={"16px"} />
+                  Video and <Mic width={"16px"} />
+                  Mic below
+                </span>
+              </li>
             </ul>
             <Button className="w-32 m-auto" onClick={webrtc.startCall}>
               Join room
             </Button>
           </div>
-        )
-        }
+        )}
         {/* Background elements */}
         <img className="absolute left-0" src="/session/palm.png" />
         <img className="absolute top-20 right-0" src="/session/fred.png" />
         <img className="absolute top-1/4 left-20" src="/session/heart.svg" />
         <img className="absolute top-1/4 right-1/4" src="/session/heart.svg" />
         <img className="absolute top-3/4 left-2/4" src="/session/heart.svg" />
-        <img className="absolute bottom-2/4 right-2/4" src="/session/heart.svg" />
-        <img className="absolute top-10 left-40" src="/session/postcards.png" width={"300px"} />
-        <img className="absolute top-40 right-4/5" src="/session/chihuahua.png" width={"200px"} />
-        <img className="absolute bottom-36 right-52" src="/session/cat.png" width={"200px"} />
-        <img className="absolute bottom-52 left-60" src="/session/coffee_cup.png" width={"200px"} />
+        <img
+          className="absolute bottom-2/4 right-2/4"
+          src="/session/heart.svg"
+        />
+        <img
+          className="absolute top-10 left-40"
+          src="/session/postcards.png"
+          width={"300px"}
+        />
+        <img
+          className="absolute top-40 right-4/5"
+          src="/session/chihuahua.png"
+          width={"200px"}
+        />
+        <img
+          className="absolute bottom-36 right-52"
+          src="/session/cat.png"
+          width={"200px"}
+        />
+        <img
+          className="absolute bottom-52 left-60"
+          src="/session/coffee_cup.png"
+          width={"200px"}
+        />
 
         <div className="controls flex gap-x-4 absolute p-5 right-0 bottom-0 border-t border-t-black/20 w-full border flex-row items-center justify-center gap-2">
           <div
@@ -185,10 +207,29 @@ const VideoChat: FC<{
               setVideoEnabled(!isVideoEnabled);
               webrtc.setVideoEnabled(!isVideoEnabled);
             }}
-            style={isVideoEnabled ? { backgroundColor: "#FDBE7C", borderRadius: "10%", width: "auto", border: "2px solid #373737" } : { backgroundColor: "transparent", borderRadius: "100%", width: "46px", border: "2px solid #373737" }}
+            style={
+              isVideoEnabled
+                ? {
+                    backgroundColor: "#FDBE7C",
+                    borderRadius: "10%",
+                    width: "auto",
+                    border: "2px solid #373737",
+                  }
+                : {
+                    backgroundColor: "transparent",
+                    borderRadius: "100%",
+                    width: "46px",
+                    border: "2px solid #373737",
+                  }
+            }
           >
-            {isVideoEnabled ?
-              (<><Video /> &nbsp;<p className="font-bold">Video On</p></>) : <VideoOff />}
+            {isVideoEnabled ? (
+              <>
+                <Video /> &nbsp;<p className="font-bold">Video On</p>
+              </>
+            ) : (
+              <VideoOff />
+            )}
           </div>
 
           <div
@@ -197,30 +238,45 @@ const VideoChat: FC<{
               setAudioEnabled(!isAudioEnabled);
               webrtc.setAudioEnabled(!isAudioEnabled);
             }}
-            style={isAudioEnabled ? { backgroundColor: "#FF7D7F", borderRadius: "10%", width: "auto", border: "2px solid #373737" } : { backgroundColor: "transparent", borderRadius: "100%", width: "46px", border: "2px solid #373737" }}
+            style={
+              isAudioEnabled
+                ? {
+                    backgroundColor: "#FF7D7F",
+                    borderRadius: "10%",
+                    width: "auto",
+                    border: "2px solid #373737",
+                  }
+                : {
+                    backgroundColor: "transparent",
+                    borderRadius: "100%",
+                    width: "46px",
+                    border: "2px solid #373737",
+                  }
+            }
           >
             {isAudioEnabled ? (
               <>
                 <Mic />
                 <p className="font-bold">Mic On</p>
               </>
-            )
-              :
-              (
-                <MicOff />)
-            }
+            ) : (
+              <MicOff />
+            )}
           </div>
           <div
-            className={cn("cursor-pointer p-2 rounded-full bg-transparent absolute right-4 w-auto flex flex-row gap-2", {
-              "opacity-1": webrtc.connectionState === "disconnected",
-            })}
+            className={cn(
+              "cursor-pointer p-2 rounded-full bg-transparent absolute right-4 w-auto flex flex-row gap-2",
+              {
+                "opacity-1": webrtc.connectionState === "disconnected",
+              }
+            )}
             onClick={webrtc.endCall}
           >
             <PhoneOff /> Not connected
           </div>
         </div>
-      </MovablePanes >
-    </div >
+      </MovablePanes>
+    </div>
   );
 };
 

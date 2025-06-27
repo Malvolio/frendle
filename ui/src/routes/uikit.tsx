@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/uikit")({
   component: () => (
-    <div className="container py-10 bg-[url(background.jpg)]">
+    <div className="container py-10">
       <h1>UI Kit</h1>
       <p className="text-lg mb-6">
         This page showcases the UI components used in the Frendle.{" "}
