@@ -40,10 +40,6 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
       type: "game",
       payload,
     });
-  // DEBUG
-  const [gameEvent, setGameEvent] = useState<ThirtySixMessage["type"] | null>(
-    null
-  );
 
   const goToNextQuestion = useCallback(() => {
     const q = Questions.find(({ id }) => !usedQuestions.has(id));
@@ -66,7 +62,6 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
       const message = ThirtySixMessageSchema.safeParse(event.payload);
       if (message.success) {
         const { data } = message;
-        setGameEvent(data.type); // DEBUG
         switch (data.type) {
           case "ask":
             setMode("asking");
