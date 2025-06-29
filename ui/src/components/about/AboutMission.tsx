@@ -11,10 +11,10 @@ const AboutMission = () => {
     }, 300);
   };
   return (
-    <div className="min-h-screen max-w-6xl m-auto gap-6">
+    <div className="min-h-screen max-w-6xl m-auto gap-6 p-4 md:p-0">
       {/* <div className="container mx-auto px-4 py-8 max-w-4xl"> */}
       {/* <div className="p-8 mb-8 text-2xl"> */}
-      <h1 className="md:text-6xl max-w-4xl m-auto font-peachy my-4 text-[#37251e] ">
+      <h1 className="text-4xl md:text-6xl max-w-4xl m-auto font-peachy my-4 text-[#37251e] ">
         We came together to build a space for connection
       </h1>
       <p>
@@ -33,7 +33,7 @@ const AboutMission = () => {
         feedback as we look beyond the hackathon to bring Frendle to life.
       </p>
       <div className="flex flex-col md:flex-row gap-6 text-2xl mt-6">
-        <div className="w-1/2">
+        <div className="w-full md:w-1/2">
           <RoughNotation
             type="box"
             show={showRN}
@@ -123,7 +123,7 @@ const AboutMission = () => {
             </div>
           </RoughNotation>
         </div>
-        <div className="w-1/2">
+        <div className="w-full md:w-1/2">
           <RoughNotation
             type="box"
             show={showRN}
@@ -190,7 +190,7 @@ const AboutMission = () => {
           </RoughNotation>
         </div>
       </div>
-      <div className="w-1/2">
+      <div className="w-full md:w-1/2">
         <RoughNotation
           type="box"
           show={showRN}

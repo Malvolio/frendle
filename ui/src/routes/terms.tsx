@@ -8,14 +8,14 @@ export const Route = createFileRoute("/terms")({
         <main className="relative z-10 max-w-4xl mx-auto px-6 py-12">
           {/* Header */}
           <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold  mb-6 leading-snug font-peachy uppercase text-[#37251e]">
               Terms of Service
             </h1>
-            <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto">
               Please read these terms carefully before using our services. Your
               use of our service constitutes acceptance of these terms.
             </p>
-            <div className="mt-8 text-foreground/60">
+            <div className="mt-8 ">
               <p>
                 Last updated:{" "}
                 <span className="font-semibold">June 2025</span>
@@ -27,10 +27,10 @@ export const Route = createFileRoute("/terms")({
           <div className="space-y-12">
             {/* Section 1 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 1. Acceptance of Terms
               </h2>
-              <p className="text-foreground/80 leading-relaxed">
+              <p className="text-[#37251e] leading-relaxed">
                 By accessing and using this website, you accept and agree to be
                 bound by the terms and provision of this agreement. If you do
                 not agree to abide by the above, please do not use this service.
@@ -41,16 +41,16 @@ export const Route = createFileRoute("/terms")({
 
             {/* Section 2 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 2. Use License
               </h2>
-              <p className="text-foreground/80 leading-relaxed mb-4">
+              <p className="text-[#37251e] leading-relaxed mb-4">
                 Permission is granted to temporarily download one copy of the
                 materials on our website for personal, non-commercial transitory
                 viewing only. This is the grant of a license, not a transfer of
                 title, and under this license you may not:
               </p>
-              <ul className="text-foreground/80 space-y-2 pl-6">
+              <ul className="text-[#37251e] space-y-2 pl-6">
                 <li className="flex items-start">
                   <span className="text-pink-400 mr-2">•</span>
                   Modify or copy the materials
@@ -70,10 +70,10 @@ export const Route = createFileRoute("/terms")({
 
             {/* Section 3 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 3. Disclaimer
               </h2>
-              <p className="text-foreground/80 leading-relaxed">
+              <p className="text-[#37251e] leading-relaxed">
                 The materials on our website are provided on an 'as is' basis.
                 We make no warranties, expressed or implied, and hereby disclaim
                 and negate all other warranties including without limitation,
@@ -85,10 +85,10 @@ export const Route = createFileRoute("/terms")({
 
             {/* Section 4 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 4. Limitations
               </h2>
-              <p className="text-foreground/80 leading-relaxed">
+              <p className="text-[#37251e] leading-relaxed">
                 In no event shall our company or its suppliers be liable for any
                 damages (including, without limitation, damages for loss of data
                 or profit, or due to business interruption) arising out of the
@@ -103,10 +103,10 @@ export const Route = createFileRoute("/terms")({
 
             {/* Section 5 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 5. Privacy Policy
               </h2>
-              <p className="text-foreground/80 leading-relaxed">
+              <p className="text-[#37251e] leading-relaxed">
                 Your privacy is important to us. Our Privacy Policy explains how
                 we collect, use, and protect your information when you use our
                 service. By using our service, you agree to the collection and
@@ -118,10 +118,10 @@ export const Route = createFileRoute("/terms")({
 
             {/* Section 6 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 6. Revisions and Errata
               </h2>
-              <p className="text-foreground/80 leading-relaxed">
+              <p className="text-[#37251e] leading-relaxed">
                 The materials appearing on our website could include technical,
                 typographical, or photographic errors. We do not warrant that
                 any of the materials on its website are accurate, complete, or
@@ -133,10 +133,10 @@ export const Route = createFileRoute("/terms")({
 
             {/* Section 7 */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 7. Governing Law
               </h2>
-              <p className="text-foreground/80 leading-relaxed">
+              <p className="text-[#37251e] leading-relaxed">
                 These terms and conditions are governed by and construed in
                 accordance with the laws of the jurisdiction in which our
                 company operates, and you irrevocably submit to the exclusive
@@ -148,15 +148,15 @@ export const Route = createFileRoute("/terms")({
 
             {/* Contact Section */}
             <section className="backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl p-8 hover:bg-white/20 transition-all duration-300 text-center">
-              <h2 className="text-2xl font-bold text-foreground mb-4">
+              <h2 className="text-2xl font-bold text-[#37251e] mb-4">
                 Questions About These Terms?
               </h2>
-              <p className="text-foreground/80 leading-relaxed mb-6">
+              <p className="text-[#37251e] leading-relaxed mb-6">
                 If you have any questions about these Terms of Service, please
                 don't hesitate to contact us.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                {/* <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-foreground font-semibold py-3 px-8 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                {/* <button className="bg-gradient-to-r from-pink-500 to-purple-600 text-[#37251e] font-semibold py-3 px-8 rounded-full hover:from-pink-600 hover:to-purple-700 transition-all duration-300 hover:scale-105 hover:shadow-lg">
                   Contact Support
                 </button> */}
                 <a

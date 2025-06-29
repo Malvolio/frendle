@@ -65,12 +65,12 @@ export function Header() {
 
         <div className="flex items-center gap-4 text-[1.2rem]">
           {loading ? null : user ? (
-            <Button onClick={signOut} size="sm">
+            <Button onClick={signOut} size="sm" className="hidden md:inline-block">
               Sign Out
             </Button>
           ) : (
             <Link to="/login">
-              <Button size="sm">Sign In</Button>
+              <Button size="sm" className="hidden md:inline-block">Sign In</Button>
             </Link>
           )}
           <a
@@ -86,7 +86,7 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
+            <SheetContent side="right" className="bg-[#efe3d3] border-l-4 border-black">
               <nav className="flex flex-col gap-4 mt-8">
                 {filteredNavItems.map((item) => (
                   <Link
@@ -102,6 +102,15 @@ export function Header() {
                   </Link>
                 ))}
               </nav>
+                        {loading ? null : user ? (
+            <Button onClick={signOut} size="sm" className="mt-8">
+              Sign Out
+            </Button>
+          ) : (
+            <Link to="/login">
+              <Button size="sm">Sign In</Button>
+            </Link>
+          )}
             </SheetContent>
           </Sheet>
         </div>

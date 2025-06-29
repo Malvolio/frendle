@@ -12,7 +12,7 @@ const Headline: FC<PropsWithChildren<{}>> = ({ children }) => (
   <h2 className="text-2xl font-bold mb-4 font-peachy">{children}</h2>
 );
 const Paragraph: FC<PropsWithChildren<{}>> = ({ children }) => (
-  <div className="my-1">{children}</div>
+  <div className="my-1 text-[#37251e] ">{children}</div>
 );
 
 type Props = PropsWithChildren<{

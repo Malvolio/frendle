@@ -36,7 +36,7 @@ export function ProfileForm() {
   });
 
   return (
-    <Card className="m-auto w-full md:w-[1260px] ">
+    <Card className="m-auto w-full md:w-[1260px]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 mb-4">
           All about you, yes, you!

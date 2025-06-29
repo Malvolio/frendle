@@ -9,7 +9,7 @@ export const Route = createFileRoute("/expectations")({
       <TextBlock>
         {/* Introduction */}
         <div className="mb-10 leading-relaxed text-[#37251e] ">
-          <h1 className="md:text-6xl font-peachy mb-4">
+          <h1 className="text-4xl md:text-6xl font-peachy mb-4 leading-relaxed">
             <RoughNotationGroup show={true}>
               Frendle's &nbsp;
               <RoughNotation
@@ -173,7 +173,7 @@ export const Route = createFileRoute("/expectations")({
       <div>
         <div className="container mx-auto px-4 py-8 max-w-4xl border-t-2 border-t-black/30">
           <div className=" rounded-2xl p-8 text-center">
-            <h2 className="text-4xl font-peachy mb-4 text-[#37251e]">
+            <h2 className="text-4xl font-peachy mb-4 text-[#37251e] leading-relaxed">
               <RoughNotation
                 type="underline"
                 show={true}
@@ -192,12 +192,12 @@ export const Route = createFileRoute("/expectations")({
               interaction you have makes Frendle a better place for everyone.
             </p>
             <div className="flex justify-center space-x-4">
-              <button className="bg-white px-6 py-2 rounded-sm font-semibold hover:bg-indigo-50 transition duration-200">
+              {/* <button className="bg-white px-6 py-2 rounded-sm font-semibold hover:bg-indigo-50 transition duration-200">
                 Start Connecting
-              </button>
-              <button className="border-2 border-black px-6 py-2 rounded-sm font-semibold hover:bg-white hover:[#58B4AE]] transition duration-200">
+              </button> */}
+              <a href="mailto:admin@frendle.space?subject=Issue"  className="border-2 border-black px-6 py-2 rounded-sm font-semibold hover:bg-white hover:[#58B4AE]] transition duration-200 bg-transparent">
                 Report an Issue
-              </button>
+              </a>
             </div>
           </div>
         </div>

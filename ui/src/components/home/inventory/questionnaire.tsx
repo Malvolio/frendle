@@ -29,7 +29,7 @@ const DisplayQuestion: FC<{
     <h2 className="text-3xl mb-6 font-bold text-[#373737]">{text}</h2>
     <form className="w-full">
       <RadioGroup onValueChange={setSelectedId} value={selectedId}>
-        <div className="flex flex-row gap-4 w-full  h-72">
+        <div className="flex flex-col md:flex-row gap-4 w-full  h-72">
           {options.map((option) => {
             const isSelected = selectedId === option.id;
             return (
