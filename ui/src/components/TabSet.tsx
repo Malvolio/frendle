@@ -29,7 +29,7 @@ const TabSet: FC<{ tabs: TabDescription[] }> = ({ tabs }) => {
       onValueChange={handleTabChange}
       className="w-full mt-12"
     >
-      <TabsList className="w-7/12 mx-auto flex mb-3 gap-4">
+      <TabsList className="w-full md:w-7/12 md:mx-auto flex justify-start md:justify-center flex-row mb-3 gap-0 md:gap-4 h-auto overflow-scroll md:overflow-auto">
         {tabs.map(({ icon: Icon, name, id, todo }) => (
           <div className="flex-col" key={id}>
             <div className="mb-1 text-sm font-bold m-auto flex flex-row justify-center items-end h-6">

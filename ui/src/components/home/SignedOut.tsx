@@ -36,14 +36,14 @@ const SignedOut = () => {
           <div className="container relative z-10 md:pt-0 mx-auto">
             <div className="max-w-3xl mx-auto text-center  items-center">
               <div className="flex flex-row items-start justify-between">
-                <div className="w-20"></div>
+                
                 <img
                   src="index/hero_image.png"
-                  alt="Questions, videos, games for friendly connections."
-                  className="m-auto"
+                  alt="Chat bubbles with questions, videos, and tic tac toe"
+                  className="m-auto w-48 md:w-auto"
                 />
               </div>
-              <h1 className="text-6xl md:text-7xl font-bold leading-tight animate-fade-in text-[#373737] font-peachy ">
+              <h1 className="text-4xl md:text-7xl font-bold leading-tight animate-fade-in text-[#373737] font-peachy ">
                 Create connections, make friends
               </h1>
 
@@ -72,7 +72,7 @@ const SignedOut = () => {
             </div>
           </div>
 
-          {/* <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent"></div> */}
+          
         </div>
         {/* Features section */}
         <motion.section
@@ -93,7 +93,7 @@ const SignedOut = () => {
           {/*  */}
 
           <div
-            className={` m-auto text-center  h-auto sticky top-[13px] z-50 pt-16 max-w-6xl `}
+            className={` m-auto text-center  h-auto md:sticky top-[13px] z-50 pt-16 max-w-6xl `}
           >
             <>
               <RoughNotation
@@ -139,7 +139,7 @@ const SignedOut = () => {
               />
             </div>
 
-            <ol className="grid grid-cols-1 md:grid-cols-3 gap- max-w-4xl m-auto">
+            <ol className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl m-auto w-full px-8">
               <li>
                 <Wrench className="h-14 w-14 text-primary" /> Keeping Frendle up
                 and running (and getting better)
@@ -157,7 +157,7 @@ const SignedOut = () => {
         </div>
 
         {/* CTA section */}
-        <div className="bg-muted/30 py-20">
+        <div className="bg-muted/30 py-20 px-8">
           <div className="container m-auto">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="font-peachy text-3xl font-bold mb-4 text-[#373737]">

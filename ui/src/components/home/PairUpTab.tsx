@@ -7,7 +7,7 @@ const PairUpTab = () => {
   const { user } = useAuth();
   const membership_status = user?.system_profile.membership_status;
   return (
-    <div className="flex flex-col items-center justify-center  ">
+    <div className="flex flex-col items-center justify-center px-8 ">
       {(membership_status === "good" || membership_status === "paused") && (
         <>
           <h1 className="font-peachy m-auto leading-none tracking-tight text-5xl text-[#373737]  mx-auto my-10">

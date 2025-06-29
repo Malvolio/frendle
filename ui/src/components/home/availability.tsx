@@ -72,8 +72,8 @@ const isTimeSelected = (
 const SelectTimezone = () => {
   const { timezone, timezones, updateTimezone } = useGetTimezone();
   return (
-    <div className="flex justify-center items-center mb-4">
-      <label className="text-lg font-semibold mr-2">Select Timezone:</label>
+    <div className="flex justify-between px-4 md:justify-center items-center mb-4">
+      <label className="mr-2">Select Timezone:</label>
       <Select value={timezone} onValueChange={updateTimezone}>
         <SelectTrigger className="w-48 bg-[#FFFDF4] rounded-none border-[#373737]">
           <SelectValue placeholder="Select timezone" />
@@ -126,25 +126,27 @@ const Availability = () => {
   }
 
   return (
-    <div className="md:w-fit md:m-auto w-full">
+    <div className="md:w-fit md:m-auto w-full mt-4">
       {/* <div className="flex-col justify-between items-start md:items-center mb-4 w-screen md:w-7/12 m-auto"> */}
       <div className="w-screen md:max-w-6xl mx-auto border  border-black border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl overflow-visible">
         <div className="bg-[url('profile/binder.png')] repeat-x h-12 -mt-4"></div>
 
-        <div className="text-xl text-center h-12 mx-12 text-balance">
+        <div className="md:text-lg text-left md:text-center justify-center md:my-4 flex-row flex gap-4 w-fit mr-4 mt-2 md:m-auto">
+          <p className="my-0 ml-4">
           {totalSelections < MAX_SLOTS
             ? "Pick a couple days and times that work for you for quick 15-min connects."
             : `We only need ${MAX_SLOTS} slots to find you a match`}
+            </p>
+            <PauseButton />
         </div>
-        <div className="flex justify-end mr-6">
-          <PauseButton />
-        </div>
-        <SelectTimezone />
-        <div className="flex ">
+        
+        
+        <SelectTimezone /> 
+        <div className="flex h-[300px] md:h-auto">
           {DAYS.map((day, dayIndex) => (
             <motion.div
               key={day.short}
-              className="border-r border-[#373737] last:border-r-0 overflow-hidden cursor-pointer"
+              className="border-r border-[#373737] last:border-r-0 overflow-hidden cursor-pointer overflow-y-scroll md:overflow-hidden"
               onClick={() => setOpenColumn(day.short)}
               initial={false}
               animate={{
@@ -158,7 +160,7 @@ const Availability = () => {
               {/* Column Header */}
               <motion.div
                 className={cn(
-                  `border-[#373737] border-t border-b font-semibold w-full text-center`,
+                  `border-[#373737] border-t border-b font-semibold w-full text-center sticky`,
                   {
                     "text-3xl": openColumn === day.short,
                     "hover:border-b": openColumn !== day.short,
@@ -167,6 +169,7 @@ const Availability = () => {
                 whileHover={{ backgroundColor: "#58B4AE" }}
                 whileFocus={{ backgroundColor: "#58B4AE" }}
               >
+                {/* Days Row */}
                 <div
                   className={cn(
                     "flex items-center justify-center px-2 py-2 h-full w-full bg-[#58B4AE]/0 transition-all",
@@ -182,10 +185,10 @@ const Availability = () => {
                 </div>
               </motion.div>
 
-              {/* Column Content */}
+              {/* Day Column Content */}
               <AnimatePresence>
                 {openColumn === day.short ? (
-                  <div className="flex gap-2 px-2 ">
+                  <div className="flex gap-2 px-2 boder-8 flex-col md:flex-row overflow-y-scroll md:overflow-hidden ">
                     {TIME_BLOCKS.map((block) => (
                       <motion.div
                         layout
@@ -195,7 +198,7 @@ const Availability = () => {
                         animate={{ opacity: 1 }}
                         transition={{ type: 'spring', stiffness: 50 }}
 
-                        className="flex flex-col items-center"
+                        className="flex flex-col items-center "
                       >
                         <img
                           src={block.label + ".svg"}

@@ -6,7 +6,7 @@ const PauseButton = () => {
 
   return (
     eligible && (
-      <Button disabled={ploading} onClick={togglePause} className="w-44 bg-[#373737]">
+      <Button disabled={ploading} onClick={togglePause} className=" bg-[#373737]">
         {ploading ? "..." : paused ? "Unpause matches" : "Pause matches"}
       </Button>
     )

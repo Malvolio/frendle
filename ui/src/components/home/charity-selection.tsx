@@ -132,12 +132,12 @@ export function CharitySelection() {
   };
 
   return (
-    <Card className="md:max-w-2xl md:min-w-fit">
+    <Card className="w-full md:max-w-2xl md:w-fit ">
       <CardHeader>
         <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="bg-[#FFFDFA] gap-4 w-[500px] -rotate-2 m-auto flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+        <div className="bg-[#FFFDFA] gap-4 w-full md:w-[500px] -rotate-2 m-auto flex flex-col p-6 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
           <p className="font-bold text-lg m-0">Your just cause {selectedCharity && `: ${selectedCharity.name}`}</p>
 
           <div className="space-y-4 ">
@@ -145,7 +145,7 @@ export function CharitySelection() {
               <label htmlFor="charitySelect" className="text-sm font-medium">
                 {!selectedCharity && "Select Charity"}
               </label>
-              <Carousel className="w-full">
+              <Carousel className="w-full ">
                 <CarouselContent>
                   {Charities.map((charity) => (
                     <CarouselItem key={charity.id} className="w-full">

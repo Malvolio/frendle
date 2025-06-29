@@ -36,7 +36,7 @@ export function ProfileForm() {
   });
 
   return (
-    <Card className="m-auto ">
+    <Card className="m-auto w-full md:w-[1260px] ">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 mb-4">
           All about you, yes, you!
@@ -45,7 +45,7 @@ export function ProfileForm() {
       <CardContent className="flex flex-col md:flex-row md:min-w-fit items-center m-auto justify-center">
         <AnimatePresence>
           {/* TODO: Make each one animate in seperately */}
-          <motion.div className="bg-[#FFFDFA] gap-4 max-w-lg min-w-[360px] flex flex-col p-8 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
+          <motion.div className="bg-[#FFFDFA] gap-6 w-[360px] flex flex-col p-4 border-2 border-black  border-b-8 border-r-8 border-b-black/70 border-r-black/70 rounded-2xl">
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}

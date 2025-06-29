@@ -93,7 +93,7 @@ const ScrollTriggeredImages: React.FC = () => {
     return (
         <div className="min-h[50vh] m-auto  ">
 
-            <div className="flex relative m-auto justify-center md:flex-row-reverse">
+            <div className="flex relative m-auto justify-center flex-col md:flex-row-reverse">
 
                 {/* INITIAL ROW */}
 
@@ -104,14 +104,10 @@ const ScrollTriggeredImages: React.FC = () => {
                         <section
                             key={section.id}
                             ref={(el) => (sectionsRef.current[index] = el)}
-                            className="min-h-screen flex items-center justify-center px-8 lg:px-16"
+                            className="md:min-h-screen flex items-center justify-center px-8 lg:px-16"
                         >
                             <div className="max-w-2xl">
                                 <div className="mb-8">
-                                    {/* <div
-                                        className="w-16 h-1 rounded-full mb-6 transition-all duration-700"
-                                        style={{ backgroundColor: section.accent }}
-                                    ></div> */}
                                     <RoughNotation type="highlight" show={activeSection === section.id} color={section.accent} animationDelay={300} animationDuration={500} multiline={true} >
                                         <h2 className="py-4 font-peachy text-2xl lg:text-5xl font-bold text-[#37251E]  mb-6 leading-tight bg-blend-multiply">
                                             {section.title}
@@ -127,27 +123,27 @@ const ScrollTriggeredImages: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Fixed Image Panel - Right Side */}
-                <div className="hidden lg:block lg:w-2/5 sticky left-0 top-12 h-screen">
-                    <div className="relative w-full h-full overflow-hidden">
+                {/* Fixed Image Panel - Right Side Desktop */}
+                {/* <div className="hidden lg:block lg:w-2/5 md:sticky left-0 top-12 h-screen"> */}
+                <div className="hidden lg:block lg:w-2/5 md:sticky md:left-0 md:top-12 md:h-screen border-8">
+                    <div className="relative flex-col w-full md:h-full overflow-hidden">
 
                         {sections.map((section) => (
                             <div
                                 key={section.id}
-                                className={`absolute inset-0 transition-opacity duration-1000 ease-in-out  ${activeSection === section.id ? 'opacity-70' : 'opacity-0'
+                                className={`md:absolute border-8 inset-0 transition-opacity duration-1000 ease-in-out  ${activeSection === section.id ? 'opacity-70' : 'md:opacity-0'
                                     }`}
                             >
                                 <img
                                     src={section.imageUrl}
                                     alt={section.title}
-                                    className="w-full h-full object-fit mix-blend-multiply"
+                                    className="w-full h-full object-fit mix-blend-multiply "
                                 />
-                                {/* <div className="absolute inset-0"></div> */}
                             </div>
                         ))}
 
                         {/* Floating accent indicator */}
-                        <div className="absolute top-8 left-8 z-10">
+                        <div className="md:absolute top-8 left-8 z-10">
                             <div
                                 className="w-4 h-4 rounded-full transition-all duration-700 shadow-lg"
                                 style={{ backgroundColor: activeImage?.accent }}
@@ -157,25 +153,7 @@ const ScrollTriggeredImages: React.FC = () => {
                 </div>
             </div>
 
-            {/* Mobile Image Preview */}
-            <div className="lg:hidden">
-                <div className="sticky top-0 h-64 overflow-hidden">
-                    {sections.map((section) => (
-                        <div
-                            key={section.id}
-                            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeSection === section.id ? 'opacity-100' : 'opacity-0'
-                                }`}
-                        >
-                            <img
-                                src={section.imageUrl}
-                                alt={section.title}
-                                className="w-full h-full object-cover"
-                            />
 
-                        </div>
-                    ))}
-                </div>
-            </div>
         </div>
     );
 };
