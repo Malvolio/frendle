@@ -125,13 +125,13 @@ const ScrollTriggeredImages: React.FC = () => {
 
                 {/* Fixed Image Panel - Right Side Desktop */}
                 {/* <div className="hidden lg:block lg:w-2/5 md:sticky left-0 top-12 h-screen"> */}
-                <div className="hidden lg:block lg:w-2/5 md:sticky md:left-0 md:top-12 md:h-screen border-8">
+                <div className="hidden lg:block lg:w-2/5 md:sticky md:left-0 md:top-12 md:h-screen">
                     <div className="relative flex-col w-full md:h-full overflow-hidden">
 
                         {sections.map((section) => (
                             <div
                                 key={section.id}
-                                className={`md:absolute border-8 inset-0 transition-opacity duration-1000 ease-in-out  ${activeSection === section.id ? 'opacity-70' : 'md:opacity-0'
+                                className={`md:absolute inset-0 transition-opacity duration-1000 ease-in-out  ${activeSection === section.id ? 'opacity-70' : 'md:opacity-0'
                                     }`}
                             >
                                 <img

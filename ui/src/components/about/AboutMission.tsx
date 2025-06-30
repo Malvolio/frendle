@@ -28,7 +28,7 @@ const AboutMission = () => {
           Bolt.New Hackaton
         </a>
         , what came to be the world's largest hackaton. It's been a long month
-        but with the help of Ai, we've taken the opportunity to work togehter on
+        but with the help of AI, we've taken the opportunity to work togehter on
         something special. We hope you take a peak around and share your
         feedback as we look beyond the hackathon to bring Frendle to life.
       </p>
