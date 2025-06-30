@@ -45,11 +45,11 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
     const q = Questions.find(({ id }) => !usedQuestions.has(id));
     if (q) {
       sendGameMessage({
-        type: "im-asking",
+        type: "ask",
         questionId: q.id,
       });
       setQuestionId(q.id);
-      setMode("asking");
+      setMode("answering");
     } else {
       sendGameMessage({
         type: "were-done",
@@ -68,12 +68,9 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
             setQuestionId(data.questionId);
             break;
           case "done-answering":
-            setMode(isHost ? "answering" : "waiting");
             if (isHost) {
-              sendGameMessage({
-                type: "ask",
-                questionId,
-              });
+              setUsedQuestions((allQ) => allQ.add(questionId));
+              goToNextQuestion();
             }
             break;
           case "im-asking":
@@ -100,8 +97,8 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
 
   const doneAnswering = () => {
     if (isHost) {
-      setUsedQuestions((allQ) => allQ.add(questionId));
-      goToNextQuestion();
+      sendGameMessage({ type: "im-asking", questionId });
+      setMode("asking");
     } else {
       sendGameMessage({ type: "done-answering" });
       setMode("waiting");
@@ -121,26 +118,25 @@ const ThirtySix: GameComponent = ({ event, sendEvent, session }) => {
       )}
       {mode === "asking" && (
         <div className="text-left flex flex-col gap-y-2 around">
-          
-            <p className="m-0">
-              Ask {session.partner.name} the following:
-            </p>
-            <p className=" font-peachy text-[1.25rem] leading-6 text-[#37251E] m-0">
-              {question?.text}
-            </p>
-            <p className="m-0">
-              <span className="font-bold">TIP:</span> Listen intently, ask
-              follow-up questions.
-            </p>
-          </div>
-        
+          <p className="m-0">Ask {session.partner.name} the following:</p>
+          <p className=" font-peachy text-[1.25rem] leading-6 text-[#37251E] m-0">
+            {question?.text}
+          </p>
+          <p className="m-0">
+            <span className="font-bold">TIP:</span> Listen intently, ask
+            follow-up questions.
+          </p>
+        </div>
       )}
       {mode === "answering" && (
         <div className="text-left italic flex flex-col gap-y-2 justify-between ">
           <p className="m-0">
-          {session.partner.name} is asking you a question.</p>
-          <p className="m-0"><span className="font-bold ml-1">TIP:</span> Be as candid as you feel comfortable.Click the button when you are
-          done.</p>
+            {session.partner.name} is asking you a question.
+          </p>
+          <p className="m-0">
+            <span className="font-bold ml-1">TIP:</span> Be as candid as you
+            feel comfortable.Click the button when you are done.
+          </p>
           <div className="flex w-full justify-center">
             <Button onClick={doneAnswering}>Done Answering</Button>
           </div>

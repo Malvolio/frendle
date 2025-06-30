@@ -1,6 +1,16 @@
 # Introduction
 
+Frendle is a social network that matches participants for short, structured interactions, called
+“pair-ups”, where two people engage in focused activities designed to create camaraderie and intimacy.
+
 # System Design
+
+Frendle is built entirely on Supabase to provide database services and
+serverless (“Edge”) services. The Edge services perform all backend database
+changes where security (beyond what can be provided by Postgres RLS) is required.
+
+The video-chats are set up through web-sockets and then conducted via WebRTC.
+WebRTC is not only for the media (audio/video) but for the communication between the two halves of the gameplay.
 
 # Technical Stack
 
@@ -11,6 +21,7 @@ ShadCN
 Supabase Postgres
 Supabase Edge
 WebRTC
+Rough.js and RoughNotation — to give the UI the hand-drawn look
 Fly.io — for signaling services to set up WebRTC connections
 Twilio — for RTC TURN services
 Netlify — for front-end deployment
@@ -35,6 +46,9 @@ Others:
 - free RTC `STUN` servers are useful for testing, but nothing else. The few free
   `TURN` servers are not reliable. Twilio’s low-cost TURN servers work well.
 
+Our other partners — Netlify, Twilio, Fly.io — just _worked_. They fulfilled
+their promises exactly.
+
 # General technical conclusion
 
 My conclusion after a month of leaning on AI for software development is that
@@ -57,8 +71,8 @@ _used_ Deno, but the use of Deno actually made things more complicated and less
 reliable than simply not using it, and I said as much to the LLM. To my
 surprise, the AI responded with sympathy and the suggestion that I take a break.
 I was charmed, and my frustration was soothed a bit, until I remembered a scene
-from _2001_ where the AI HAL, after its rampage, tells the surviving
-crewmember: “Look Dave, I can see you're really upset about this. I honestly
+from _2001_ where the computer HAL, after its rampage, tells the surviving
+crewmember, “Look, Dave, I can see you're really upset about this. I honestly
 think you ought to sit down calmly, take a stress pill, and think things over.”
 
 Indeed.
